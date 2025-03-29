@@ -128,6 +128,8 @@ RUN --mount=type=ssh apt-get update && apt-get install -y \
         libffi8 \
         libzmq5 \
         tini \
+        git \
+        openssh-client \
         libpq5 \
     && apt-get autoremove -y \
     && rm -rf /var/lib/apt/lists/* \
