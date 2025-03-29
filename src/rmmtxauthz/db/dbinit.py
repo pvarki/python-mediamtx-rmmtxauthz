@@ -15,7 +15,9 @@ from .engine import EngineWrapper
 
 # Import all models to ensure ORM can create all tables
 from .base import ORMBaseModel
+from .user import User
 
+_ = User
 LOGGER = logging.getLogger(__name__)
 
 

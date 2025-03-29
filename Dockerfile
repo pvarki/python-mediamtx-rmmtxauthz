@@ -90,7 +90,6 @@ COPY ./poetry.lock ./pyproject.toml ./README.rst /pysetup/
 # Install basic requirements (utilizing an internal docker wheelhouse if available)
 RUN --mount=type=ssh pip3 install wheel virtualenv \
     && poetry self add poetry-plugin-export \
-    && poetry config warnings.export false \
     && poetry export -f requirements.txt --without-hashes -o /tmp/requirements.txt \
     && pip3 wheel --wheel-dir=/tmp/wheelhouse -r /tmp/requirements.txt \
     && virtualenv /.venv && source /.venv/bin/activate && echo 'source /.venv/bin/activate' >>/root/.profile \
@@ -146,7 +145,8 @@ ENTRYPOINT ["/usr/bin/tini", "--", "/docker-entrypoint.sh"]
 #####################################
 FROM builder_base as devel_build
 # Install deps
-WORKDIR /pysetup
+COPY . /app
+WORKDIR /app
 RUN --mount=type=ssh source /.venv/bin/activate \
     && apt-get update && apt-get install -y \
         git \
@@ -168,8 +168,6 @@ RUN --mount=type=ssh source /.venv/bin/activate \
 # Run tests #
 #############
 FROM devel_build as test
-COPY . /app
-WORKDIR /app
 ENTRYPOINT ["/usr/bin/tini", "--", "docker/entrypoint-test.sh"]
 # Re run install to get the service itself installed
 RUN --mount=type=ssh source /.venv/bin/activate \

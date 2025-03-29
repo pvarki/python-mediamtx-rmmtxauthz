@@ -12,6 +12,7 @@ from libadvian.tasks import TaskMaster
 from rmmtxauthz import __version__
 from ..db.dbinit import init_db
 from ..config import RMMTXSettings
+from .usercrud import crudrouter
 
 LOGGER = logging.getLogger(__name__)
 
@@ -38,6 +39,7 @@ def get_app_no_init() -> FastAPI:
         lifespan=app_lifespan,
         version=__version__,
     )
+    app.include_router(crudrouter, prefix="/users", tags=["users"])
     return app
 
 
