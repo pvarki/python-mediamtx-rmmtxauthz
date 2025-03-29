@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "rmmtxauthz"
-version = "0.1.0"
+version = "0.2.0"
 description = "Do HTTP based authz for MediaMTX"
 authors = ["Eero af Heurlin <eero.afheurlin@iki.fi>"]
 homepage = "https://github.com/pvarki/python-mediamtx-rmmtxauthz"
