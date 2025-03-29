@@ -1,10 +1,8 @@
-version: '3.4'
-
 x-raesenmaeher_dbconfig_env: &rmmtxdbconfig_env
-  RMMTX_DATABASE_NAME: &rmmtxdbname raesenmaeher
+  RMMTX_DATABASE_NAME: &rmmtxdbname rmmtxauthz
   RMMTX_DATABASE_HOST: postgres
-  RMMTX_DATABASE_USER: &rmmtxdbuser raesenmaeher
-  RMMTX_DATABASE_PASSWORD: &rmmtxdbpass raesenmaehertestpwd # pragma: allowlist secret
+  RMMTX_DATABASE_USER: &rmmtxdbuser rmmtxauthz
+  RMMTX_DATABASE_PASSWORD: &rmmtxdbpass rmmtxauthztestpwd # pragma: allowlist secret
 
 
 x-postgres_env: &postgres_env
