@@ -39,7 +39,7 @@ def get_app_no_init() -> FastAPI:
         lifespan=app_lifespan,
         version=__version__,
     )
-    app.include_router(crudrouter, prefix="/users", tags=["users"])
+    app.include_router(crudrouter, prefix="/api/v1/users", tags=["users"])
     return app
 
 

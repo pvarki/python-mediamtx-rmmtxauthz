@@ -13,7 +13,7 @@ from fastapi import FastAPI
 from fastapi.testclient import TestClient
 
 from rmmtxauthz.db.dbinit import init_db, drop_db
-from rmmtxauthz.web.application import get_app_no_init
+from rmmtxauthz.config import RMMTXSettings
 
 
 init_logging(logging.DEBUG)
@@ -22,16 +22,13 @@ LOGGER = logging.getLogger(__name__)
 # pylint: disable=W0621
 
 
-@pytest.fixture(scope="session")
-def app_instance() -> FastAPI:
-    """app instance"""
-    return get_app_no_init()
-
-
 @pytest.fixture(scope="function")
 def testclient(app_instance: FastAPI) -> TestClient:
-    """Plain TestClient instance"""
-    return TestClient(app_instance)
+    """Testclient with Rasenmaeher DN"""
+    client = TestClient(app_instance)
+    cnf = RMMTXSettings.singleton()
+    client.headers["X-ClientCert-DN"] = f"CN={cnf.rmcn},O=N/A"
+    return client
 
 
 @pytest.fixture(scope="session", autouse=True)
@@ -44,6 +41,16 @@ def session_env_config(
         mpatch.setenv("LOG_LEVEL", "DEBUG")
         mpatch.setenv("DB_ECHO", "0")
         yield None
+
+
+@pytest.fixture(scope="session")
+def app_instance(session_env_config: None) -> FastAPI:
+    """app instance"""
+    _ = session_env_config
+    # To ensure that env mock happens before import side-effects (if any)
+    from rmmtxauthz.web.application import get_app_no_init  # pylint: disable=C0415
+
+    return get_app_no_init()
 
 
 @pytest_asyncio.fixture(scope="module", loop_scope="session")

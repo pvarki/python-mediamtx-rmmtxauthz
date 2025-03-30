@@ -25,7 +25,7 @@ class DBSettings(BaseSettings):
     database: str = "rmmtxauthz"
     echo: bool = False
 
-    model_config = SettingsConfigDict(env_prefix="RMMTX_DATABASE", extra="ignore")
+    model_config = SettingsConfigDict(env_prefix="RMMTX_DATABASE_", extra="ignore")
 
     _singleton: ClassVar[Optional["DBSettings"]] = None
 
@@ -65,6 +65,7 @@ class RMMTXSettings(BaseSettings):  # pylint: disable=too-few-public-methods
     # Enable uvicorn reloading
     reload: bool = True
     log_level: UCStr = Field(default="DEBUG", alias="LOG_LEVEL")
+    rmcn: str = Field(default="rasenmaeher", description="expected CN for RASENMAEHERs mTLS cert")
 
     model_config = SettingsConfigDict(env_prefix="RMMTX_", extra="ignore")
 
