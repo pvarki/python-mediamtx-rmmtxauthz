@@ -3,9 +3,11 @@
 from __future__ import annotations
 from typing import Optional, Dict
 import logging
+import json
+from pathlib import Path
 
 from pydantic import BaseModel, Field, ConfigDict
-from fastapi import APIRouter, Depends, Request
+from fastapi import APIRouter, Depends, Request, HTTPException
 from libpvarki.middleware import MTLSHeader
 from libpvarki.schemas.product import UserCRUDRequest, ProductHealthCheckResponse
 
@@ -57,19 +59,34 @@ async def return_product_description(language: str, request: Request) -> Product
 
 
 @router.post("/instructions/{language}")
-async def user_intructions(user: UserCRUDRequest, request: Request) -> Dict[str, str]:
+async def user_intructions(user: UserCRUDRequest, request: Request, language: str) -> Dict[str, str]:
     """return user instructions"""
     comes_from_rm(request)
     try:
         dbuser = await User.by_rmuuid(user.uuid)
     except NotFound:
         dbuser = await create_user(user)
-    # FIXME: return in correct Rune format
-    return {
-        "callsign": user.callsign,
-        "instructions": f"MediaMTX username={dbuser.username} and password={dbuser.mtxpassword}",
-        "language": "en",
-    }
+
+    # Use language specific rune if one is available
+    instructions_json_file = Path(f"/opt/templates/mediamtx_{language}.json")
+    if not instructions_json_file.is_file():
+        instructions_json_file = Path("/opt/templates/mediamtx.json")
+
+    if not instructions_json_file.is_file():
+        _reason = f"mediamtx json rune is missing from server."
+        LOGGER.error("{} : {}".format(request.url, _reason))
+        raise HTTPException(status_code=500, detail=_reason)
+
+    instructions_data = json.loads(instructions_json_file.read_text(encoding="utf-8"))
+    instructions_data.append(
+        {
+            "type": "Asset",
+            "name": "MediaMTX-credentials",
+            "body": f"MediaMTX username={dbuser.username} and password={dbuser.mtxpassword}",
+        }
+    )
+
+    return {"callsign": dbuser.username, "instructions": json.dumps(instructions_data), "language": language}
 
 
 @router.get("/healthcheck")
