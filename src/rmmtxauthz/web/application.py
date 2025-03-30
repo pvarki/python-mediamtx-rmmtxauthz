@@ -14,6 +14,7 @@ from ..db.dbinit import init_db
 from ..config import RMMTXSettings
 from .usercrud import crudrouter
 from .mediamtx import mtxrouter
+from .instructions import router as irouter
 
 LOGGER = logging.getLogger(__name__)
 
@@ -42,6 +43,7 @@ def get_app_no_init() -> FastAPI:
     )
     app.include_router(crudrouter, prefix="/api/v1/users", tags=["users"])
     app.include_router(mtxrouter, prefix="/api/v1/mediamtx", tags=["mediamtx"])
+    app.include_router(irouter, prefix="/api/v1", tags=["instructions"])
     return app
 
 
