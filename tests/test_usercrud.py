@@ -93,3 +93,25 @@ async def test_demote_wo_create(dbinstance: None, testclient: TestClient, crudre
     assert resp.status_code == 200
     dbuser = await User.by_rmuuid(user.uuid)
     assert dbuser.is_rmadmin is False
+
+
+@pytest.mark.asyncio
+async def test_unauth_crud(dbinstance: None, unauth_testclient: TestClient, crudrequest: UserCRUDRequest) -> None:
+    """Test basic crud operations in order"""
+    _ = dbinstance
+    user = crudrequest
+    payload = user.model_dump()
+    resp = unauth_testclient.post("/api/v1/users/created", json=payload)
+    assert resp.status_code == 403
+
+    resp = unauth_testclient.put("/api/v1/users/updated", json=payload)
+    assert resp.status_code == 403
+
+    resp = unauth_testclient.post("/api/v1/users/promoted", json=payload)
+    assert resp.status_code == 403
+
+    resp = unauth_testclient.post("/api/v1/users/demoted", json=payload)
+    assert resp.status_code == 403
+
+    resp = unauth_testclient.post("/api/v1/users/revoked", json=payload)
+    assert resp.status_code == 403
