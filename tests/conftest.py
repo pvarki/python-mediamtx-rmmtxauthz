@@ -31,6 +31,12 @@ def testclient(app_instance: FastAPI) -> TestClient:
     return client
 
 
+@pytest.fixture(scope="function")
+def unauth_testclient(app_instance: FastAPI) -> TestClient:
+    """Testclient without auth headers"""
+    return TestClient(app_instance)
+
+
 @pytest.fixture(scope="session", autouse=True)
 def session_env_config(
     monkeysession: pytest.MonkeyPatch,
