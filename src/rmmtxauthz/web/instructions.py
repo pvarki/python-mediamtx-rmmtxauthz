@@ -73,7 +73,7 @@ async def user_intructions(user: UserCRUDRequest, request: Request, language: st
         instructions_json_file = Path("/opt/templates/mediamtx.json")
 
     if not instructions_json_file.is_file():
-        _reason = f"mediamtx json rune is missing from server."
+        _reason = "mediamtx json rune is missing from server."
         LOGGER.error("{} : {}".format(request.url, _reason))
         raise HTTPException(status_code=500, detail=_reason)
 
