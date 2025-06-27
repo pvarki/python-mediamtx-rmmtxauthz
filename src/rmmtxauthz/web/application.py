@@ -15,6 +15,8 @@ from ..config import RMMTXSettings
 from .usercrud import crudrouter
 from .mediamtx import mtxrouter
 from .instructions import router as irouter
+from .interop import interoprouter
+
 
 LOGGER = logging.getLogger(__name__)
 
@@ -41,6 +43,7 @@ def get_app_no_init() -> FastAPI:
         lifespan=app_lifespan,
         version=__version__,
     )
+    app.include_router(interoprouter, prefix="/api/v1/interop", tags=["interop"])
     app.include_router(crudrouter, prefix="/api/v1/users", tags=["users"])
     app.include_router(mtxrouter, prefix="/api/v1/mediamtx", tags=["mediamtx"])
     app.include_router(irouter, prefix="/api/v1", tags=["instructions"])
