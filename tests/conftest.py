@@ -32,6 +32,14 @@ def testclient(app_instance: FastAPI) -> TestClient:
 
 
 @pytest.fixture(scope="function")
+def product_testclient(app_instance: FastAPI) -> TestClient:
+    """Testclient with Product DN"""
+    client = TestClient(app_instance)
+    client.headers["X-ClientCert-DN"] = "CN=fake.localmaeher.dev.pvarki.fi,O=N/A"
+    return client
+
+
+@pytest.fixture(scope="function")
 def unauth_testclient(app_instance: FastAPI) -> TestClient:
     """Testclient without auth headers"""
     return TestClient(app_instance)
