@@ -23,6 +23,10 @@ async def get_auth(authreq: MTXAuthReq) -> Response:
         if authreq.password != dbuser.mtxpassword:
             LOGGER.error("Wrong password for {}".format(authreq.user))
             raise HTTPException(status_code=403)
+        # Operations that require admin privileges
+        if authreq.action in ("api", "metrics", "pprof") and not dbuser.is_rmadmin:
+            LOGGER.error("{} is not admin requesting {}".format(authreq.user, authreq.action))
+            raise HTTPException(status_code=403)
         return Response(status_code=204)
     except (NotFound, Deleted) as exc:
         LOGGER.error("Invalid user {}: {}".format(authreq.user, exc))
