@@ -54,6 +54,7 @@ def session_env_config(
         mpatch.setenv("LOG_CONSOLE_FORMATTER", "utc")
         mpatch.setenv("LOG_LEVEL", "DEBUG")
         mpatch.setenv("DB_ECHO", "0")
+        mpatch.setenv("RMMTX_API_PASSWORD", "pytestpasswd")
         yield None
 
 
