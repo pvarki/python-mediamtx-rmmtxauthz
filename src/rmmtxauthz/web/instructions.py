@@ -9,7 +9,7 @@ from pathlib import Path
 from pydantic import BaseModel, Field, ConfigDict
 from fastapi import APIRouter, Depends, Request, HTTPException
 from libpvarki.middleware import MTLSHeader
-from libpvarki.schemas.product import UserCRUDRequest, ProductHealthCheckResponse
+from libpvarki.schemas.product import UserCRUDRequest
 
 from ..db.user import User
 from ..db.errors import NotFound
@@ -87,13 +87,3 @@ async def user_intructions(user: UserCRUDRequest, request: Request, language: st
     )
 
     return {"callsign": dbuser.username, "instructions": json.dumps(instructions_data), "language": language}
-
-
-@router.get("/healthcheck")
-async def request_healthcheck(request: Request) -> ProductHealthCheckResponse:
-    """Check that we are healthy, return accordingly"""
-    comes_from_rm(request)
-    users_count = 0
-    async for _user in User.list():
-        users_count += 1
-    return ProductHealthCheckResponse(healthy=True, extra=f"DB works, {users_count} users found")
