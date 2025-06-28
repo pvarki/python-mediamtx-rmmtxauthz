@@ -71,6 +71,7 @@ async def user_promoted(
     try:
         dbuser = await User.by_rmuuid(user.uuid)
     except NotFound:
+        LOGGER.warning("User '{}' did not exist, creating transparently".format(user.callsign))
         dbuser = await create_user(user)
     with EngineWrapper.singleton().get_session() as session:
         dbuser.is_rmadmin = True
@@ -90,6 +91,7 @@ async def user_demoted(
     try:
         dbuser = await User.by_rmuuid(user.uuid)
     except NotFound:
+        LOGGER.warning("User '{}' did not exist, creating transparently".format(user.callsign))
         dbuser = await create_user(user)
     with EngineWrapper.singleton().get_session() as session:
         dbuser.is_rmadmin = False
@@ -110,6 +112,7 @@ async def user_updated(
     try:
         dbuser = await User.by_rmuuid(user.uuid)
     except NotFound:
+        LOGGER.warning("User '{}' did not exist, creating transparently".format(user.callsign))
         dbuser = await create_user(user)
     _ = dbuser
     result = OperationResultResponse(success=True)
