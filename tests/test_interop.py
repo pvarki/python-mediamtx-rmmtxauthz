@@ -32,7 +32,7 @@ async def test_authz(dbinstance: None, product_testclient: TestClient) -> None:
     _ = dbinstance
     resp = product_testclient.get("/api/v1/interop/authz")
     assert resp.status_code == 200
-    parsed = ProductAuthzResponse.parse_raw(resp.text)
+    parsed = ProductAuthzResponse.model_validate_json(resp.text)
     assert parsed
     assert parsed.type == "basic"
     assert parsed.username == "fake.localmaeher.dev.pvarki.fi"
