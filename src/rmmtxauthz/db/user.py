@@ -76,5 +76,5 @@ class User(ORMBaseModel, table=True):
                 )
             results = session.exec(statement)
             for result in results:
-                result.password = "REDACTED"  # nosec  # pragma: allowlist secret
+                result.mtxpassword = "REDACTED"  # nosec  # pragma: allowlist secret
                 yield result
