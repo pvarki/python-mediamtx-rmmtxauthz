@@ -18,6 +18,9 @@ mtxrouter = APIRouter()
 
 def check_apiuser(authreq: MTXAuthReq) -> Optional[Response]:
     """Check if user is this API"""
+    if not authreq.user or not authreq.password:
+        LOGGER.debug("No user/password, returning 401")
+        raise HTTPException(status_code=401)
     conf = RMMTXSettings.singleton()
     if authreq.user != conf.api_username:
         return None
@@ -31,6 +34,9 @@ def check_apiuser(authreq: MTXAuthReq) -> Optional[Response]:
 
 async def check_productuser(authreq: MTXAuthReq) -> Optional[Response]:
     """Check if the user is a product that requested interop"""
+    if not authreq.user or not authreq.password:
+        LOGGER.debug("No user/password, returning 401")
+        raise HTTPException(status_code=401)
     try:
         dbproduct = await Product.by_cn(authreq.user)
         if authreq.password != dbproduct.mtxpassword:
@@ -44,6 +50,9 @@ async def check_productuser(authreq: MTXAuthReq) -> Optional[Response]:
 
 async def check_rmuser(authreq: MTXAuthReq) -> Optional[Response]:
     """Check RM user credentials"""
+    if not authreq.user or not authreq.password:
+        LOGGER.debug("No user/password, returning 401")
+        raise HTTPException(status_code=401)
     try:
         dbuser = await User.by_username(authreq.user)
         if authreq.password != dbuser.mtxpassword:

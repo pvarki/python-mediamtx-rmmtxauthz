@@ -49,6 +49,22 @@ def test_wrong_password(unauth_testclient: TestClient, valid_user: User) -> None
     assert resp.status_code == 403
 
 
+def test_real_data(unauth_testclient: TestClient, valid_user: User) -> None:
+    """See what gives with this real request"""
+    content = '{"ip":"185.11.209.242","user":"__USERNAME__","password":"__PASSWORD__","token":"","action":"read","path":"live/icu/eetu","protocol":"hls","id":null,"query":""}'.replace(  # pylint: disable=C0301  ;  # pragma: allowlist secret
+        "__USERNAME__",
+        valid_user.username,
+    ).replace(
+        "__PASSWORD__", valid_user.mtxpassword  # pragma: allowlist secret
+    )
+    LOGGER.debug("POSTing '{}'".format(content))
+    resp = unauth_testclient.post(
+        "/api/v1/mediamtx/auth",
+        content=content,
+    )
+    assert resp.status_code == 204
+
+
 def test_wrong_username(unauth_testclient: TestClient, valid_user: User) -> None:
     """Test without password"""
     _ = valid_user

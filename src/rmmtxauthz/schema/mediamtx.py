@@ -1,6 +1,7 @@
 """MediaMTX schemas"""
 
 from __future__ import annotations
+from typing import Optional
 import logging
 
 from pydantic import BaseModel, Field, ConfigDict
@@ -25,11 +26,13 @@ class MTXAuthReq(BaseModel):
 
     model_config = ConfigDict(extra="ignore")
 
-    user: str = Field(description="Username, may be empty if user is not provided yet", default="")
-    password: str = Field(description="Password, may be empty if user+password is not provided yet", default="")
-    ip: str = Field(description="IP address of the client from MediaMTX PoV", default="")
-    action: str = Field(description="Action user wants to take", default="")
-    path: str = Field(description="Path user wants to use", default="")
-    protocol: str = Field(description="Protocol user wants to use", default="")
-    id: str = Field(description="FIXME: Figure out what this actually means", default="")
-    query: str = Field(description="FIXME: Figure out what this actually means", default="")
+    user: Optional[str] = Field(description="Username, may be empty if user is not provided yet", default=None)
+    password: Optional[str] = Field(
+        description="Password, may be empty if user+password is not provided yet", default=None
+    )
+    ip: Optional[str] = Field(description="IP address of the client from MediaMTX PoV", default=None)
+    action: Optional[str] = Field(description="Action user wants to take", default=None)
+    path: Optional[str] = Field(description="Path user wants to use", default=None)
+    protocol: Optional[str] = Field(description="Protocol user wants to use", default=None)
+    id: Optional[str] = Field(description="FIXME: Figure out what this actually means", default=None)
+    query: Optional[str] = Field(description="FIXME: Figure out what this actually means", default=None)
