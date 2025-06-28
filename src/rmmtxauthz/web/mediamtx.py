@@ -62,7 +62,9 @@ async def check_rmuser(authreq: MTXAuthReq) -> Optional[Response]:
 @mtxrouter.post("/auth")
 async def get_auth(authreq: MTXAuthReq) -> Response:
     """Check if username and password match and return empty ok if so"""
+    LOGGER.debug("Processing {}".format(authreq))
     if not authreq.user or not authreq.password:
+        LOGGER.debug("No user/password, returning 401")
         raise HTTPException(status_code=401)
     if resp := check_apiuser(authreq):
         return resp
