@@ -76,6 +76,8 @@ async def dbinstance(
         mpatch.setenv("RMMTX_DATABASE_PORT", str(docker_services.port_for("postgres", 5432)))
         mpatch.setenv("RMMTX_DATABASE_HOST", docker_ip)
         mpatch.setenv("RMMTX_DATABASE_PASSWORD", "rmmtxauthztestpwd")
+        mpatch.setenv("RMMTX_DATABASE_USER", "rmmtxauthz")
+        mpatch.setenv("RMMTX_DATABASE_DATABASE", "rmmtxauthz")
         await asyncio.sleep(1.0)
         await init_db()
         await asyncio.sleep(0.5)
