@@ -2,8 +2,10 @@
 
 import logging
 import json
+import asyncio
 
 import click
+import aiohttp
 from libadvian.logging import init_logging
 
 from rmmtxauthz import __version__
@@ -46,6 +48,34 @@ def dump_openapi(ctx: click.Context) -> None:
     app = get_app_no_init()
     click.echo(json.dumps(app.openapi()))
     ctx.exit(0)
+
+
+@cli_group.command(name="healthcheck")
+@click.option("--host", default="localhost", help="The host to connect to")
+@click.option("--port", default=8005, help="The port to connect to")
+@click.option("--timeout", default=2.0, help="The timeout in seconds")
+@click.pass_context
+def do_http_healthcheck(ctx: click.Context, host: str, port: int, timeout: float) -> None:
+    """
+    Do a GET request to the healthcheck api and dump results to stdout
+    """
+
+    async def doit() -> int:
+        """The actual work"""
+        nonlocal host, port, timeout
+        if "://" not in host:
+            host = f"http://{host}"
+        async with aiohttp.ClientSession(timeout=aiohttp.ClientTimeout(total=timeout)) as session:
+            async with session.get(f"{host}:{port}/api/v1/healthcheck") as resp:
+                if resp.status != 200:
+                    return int(resp.status)
+                payload = await resp.json()
+                click.echo(json.dumps(payload))
+                if not payload["healthy"]:
+                    return 1
+        return 0
+
+    ctx.exit(asyncio.get_event_loop().run_until_complete(doit()))
 
 
 def rmmtxauthz_cli() -> None:
