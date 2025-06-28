@@ -20,9 +20,9 @@ class DBSettings(BaseSettings):
     driver: str = "postgresql"
     host: str = "localhost"
     port: int = 5432
-    user: str = "rmmtxauthz"
+    user: str = "rmmtx"
     password: str = "<PASSWORD>"  # pragma: allowlist secret
-    database: str = "rmmtxauthz"
+    database: str = "rmmtx"
     echo: bool = False
 
     model_config = SettingsConfigDict(env_prefix="RMMTX_DATABASE_", extra="ignore")
