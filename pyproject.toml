@@ -73,6 +73,7 @@ pydantic-collections = ">=0.6.0,<1.0"
 filelock = "^3.17"
 psycopg2 = "^2.9"
 libpvarki = { git="https://github.com/pvarki/python-libpvarki.git", tag="2.0.0"}
+aiohttp = "^3.12"
 
 [tool.poetry.group.dev.dependencies]
 pytest = "^8.0"
