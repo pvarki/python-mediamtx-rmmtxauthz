@@ -70,7 +70,7 @@ class RMMTXSettings(BaseSettings):  # pylint: disable=too-few-public-methods
     workers_count: int = 1
     # Enable uvicorn reloading
     reload: bool = True
-    log_level: UCStr = Field(default="DEBUG", alias="LOG_LEVEL")
+    log_level: UCStr = Field(default="INFO", alias="LOG_LEVEL")
     rmcn: str = Field(default="rasenmaeher", description="expected CN for RASENMAEHERs mTLS cert")
 
     api_username: str = Field(default="rmmtxauthz", description="Username for *this* integration to use")
