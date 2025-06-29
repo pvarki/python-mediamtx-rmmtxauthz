@@ -28,7 +28,7 @@ class MTXAuthReq(BaseModel):
 
     user: Optional[str] = Field(description="Username, may be empty if user is not provided yet", default=None)
     password: Optional[str] = Field(
-        description="Password, may be empty if user+password is not provided yet", default=None
+        description="Password, may be empty if user+password is not provided yet", default=None, repr=False
     )
     ip: Optional[str] = Field(description="IP address of the client from MediaMTX PoV", default=None)
     action: Optional[str] = Field(description="Action user wants to take", default=None)
