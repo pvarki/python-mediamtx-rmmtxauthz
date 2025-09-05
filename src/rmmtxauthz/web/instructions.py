@@ -80,9 +80,16 @@ async def user_intructions(user: UserCRUDRequest, request: Request, language: st
     instructions_data = json.loads(instructions_json_file.read_text(encoding="utf-8"))
     instructions_data.append(
         {
-            "type": "Asset",
-            "name": "MediaMTX-credentials",
-            "body": f"MediaMTX username={dbuser.username} and password={dbuser.mtxpassword}",
+            "type": "Component",
+            "name": "CredentialUser",
+            "body": dbuser.username,
+        }
+    )
+    instructions_data.append(
+        {
+            "type": "Component",
+            "name": "CredentialPassword",
+            "body": dbuser.mtxpassword,
         }
     )
 
