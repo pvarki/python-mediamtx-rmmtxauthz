@@ -14,6 +14,7 @@ from libpvarki.schemas.product import UserCRUDRequest
 from ..db.user import User
 from ..db.errors import NotFound
 from .usercrud import comes_from_rm, create_user
+from ..mediamtx import MediaMTXControl
 
 LOGGER = logging.getLogger(__name__)
 
@@ -90,6 +91,21 @@ async def user_intructions(user: UserCRUDRequest, request: Request, language: st
             "type": "Component",
             "name": "CredentialPassword",
             "body": dbuser.mtxpassword,
+        }
+    )
+    streams = await MediaMTXControl.singleton().get_paths(insert_credentials=f"{dbuser.username}:{dbuser.mtxpassword}@")
+    streams_content = "<ul>\n"
+    for streamdict in streams:
+        streams_content += f"<li>{streamdict['pname']}<ul>"
+        for pname, purl in streamdict["urls"].items():
+            streams_content += f'<li><a href="{purl}">{pname}</a></li>>'
+        streams_content += "</ul></li>\n"
+    streams_content += "<ul>\n"
+    instructions_data.append(
+        {
+            "type": "Component",
+            "name": "StreamsList",
+            "body": streams_content,
         }
     )
 
