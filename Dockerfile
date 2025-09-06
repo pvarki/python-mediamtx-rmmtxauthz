@@ -132,6 +132,7 @@ RUN --mount=type=ssh source /.venv/bin/activate \
 # Main production build #
 #########################
 FROM python:3.11-slim-bookworm as production
+COPY --from=pvarki/kw_product_init:latest /kw_product_init /kw_product_init
 COPY --from=production_build /tmp/wheelhouse /tmp/wheelhouse
 COPY --from=production_build /docker-entrypoint.sh /docker-entrypoint.sh
 COPY --from=rune_build /opt/templates/mediamtx.json /opt/templates/mediamtx.json
@@ -162,6 +163,7 @@ ENTRYPOINT ["/usr/bin/tini", "--", "/docker-entrypoint.sh"]
 # Base stage for development builds #
 #####################################
 FROM builder_base as devel_build
+COPY --from=pvarki/kw_product_init:latest /kw_product_init /kw_product_init
 COPY --from=rune_build /opt/templates/mediamtx.json /opt/templates/mediamtx.json
 
 # Install deps
