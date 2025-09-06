@@ -3,8 +3,11 @@
 from typing import Optional, ClassVar, Sequence, Dict, Any
 import logging
 from dataclasses import dataclass
+import ssl
+from pathlib import Path
 
 import aiohttp
+from libpvarki.mtlshelp.context import get_ca_context
 
 from .config import RMMTXSettings
 
@@ -28,6 +31,12 @@ class MediaMTXControl:
         """Get session"""
         cnf = RMMTXSettings.singleton()
         auth = aiohttp.BasicAuth(login=cnf.api_username, password=cnf.api_password)
+        cadir = Path("/ca_public")
+        if cadir.is_dir():
+            ctx = get_ca_context(ssl.Purpose.SERVER_AUTH, cadir)
+            conn = aiohttp.TCPConnector(ssl=ctx)
+            return aiohttp.ClientSession(connector=conn, auth=auth, base_url=cnf.api_url, raise_for_status=True)
+        # Fallback
         return aiohttp.ClientSession(auth=auth, base_url=cnf.api_url, raise_for_status=True)
 
     async def get_paths(self, insert_credentials: str = "") -> Sequence[Dict[str, Any]]:
