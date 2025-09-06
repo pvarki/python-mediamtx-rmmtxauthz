@@ -96,10 +96,6 @@ RUN --mount=type=ssh pip3 install wheel virtualenv \
     && pip3 install --no-deps --find-links=/tmp/wheelhouse/ -r /tmp/requirements.txt \
     && true
 
-# Add rune instructions
-RUN mkdir -p /opt/templates \
-    && curl -L https://github.com/pvarki/rune-mediamtx-metadata/releases/latest/download/rune.json -o /opt/templates/mediamtx.json
-
 ####################################
 # Base stage for production builds #
 ####################################
@@ -116,6 +112,20 @@ RUN --mount=type=ssh source /.venv/bin/activate \
     && chmod a+x /docker-entrypoint.sh \
     && true
 
+################################################
+# Build RUNE instructions from local submodule #
+################################################
+FROM builder_base as rune_build
+COPY ./poetry.lock ./pyproject.toml ./README.rst /app/
+COPY ./rune /app/rune
+WORKDIR /app
+RUN --mount=type=ssh source /.venv/bin/activate \
+    && poetry install --no-interaction --no-ansi  --no-root \
+    && ls -lah -R \
+    && mkdir -p /opt/templates \
+    && cd /app/rune \
+    && rune src json >/opt/templates/mediamtx.json \
+    && true
 
 
 #########################
@@ -124,7 +134,7 @@ RUN --mount=type=ssh source /.venv/bin/activate \
 FROM python:3.11-slim-bookworm as production
 COPY --from=production_build /tmp/wheelhouse /tmp/wheelhouse
 COPY --from=production_build /docker-entrypoint.sh /docker-entrypoint.sh
-COPY --from=builder_base /opt/templates/mediamtx.json /opt/templates/mediamtx.json
+COPY --from=rune_build /opt/templates/mediamtx.json /opt/templates/mediamtx.json
 
 WORKDIR /app
 # Install system level deps for running the package (not devel versions for building wheels)
@@ -152,7 +162,7 @@ ENTRYPOINT ["/usr/bin/tini", "--", "/docker-entrypoint.sh"]
 # Base stage for development builds #
 #####################################
 FROM builder_base as devel_build
-COPY --from=builder_base /opt/templates/mediamtx.json /opt/templates/mediamtx.json
+COPY --from=rune_build /opt/templates/mediamtx.json /opt/templates/mediamtx.json
 
 # Install deps
 COPY . /app
