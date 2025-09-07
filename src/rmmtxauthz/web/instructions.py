@@ -109,4 +109,4 @@ async def user_intructions(user: UserCRUDRequest, request: Request, language: st
         }
     )
 
-    return {"callsign": dbuser.username, "instructions": json.dumps(instructions_data), "language": language}
+    return {"callsign": dbuser.username, "instructions": instructions_data, "language": language}
