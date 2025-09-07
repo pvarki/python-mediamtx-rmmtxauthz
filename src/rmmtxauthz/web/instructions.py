@@ -96,9 +96,9 @@ async def user_intructions(user: UserCRUDRequest, request: Request, language: st
     streams = await MediaMTXControl.singleton().get_paths(insert_credentials=f"{dbuser.username}:{dbuser.mtxpassword}@")
     streams_content = "<ul>\n"
     for streamdict in streams:
-        streams_content += f"<li>{streamdict['pname']}<ul>"
+        streams_content += f"<li>{streamdict['path']}<ul>"
         for pname, purl in streamdict["urls"].items():
-            streams_content += f'<li><a href="{purl}">{pname}</a></li>>'
+            streams_content += f'<li><a href="{purl}">{pname}</a></li>'
         streams_content += "</ul></li>\n"
     streams_content += "<ul>\n"
     instructions_data.append(
