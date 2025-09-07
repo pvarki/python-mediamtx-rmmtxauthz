@@ -1,7 +1,7 @@
 """Instructions and descriptions"""
 
 from __future__ import annotations
-from typing import Optional, Dict
+from typing import Optional, Dict, Any
 import logging
 import json
 from pathlib import Path
@@ -60,7 +60,7 @@ async def return_product_description(language: str, request: Request) -> Product
 
 
 @router.post("/instructions/{language}")
-async def user_intructions(user: UserCRUDRequest, request: Request, language: str) -> Dict[str, str]:
+async def user_intructions(user: UserCRUDRequest, request: Request, language: str) -> Dict[str, Any]:
     """return user instructions"""
     comes_from_rm(request)
     try:
