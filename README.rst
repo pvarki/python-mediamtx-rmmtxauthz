@@ -108,3 +108,10 @@ because pylint and mypy pre-commit hooks use the "system" python for now (becaus
 
 Running "pre-commit run --all-files" and "py.test -v" regularly during development and
 especially before committing will save you some headache.
+
+RUNE instructions compile
+^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tldr::
+
+    rune rune/src json >rune/output/mediamtx.json
