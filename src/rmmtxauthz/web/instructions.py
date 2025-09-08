@@ -80,15 +80,12 @@ async def user_intructions(user: UserCRUDRequest, request: Request, language: st
     except NotFound:
         dbuser = await create_user(user)
 
-    # Use language specific rune if one is available
-    instructions_json_file = Path(f"/opt/templates/mediamtx_{language}.json")
-    if not instructions_json_file.is_file():
-        instructions_json_file = Path("/opt/templates/mediamtx.json")
+    instructions_json_file = Path("/opt/templates/mediamtx.json")
 
     if not instructions_json_file.is_file():
-        _reason = "mediamtx json rune is missing from server."
-        LOGGER.error("{} : {}".format(request.url, _reason))
-        raise HTTPException(status_code=500, detail=_reason)
+        reason = "mediamtx json rune is missing from server."
+        LOGGER.error("{} : {}".format(request.url, reason))
+        raise HTTPException(status_code=500, detail=reason)
 
     instructions_data = json.loads(instructions_json_file.read_text(encoding="utf-8"))
     instructions_data.append(
