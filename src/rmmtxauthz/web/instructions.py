@@ -8,6 +8,7 @@ from pathlib import Path
 
 from pydantic import BaseModel, Field, ConfigDict
 from fastapi import APIRouter, Depends, Request, HTTPException
+from fastapi.responses import FileResponse
 from libpvarki.middleware import MTLSHeader
 from libpvarki.schemas.product import UserCRUDRequest
 
@@ -57,6 +58,17 @@ async def return_product_description(language: str, request: Request) -> Product
         description="Fake product for integrations testing and examples",
         language="en",
     )
+
+
+@router.get("/assets/{file_path:path}")
+async def get_asset(file_path: str) -> FileResponse:
+    """Asset file"""
+    basepath = Path("/opt/templates/assets")
+    assetpath = basepath / file_path
+    LOGGER.info("Looking for {} from {}".format(file_path, assetpath))
+    if not assetpath.exists():
+        raise HTTPException(status_code=404, detail="File not found")
+    return FileResponse(path=str(assetpath))
 
 
 @router.post("/instructions/{language}")
