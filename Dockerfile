@@ -102,6 +102,7 @@ RUN --mount=type=ssh pip3 install wheel virtualenv \
 FROM builder_base as production_build
 # Copy entrypoint script
 COPY ./docker/entrypoint.sh /docker-entrypoint.sh
+COPY ./docker/container-init.sh /container-init.sh
 # Only files needed by production setup
 COPY ./poetry.lock ./pyproject.toml ./README.rst ./src /app/
 WORKDIR /app
@@ -135,6 +136,7 @@ FROM python:3.11-slim-bookworm as production
 COPY --from=pvarki/kw_product_init:latest /kw_product_init /kw_product_init
 COPY --from=production_build /tmp/wheelhouse /tmp/wheelhouse
 COPY --from=production_build /docker-entrypoint.sh /docker-entrypoint.sh
+COPY --from=production_build /container-init.sh /container-init.sh
 COPY --from=rune_build /opt/templates/mediamtx.json /opt/templates/mediamtx.json
 
 WORKDIR /app
