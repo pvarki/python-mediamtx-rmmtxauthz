@@ -4,6 +4,8 @@
 .cache
 .venv
 
+rune/output/
+
 # docker build files (so just changing them does not invalidate *all* caches)
 .dockerignore
 Dockerfile

@@ -1,19 +1,21 @@
 """Instructions and descriptions"""
 
 from __future__ import annotations
-from typing import Optional, Dict
+from typing import Optional, Dict, Any
 import logging
 import json
 from pathlib import Path
 
 from pydantic import BaseModel, Field, ConfigDict
 from fastapi import APIRouter, Depends, Request, HTTPException
+from fastapi.responses import FileResponse
 from libpvarki.middleware import MTLSHeader
 from libpvarki.schemas.product import UserCRUDRequest
 
 from ..db.user import User
 from ..db.errors import NotFound
 from .usercrud import comes_from_rm, create_user
+from ..mediamtx import MediaMTXControl
 
 LOGGER = logging.getLogger(__name__)
 
@@ -58,8 +60,19 @@ async def return_product_description(language: str, request: Request) -> Product
     )
 
 
+@router.get("/assets/{file_path:path}")
+async def get_asset(file_path: str) -> FileResponse:
+    """Asset file"""
+    basepath = Path("/opt/templates/assets")
+    assetpath = basepath / file_path
+    LOGGER.info("Looking for {} from {}".format(file_path, assetpath))
+    if not assetpath.exists():
+        raise HTTPException(status_code=404, detail="File not found")
+    return FileResponse(path=str(assetpath))
+
+
 @router.post("/instructions/{language}")
-async def user_intructions(user: UserCRUDRequest, request: Request, language: str) -> Dict[str, str]:
+async def user_intructions(user: UserCRUDRequest, request: Request, language: str) -> Dict[str, Any]:
     """return user instructions"""
     comes_from_rm(request)
     try:
@@ -67,23 +80,42 @@ async def user_intructions(user: UserCRUDRequest, request: Request, language: st
     except NotFound:
         dbuser = await create_user(user)
 
-    # Use language specific rune if one is available
-    instructions_json_file = Path(f"/opt/templates/mediamtx_{language}.json")
-    if not instructions_json_file.is_file():
-        instructions_json_file = Path("/opt/templates/mediamtx.json")
+    instructions_json_file = Path("/opt/templates/mediamtx.json")
 
     if not instructions_json_file.is_file():
-        _reason = "mediamtx json rune is missing from server."
-        LOGGER.error("{} : {}".format(request.url, _reason))
-        raise HTTPException(status_code=500, detail=_reason)
+        reason = "mediamtx json rune is missing from server."
+        LOGGER.error("{} : {}".format(request.url, reason))
+        raise HTTPException(status_code=500, detail=reason)
 
     instructions_data = json.loads(instructions_json_file.read_text(encoding="utf-8"))
     instructions_data.append(
         {
-            "type": "Asset",
-            "name": "MediaMTX-credentials",
-            "body": f"MediaMTX username={dbuser.username} and password={dbuser.mtxpassword}",
+            "type": "Component",
+            "name": "CredentialUser",
+            "body": dbuser.username,
+        }
+    )
+    instructions_data.append(
+        {
+            "type": "Component",
+            "name": "CredentialPassword",
+            "body": dbuser.mtxpassword,
+        }
+    )
+    streams = await MediaMTXControl.singleton().get_paths(insert_credentials=f"{dbuser.username}:{dbuser.mtxpassword}@")
+    streams_content = "<ul>\n"
+    for streamdict in streams:
+        streams_content += f"<li>{streamdict['path']}<ul>"
+        for pname, purl in streamdict["urls"].items():
+            streams_content += f'<li><a href="{purl}">{pname}</a></li>'
+        streams_content += "</ul></li>\n"
+    streams_content += "<ul>\n"
+    instructions_data.append(
+        {
+            "type": "Component",
+            "name": "StreamsList",
+            "body": streams_content,
         }
     )
 
-    return {"callsign": dbuser.username, "instructions": json.dumps(instructions_data), "language": language}
+    return {"callsign": dbuser.username, "instructions": instructions_data, "language": language}
