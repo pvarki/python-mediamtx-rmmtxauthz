@@ -38,7 +38,6 @@ RUN poetry install \
 # Base builder image #
 ######################
 FROM python:3.11-bookworm as builder_base
-
 ENV \
   # locale
   LC_ALL=C.UTF-8 \
@@ -52,8 +51,6 @@ ENV \
   PIP_DEFAULT_TIMEOUT=100 \
   # poetry:
   POETRY_VERSION=2.0.1
-
-
 RUN apt-get update && apt-get install -y \
         curl \
         git \
@@ -80,10 +77,11 @@ RUN apt-get update && apt-get install -y \
     && echo 'export PATH="/root/.local/bin:$PATH"' >>/root/.profile \
     && export PATH="/root/.local/bin:$PATH" \
     && true
-
+RUN curl -fsSL https://deb.nodesource.com/setup_20.x | bash - \
+    && apt-get install -y nodejs \
+    && corepack enable \
+    && corepack prepare pnpm@latest --activate
 SHELL ["/bin/bash", "-lc"]
-
-
 # Copy only requirements, to cache them in docker layer:
 WORKDIR /pysetup
 COPY ./poetry.lock ./pyproject.toml ./README.rst /pysetup/
@@ -105,6 +103,10 @@ COPY ./docker/entrypoint.sh /docker-entrypoint.sh
 COPY ./docker/container-init.sh /container-init.sh
 # Only files needed by production setup
 COPY ./poetry.lock ./pyproject.toml ./README.rst ./src /app/
+COPY ./ui /ui/
+WORKDIR /ui
+RUN CI=true pnpm install && pnpm build
+RUN mkdir -p /ui_build && cp -r dist/* /ui_build/
 WORKDIR /app
 # Build the wheel package with poetry and add it to the wheelhouse
 RUN --mount=type=ssh source /.venv/bin/activate \
@@ -135,10 +137,10 @@ RUN --mount=type=ssh source /.venv/bin/activate \
 FROM python:3.11-slim-bookworm as production
 COPY --from=pvarki/kw_product_init:latest /kw_product_init /kw_product_init
 COPY --from=production_build /tmp/wheelhouse /tmp/wheelhouse
+COPY --from=production_build /ui_build /ui_build
 COPY --from=production_build /docker-entrypoint.sh /docker-entrypoint.sh
 COPY --from=production_build /container-init.sh /container-init.sh
 COPY --from=rune_build /opt/templates/mediamtx.json /opt/templates/mediamtx.json
-
 WORKDIR /app
 # Install system level deps for running the package (not devel versions for building wheels)
 # and install the wheels we built in the previous step. generate default config
@@ -167,9 +169,11 @@ ENTRYPOINT ["/usr/bin/tini", "--", "/docker-entrypoint.sh"]
 FROM builder_base as devel_build
 COPY --from=pvarki/kw_product_init:latest /kw_product_init /kw_product_init
 COPY --from=rune_build /opt/templates/mediamtx.json /opt/templates/mediamtx.json
-
 # Install deps
 COPY . /app
+COPY ./ui /ui/
+WORKDIR /ui
+RUN CI=true pnpm install && pnpm build
 WORKDIR /app
 RUN --mount=type=ssh source /.venv/bin/activate \
     && apt-get update && apt-get install -y \
@@ -192,6 +196,8 @@ RUN --mount=type=ssh source /.venv/bin/activate \
 # Run tests #
 #############
 FROM devel_build as test
+WORKDIR /ui
+RUN mkdir -p /ui_build && cp -r dist/* /ui_build/
 ENTRYPOINT ["/usr/bin/tini", "--", "docker/entrypoint-test.sh"]
 # Re run install to get the service itself installed
 RUN --mount=type=ssh source /.venv/bin/activate \
@@ -205,6 +211,8 @@ RUN --mount=type=ssh source /.venv/bin/activate \
 ###########
 FROM devel_build as devel_shell
 # Copy everything to the image
+WORKDIR /ui
+RUN mkdir -p /ui_build && cp -r dist/* /ui_build/
 COPY . /app
 WORKDIR /app
 RUN apt-get update && apt-get install -y zsh vim \
