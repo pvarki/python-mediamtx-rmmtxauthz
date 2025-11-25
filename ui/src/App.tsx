@@ -1,13 +1,57 @@
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { TabProvider } from "./components/TabProvider";
-import { PageRenderer } from "./components/PageRenderer";
+import {
+  createRootRoute,
+  createRoute,
+  createRouter,
+  Outlet,
+  RouterProvider,
+} from "@tanstack/react-router";
+
+import { HomePage } from "./pages/HomePage";
+import { WatchPage } from "./pages/WatchPage";
+import { StreamPage } from "./pages/StreamPage";
 
 import enLang from "./locales/en.json";
 import fiLang from "./locales/fi.json";
 import svLang from "./locales/sv.json";
 
 
+const RootLayoutComponent = () => (
+    <div className="max-w-5xl mx-auto p-6">
+      <Outlet />
+    </div>
+)
+
+const rootRoute = createRootRoute({
+  component: RootLayoutComponent,
+});
+
+const homeRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: "/",
+  component: HomePage,
+});
+
+const watchRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: "watch",
+  component: WatchPage,
+});
+
+const streamRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: "stream",
+  component: StreamPage,
+});
+
+const routeTree = rootRoute.addChildren([
+    homeRoute,
+    watchRoute,
+    streamRoute,
+]);
+
+const router = createRouter({ routeTree, basepath: "/product/mtx" });
 
 interface Props {
   data: {};
@@ -20,9 +64,8 @@ export default ({ data }: Props) => {
   const { t, i18n } = useTranslation(PRODUCT_SHORTNAME);
 
   useEffect(() => {
-    console.log("Registering")
+    console.log("Registering");
 
-    // language setup
     async function load() {
       i18n.addResourceBundle("en", PRODUCT_SHORTNAME, enLang);
       i18n.addResourceBundle("fi", PRODUCT_SHORTNAME, fiLang);
@@ -33,16 +76,9 @@ export default ({ data }: Props) => {
     }
 
     load();
-  }, []);
+  }, [i18n]);
 
   if (!ready) return null;
 
-  return (
-    <TabProvider>
-      <div className="max-w-5xl mx-auto p-6">
-        <PageRenderer />
-      </div>
-    </TabProvider>
-
-  );
+  return <RouterProvider router={router} />;
 };

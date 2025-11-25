@@ -7,11 +7,10 @@ import {
 import { Book, Tv, Video } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { PRODUCT_SHORTNAME } from "@/App";
-import { useTab } from "@/components/TabProvider";
+import { Link } from "@tanstack/react-router";
 
 export const HomePage = () => {
   const { t, i18n } = useTranslation(PRODUCT_SHORTNAME);
-  const { changeTab } = useTab();
 
   return (
     <div>
@@ -25,39 +24,46 @@ export const HomePage = () => {
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-8">
-        <Card className="hover:border-primary hover:shadow-xl hover:-translate-y-1 cursor-pointer bg-card transition-all duration-300"
-        onClick={() => changeTab("watch")}>
-          <CardHeader className="flex flex-col items-center text-center">
-            <Tv className="w-10 h-10 mb-4 text-primary" />
-            <CardTitle className="text-lg font-semibold">
-              {t("cards.watch.title")}
-            </CardTitle>
-            <CardDescription>{t("cards.watch.description")}</CardDescription>
-          </CardHeader>
-        </Card>
+        {/*@ts-ignore*/ }
+        <Link to="watch">
+          <Card className="hover:border-primary hover:shadow-xl hover:-translate-y-1 cursor-pointer bg-card transition-all duration-300">
+            <CardHeader className="flex flex-col items-center text-center">
+              <Tv className="w-10 h-10 mb-4 text-primary" />
+              <CardTitle className="text-lg font-semibold">
+                {t("cards.watch.title")}
+              </CardTitle>
+              <CardDescription>{t("cards.watch.description")}</CardDescription>
+            </CardHeader>
+          </Card>
+        </Link>
 
-        <Card className="hover:border-primary hover:shadow-xl hover:-translate-y-1 cursor-pointer bg-card transition-all duration-300"
-        onClick={() => changeTab("stream")}>
-          <CardHeader className="flex flex-col items-center text-center">
-            <Video className="w-10 h-10 mb-4 text-primary" />
-            <CardTitle className="text-lg font-semibold">
-              {t("cards.broadcast.title")}
-            </CardTitle>
-            <CardDescription>
-              {t("cards.broadcast.description")}
-            </CardDescription>
-          </CardHeader>
-        </Card>
+        {/*@ts-ignore*/ }
+        <Link to="stream">
+          <Card className="hover:border-primary hover:shadow-xl hover:-translate-y-1 cursor-pointer bg-card transition-all duration-300">
+            <CardHeader className="flex flex-col items-center text-center">
+              <Video className="w-10 h-10 mb-4 text-primary" />
+              <CardTitle className="text-lg font-semibold">
+                {t("cards.broadcast.title")}
+              </CardTitle>
+              <CardDescription>
+                {t("cards.broadcast.description")}
+              </CardDescription>
+            </CardHeader>
+          </Card>
+        </Link>
 
-        <Card className="hover:border-primary hover:shadow-xl hover:-translate-y-1 cursor-pointer bg-card transition-all duration-300">
-          <CardHeader className="flex flex-col items-center text-center">
-            <Book className="w-10 h-10 mb-4 text-primary" />
-            <CardTitle className="text-lg font-semibold">
-              {t("cards.docs.title")}
-            </CardTitle>
-            <CardDescription>{t("cards.docs.description")}</CardDescription>
-          </CardHeader>
-        </Card>
+        {/*@ts-ignore*/ }
+        <Link to="">
+          <Card className="hover:border-primary hover:shadow-xl hover:-translate-y-1 cursor-pointer bg-card transition-all duration-300">
+            <CardHeader className="flex flex-col items-center text-center">
+              <Book className="w-10 h-10 mb-4 text-primary" />
+              <CardTitle className="text-lg font-semibold">
+                {t("cards.docs.title")}
+              </CardTitle>
+              <CardDescription>{t("cards.docs.description")}</CardDescription>
+            </CardHeader>
+          </Card>
+        </Link>
       </div>
     </div>
   );
