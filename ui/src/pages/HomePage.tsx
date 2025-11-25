@@ -23,7 +23,7 @@ export const HomePage = () => {
         </p>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-8">
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-4">
         {/*@ts-ignore*/ }
         <Link to="watch">
           <Card className="hover:border-primary hover:shadow-xl hover:-translate-y-1 cursor-pointer bg-card transition-all duration-300">
