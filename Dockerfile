@@ -196,7 +196,6 @@ RUN --mount=type=ssh source /.venv/bin/activate \
 #############
 FROM devel_build as test
 WORKDIR /ui
-RUN mkdir -p /ui_build
 ENTRYPOINT ["/usr/bin/tini", "--", "docker/entrypoint-test.sh"]
 # Re run install to get the service itself installed
 RUN --mount=type=ssh source /.venv/bin/activate \
@@ -211,7 +210,6 @@ RUN --mount=type=ssh source /.venv/bin/activate \
 FROM devel_build as devel_shell
 # Copy everything to the image
 WORKDIR /ui
-RUN mkdir -p /ui_build
 COPY . /app
 WORKDIR /app
 RUN apt-get update && apt-get install -y zsh vim \

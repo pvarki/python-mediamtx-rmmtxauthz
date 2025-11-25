@@ -142,3 +142,4 @@ dmypy.json
 ui/.__mf__temp
 ui/node_modules
 !ui/dist/*.md
+ui/.pnpm-store/
