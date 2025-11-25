@@ -51,10 +51,14 @@ const routeTree = rootRoute.addChildren([
     streamRoute,
 ]);
 
-const router = createRouter({ routeTree, basepath: "/product/mtx" });
-
 interface Props {
-  data: {};
+  data: {
+    api_url: string
+  };
+}
+
+interface RootRouteContext {
+  api_url: string;
 }
 
 export const PRODUCT_SHORTNAME = "mtx";
@@ -62,6 +66,12 @@ export const PRODUCT_SHORTNAME = "mtx";
 export default ({ data }: Props) => {
   const [ready, setReady] = useState(false);
   const { t, i18n } = useTranslation(PRODUCT_SHORTNAME);
+
+  const routerContext: RootRouteContext = {
+    api_url: data.api_url,
+  };
+
+  const router = createRouter({ routeTree, basepath: "/product/mtx" });
 
   useEffect(() => {
     console.log("Registering");
@@ -80,5 +90,5 @@ export default ({ data }: Props) => {
 
   if (!ready) return null;
 
-  return <RouterProvider router={router} />;
+  return <RouterProvider router={router} context={routerContext} />;
 };

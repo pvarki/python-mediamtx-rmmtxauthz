@@ -24,7 +24,8 @@ const mtxRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: "product/mtx/$",
   component: () => {
-    const SAMPLE_DATA = { data: {} };
+    const SAMPLE_DATA = { data: { } };
+    // @ts-ignore
     return <App data={SAMPLE_DATA} />;
   },
 });
