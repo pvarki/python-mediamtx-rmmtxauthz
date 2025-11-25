@@ -5,14 +5,12 @@ import { useRouteContext } from "@tanstack/react-router";
 export const StreamPage = () => {
   const { t, i18n } = useTranslation(PRODUCT_SHORTNAME);
 
-  // @ts-ignore just really hates
-  const { api_url } = useRouteContext({from: `product/${PRODUCT_SHORTNAME}/`, });
+  // @ts-ignore
+  const { api_url } = useRouteContext({from: `__root__`, });
 
   return (
     <div>
-      Stream Page
-      {api_url}
-      something
+      Stream page
     </div>
   );
 };

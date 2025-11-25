@@ -68,7 +68,7 @@ export default ({ data }: Props) => {
   const { t, i18n } = useTranslation(PRODUCT_SHORTNAME);
 
   const routerContext: RootRouteContext = {
-    api_url: data.api_url,
+    api_url: data.api_url ?? "localhost",
   };
 
   const router = createRouter({ routeTree, basepath: "/product/mtx" });
