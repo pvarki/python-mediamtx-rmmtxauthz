@@ -53,23 +53,16 @@ const routeTree = rootRoute.addChildren([
 
 interface Props {
   data: {
-    api_url: string
+
   };
 }
 
-interface RootRouteContext {
-  api_url: string;
-}
 
 export const PRODUCT_SHORTNAME = "mtx";
 
 export default ({ data }: Props) => {
   const [ready, setReady] = useState(false);
   const { t, i18n } = useTranslation(PRODUCT_SHORTNAME);
-
-  const routerContext: RootRouteContext = {
-    api_url: data.api_url ?? "localhost",
-  };
 
   const router = createRouter({ routeTree, basepath: "/product/mtx" });
 
@@ -90,5 +83,5 @@ export default ({ data }: Props) => {
 
   if (!ready) return null;
 
-  return <RouterProvider router={router} context={routerContext} />;
+  return <RouterProvider router={router} />;
 };
