@@ -20,7 +20,6 @@ from .health import hrouter
 from .userdirect import userrouter
 from .description import router as descriptionsrouter
 from .description import router_v2 as descriptionsrouterv2
-from .userinfo import router as userinfoRouterv2
 
 LOGGER = logging.getLogger(__name__)
 
@@ -56,7 +55,6 @@ def get_app_no_init() -> FastAPI:
     app.include_router(hrouter, prefix="/api/v1", tags=["health"])
 
     app.include_router(descriptionsrouterv2, prefix="/api/v2", tags=["description"])
-    app.include_router(userinfoRouterv2, prefix="/api/v2", tags=["clients"])
     return app
 
 
