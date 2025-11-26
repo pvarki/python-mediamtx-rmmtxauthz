@@ -9,7 +9,7 @@ import {
 } from "@tanstack/react-router";
 
 import { HomePage } from "./pages/HomePage";
-import { WatchPage } from "./pages/WatchPage";
+import { WatchPage } from "./pages/watch/WatchPage";
 import { StreamPage } from "./pages/StreamPage";
 
 import enLang from "./locales/en.json";
