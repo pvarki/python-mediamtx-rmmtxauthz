@@ -75,7 +75,7 @@ async def return_product_description_extended(language: str, request: Request) -
         return ProductDescriptionExtended(
             shortname=shortname,
             title="MediaMTX",
-            icon=None,
+            icon="/ui/mtx/mtxlogo.svg",
             description="Videon suoratoistopalvelu",
             language=language,
             docs="https://pvarki.github.io/Docusaurus-docs/docs/android/deployapp/home/",
@@ -85,7 +85,7 @@ async def return_product_description_extended(language: str, request: Request) -
         return ProductDescriptionExtended(
             shortname=shortname,
             title="MediaMTX",
-            icon=None,
+            icon="/ui/mtx/mtxlogo.svg",
             description="Videoströmningstjänst",
             language=language,
             docs="https://pvarki.github.io/Docusaurus-docs/docs/android/deployapp/home/",
@@ -94,7 +94,7 @@ async def return_product_description_extended(language: str, request: Request) -
     return ProductDescriptionExtended(
         shortname=shortname,
         title="MediaMTX",
-        icon=None,
+        icon="/ui/mtx/mtxlogo.svg",
         description="Video streaming service",
         language=language,
         docs="https://pvarki.github.io/Docusaurus-docs/docs/android/deployapp/home/",
