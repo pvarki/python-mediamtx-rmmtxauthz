@@ -3,7 +3,7 @@ import {
   CardHeader,
   CardDescription,
   CardTitle,
-} from "../components/ui/card";
+} from "@/components/ui/card";
 import { Book, Tv, Video } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { PRODUCT_SHORTNAME } from "@/App";
