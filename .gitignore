@@ -136,3 +136,10 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
+
+# UI specific stuff
+!ui/src/lib
+ui/.__mf__temp
+ui/node_modules
+!ui/dist/*.md
+ui/.pnpm-store/

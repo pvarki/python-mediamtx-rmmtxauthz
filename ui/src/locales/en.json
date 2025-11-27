@@ -1,0 +1,23 @@
+{
+  "cards": {
+    "broadcast": {
+      "description": "Start your own broadcast now.",
+      "title": "Start a stream"
+    },
+    "docs": {
+      "description": "Read guides.",
+      "title": "Documentation"
+    },
+    "watch": {
+      "description": "View active streams.",
+      "title": "Watch streams"
+    }
+  },
+  "intro": {
+    "description": "Select an option below to get started.",
+    "title": "MediaMTX"
+  },
+  "streams": {
+    "introtext": "Watch Streams"
+  }
+}

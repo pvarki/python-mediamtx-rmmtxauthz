@@ -1,12 +1,11 @@
-"""Instructions and descriptions"""
+"""Instructions API"""
 
 from __future__ import annotations
-from typing import Optional, Dict, Any
+from typing import Dict, Any
 import logging
 import json
 from pathlib import Path
 
-from pydantic import BaseModel, Field, ConfigDict
 from fastapi import APIRouter, Depends, Request, HTTPException
 from fastapi.responses import FileResponse
 from libpvarki.middleware import MTLSHeader
@@ -20,44 +19,6 @@ from ..mediamtx import MediaMTXControl
 LOGGER = logging.getLogger(__name__)
 
 router = APIRouter(dependencies=[Depends(MTLSHeader(auto_error=True))])
-
-
-# FIXME: Move to libpvarki
-class ProductDescription(BaseModel):  # pylint: disable=too-few-public-methods
-    """Description of a product"""
-
-    model_config = ConfigDict(extra="forbid")
-
-    shortname: str = Field(description="Short name for the product, used as slug/key in dicts and urls")
-    title: str = Field(description="Fancy name for the product")
-    icon: Optional[str] = Field(description="URL for icon")
-    description: str = Field(description="Short-ish description of the product")
-    language: str = Field(description="Language of this response")
-
-
-@router.get(
-    "/description/{language}",
-    response_model=ProductDescription,
-)
-async def return_product_description(language: str, request: Request) -> ProductDescription:
-    """The product description"""
-    comes_from_rm(request)
-    # FIXME: return in correct Rune format
-    if language == "fi":
-        return ProductDescription(
-            shortname="fake",
-            title="Feikkituote",
-            icon=None,
-            description=""""tuote" integraatioiden testaamiseen""",
-            language="fi",
-        )
-    return ProductDescription(
-        shortname="fake",
-        title="Fake Product",
-        icon=None,
-        description="Fake product for integrations testing and examples",
-        language="en",
-    )
 
 
 @router.get("/assets/{file_path:path}")
