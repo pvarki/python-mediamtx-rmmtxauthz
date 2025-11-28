@@ -1,1 +1,23 @@
-{}
+{
+  "cards": {
+    "broadcast": {
+      "description": "Starta din egen sändning nu.",
+      "title": "Starta en stream"
+    },
+    "docs": {
+      "description": "Läs guider.",
+      "title": "Dokumentation"
+    },
+    "watch": {
+      "description": "Titta på aktiva strömmar.",
+      "title": "Titta på streams"
+    }
+  },
+  "intro": {
+    "description": "Välj ett alternativ nedan för att komma igång.",
+    "title": "MediaMTX"
+  },
+  "streams": {
+    "introtext": "Titta på streams"
+  }
+}

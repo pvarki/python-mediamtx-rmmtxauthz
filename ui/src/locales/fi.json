@@ -1,1 +1,23 @@
-{}
+{
+  "cards": {
+    "broadcast": {
+      "description": "Aloita oma stream nyt.",
+      "title": "Aloita stream"
+    },
+    "docs": {
+      "description": "Lue oppaat.",
+      "title": "Dokumentaatio"
+    },
+    "watch": {
+      "description": "Katso aktiivisia streamejä.",
+      "title": "Katso streamit"
+    }
+  },
+  "intro": {
+    "description": "Valitse alla oleva vaihtoehto aloittaaksesi.",
+    "title": "MediaMTX"
+  },
+  "streams": {
+    "introtext": "Katso streamit"
+  }
+}
