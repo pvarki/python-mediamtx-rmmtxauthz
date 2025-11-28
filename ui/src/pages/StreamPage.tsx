@@ -1,18 +1,17 @@
 import { useTranslation } from "react-i18next";
 import { PRODUCT_SHORTNAME } from "@/App";
 import { useEffect, useState } from "react";
-import {
-  Breadcrumb,
-  BreadcrumbLink,
-  BreadcrumbItem,
-  BreadcrumbList,
-  BreadcrumbSeparator,
-  BreadcrumbPage,
-} from "@/components/ui/breadcrumb";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
-import { Copy, Eye, EyeClosed, ChevronDown, ChevronUp } from "lucide-react";
+import {
+  Copy,
+  Eye,
+  EyeClosed,
+  ChevronDown,
+  ChevronUp,
+  ArrowLeftCircle,
+} from "lucide-react";
 import { toast } from "sonner";
 import { Toaster } from "@/components/ui/sonner";
 import { Link } from "@tanstack/react-router";
@@ -38,15 +37,18 @@ export const StreamPage = () => {
   const [advancedLinks, setAdvancedLinks] = useState<StreamLinks[]>([]);
 
   const [isAdvancedOpen, setIsAdvancedOpen] = useState(false);
-  const [showToolPasswords, setShowToolPasswords] = useState<Record<number, boolean>>({});
-  const [showAdvancedPasswords, setShowAdvancedPasswords] = useState<Record<number, boolean>>({});
-
+  const [showToolPasswords, setShowToolPasswords] = useState<
+    Record<number, boolean>
+  >({});
+  const [showAdvancedPasswords, setShowAdvancedPasswords] = useState<
+    Record<number, boolean>
+  >({});
 
   useEffect(() => {
     async function fetchCredentials() {
       try {
         const response = await fetch(
-          "/api/v1/product/proxy/mtx/api/v1/proxy/credentials"
+          "/api/v1/product/proxy/mtx/api/v1/proxy/credentials",
         );
 
         if (!response.ok) {
@@ -66,7 +68,7 @@ export const StreamPage = () => {
           {
             name: "GoPro App",
             url: `rtmps://${currentDomain}:1936/live/gopro/${data.username}?user=${data.username}&pass=${data.password}`,
-            hideCredentials: true
+            hideCredentials: true,
           },
           {
             name: "UASTool",
@@ -82,7 +84,7 @@ export const StreamPage = () => {
           {
             name: "RTSPS (with authentication)",
             url: `rtsps://${data.username}:${data.password}@${currentDomain}:8322/live/icu/${data.username}`,
-            hideCredentials: true
+            hideCredentials: true,
           },
           {
             name: "RTMPS",
@@ -91,7 +93,7 @@ export const StreamPage = () => {
           {
             name: "RTMPS (with authentication)",
             url: `rtmps://${data.username}:${data.password}@${currentDomain}:1936/live/icu/${data.username}`,
-            hideCredentials: true
+            hideCredentials: true,
           },
         ];
 
@@ -114,24 +116,12 @@ export const StreamPage = () => {
   return (
     <div className="flex justify-center text-center">
       <div className="w-full max-w-xl space-y-4">
-        <div>
-          <Breadcrumb>
-            <BreadcrumbList>
-              <BreadcrumbItem>
-                <BreadcrumbLink asChild>
-                  {/* @ts-ignore */}
-                  <Link to="../">Home</Link>
-                </BreadcrumbLink>
-              </BreadcrumbItem>
-              <BreadcrumbSeparator />
-              <BreadcrumbItem>
-                <BreadcrumbPage>Stream</BreadcrumbPage>
-              </BreadcrumbItem>
-            </BreadcrumbList>
-          </Breadcrumb>
+        <div className="flex flex-row items-center gap-4">
+          <Link to="/">
+            <ArrowLeftCircle className="size-8" />
+          </Link>
+          <p className="text-2xl font-bold">Create a stream</p>
         </div>
-
-        <p className="text-2xl font-bold">Create a stream</p>
 
         {error && <p className="text-red-500">Error: {error}</p>}
 
@@ -170,43 +160,45 @@ export const StreamPage = () => {
               </div>
             </div>
 
-
             <div className="mt-12">
               <p className="font-semibold text-xl text-left">Tools</p>
 
               {/* Tools */}
-             {toolLinks.map((link, idx) => (
-              <div key={idx} className="pt-4 text-left">
-                <p className="font-bold text-gray-800">{link.name}</p>
-                <div className="flex gap-2 mt-2">
-                  <Input
-                    readOnly
-                    type={link.hideCredentials && !showToolPasswords[idx] ? "password" : "text"}
-                    value={link.url}
-                    className="flex-1"
-                  />
-
-                  {link.hideCredentials && (
-                    <Button
-                      onClick={() =>
-                        setShowToolPasswords((prev) => ({
-                          ...prev,
-                          [idx]: !prev[idx],
-                        }))
+              {toolLinks.map((link, idx) => (
+                <div key={idx} className="pt-4 text-left">
+                  <p className="font-bold text-gray-800">{link.name}</p>
+                  <div className="flex gap-2 mt-2">
+                    <Input
+                      readOnly
+                      type={
+                        link.hideCredentials && !showToolPasswords[idx]
+                          ? "password"
+                          : "text"
                       }
-                    >
-                      {showToolPasswords[idx] ? "Hide" : "Show"}{" "}
-                      {showToolPasswords[idx] ? <EyeClosed /> : <Eye />}
+                      value={link.url}
+                      className="flex-1"
+                    />
+
+                    {link.hideCredentials && (
+                      <Button
+                        onClick={() =>
+                          setShowToolPasswords((prev) => ({
+                            ...prev,
+                            [idx]: !prev[idx],
+                          }))
+                        }
+                      >
+                        {showToolPasswords[idx] ? "Hide" : "Show"}{" "}
+                        {showToolPasswords[idx] ? <EyeClosed /> : <Eye />}
+                      </Button>
+                    )}
+
+                    <Button onClick={() => copyToClipboard(link.url)}>
+                      Copy <Copy />
                     </Button>
-                  )}
-
-                  <Button onClick={() => copyToClipboard(link.url)}>
-                    Copy <Copy />
-                  </Button>
+                  </div>
                 </div>
-              </div>
-            ))}
-
+              ))}
 
               {/* Advanced */}
               <div className="mt-8 border rounded-lg p-4 text-left">
@@ -226,7 +218,12 @@ export const StreamPage = () => {
                         <div className="flex gap-2 mt-2">
                           <Input
                             readOnly
-                            type={link.hideCredentials && !showAdvancedPasswords[idx] ? "password" : "text"}
+                            type={
+                              link.hideCredentials &&
+                              !showAdvancedPasswords[idx]
+                                ? "password"
+                                : "text"
+                            }
                             value={link.url}
                             className="flex-1"
                           />
@@ -241,7 +238,11 @@ export const StreamPage = () => {
                               }
                             >
                               {showAdvancedPasswords[idx] ? "Hide" : "Show"}{" "}
-                              {showAdvancedPasswords[idx] ? <EyeClosed /> : <Eye />}
+                              {showAdvancedPasswords[idx] ? (
+                                <EyeClosed />
+                              ) : (
+                                <Eye />
+                              )}
                             </Button>
                           )}
 
