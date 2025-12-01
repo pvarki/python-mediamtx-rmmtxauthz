@@ -1,23 +1,32 @@
 {
-  "cards": {
-    "broadcast": {
-      "description": "Start your own broadcast now.",
-      "title": "Start a stream"
-    },
-    "docs": {
-      "description": "Read guides.",
-      "title": "Documentation"
-    },
-    "watch": {
-      "description": "View active streams.",
-      "title": "Watch streams"
-    }
+  "common": {
+    "copied": "Copied to clipboard!",
+    "copy": "Copy",
+    "hide": "Hide",
+    "show": "Show"
   },
-  "intro": {
-    "description": "Select an option below to get started.",
-    "title": "MediaMTX"
+  "home": {
+    "add": "Add",
+    "documentation": "Documentation",
+    "error_loading_streams": "There was an error when loading streams. Please try again later.",
+    "loading": "Loading...",
+    "result": "result",
+    "results": "results",
+    "search": "Search...",
+    "started_by": "Started by: "
   },
-  "streams": {
-    "introtext": "Watch Streams"
+  "stream": {
+    "advanced_links": "Advanced Links",
+    "gopro_app": "GoPro App",
+    "opentak_icu": "OpenTak ICU",
+    "passw": "Password",
+    "rtmps": "RTMPS",
+    "rtmps_with_auth": "RTMPS (with authentication)",
+    "rtsps": "RTSPS",
+    "rtsps_with_auth": "RTSPS (with authentication)",
+    "title": "Start a stream",
+    "tools": "Tools",
+    "uastool": "UASTool",
+    "username": "Username"
   }
 }

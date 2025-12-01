@@ -1,5 +1,3 @@
-import { useTranslation } from "react-i18next";
-import { PRODUCT_SHORTNAME } from "@/App";
 import { useEffect, useState } from "react";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -12,9 +10,12 @@ import {
   ChevronUp,
   ArrowLeftCircle,
 } from "lucide-react";
-import { toast } from "sonner";
 import { Toaster } from "@/components/ui/sonner";
 import { Link } from "@tanstack/react-router";
+import { TranslatedText } from "@/components/translated-text";
+import { copyToClipboard } from "@/lib/clipboard";
+import { useTranslation } from "react-i18next";
+import { PRODUCT_SHORTNAME } from "@/App";
 
 interface Userinfo {
   username: string;
@@ -62,36 +63,36 @@ export const StreamPage = () => {
 
         const links: StreamLinks[] = [
           {
-            name: "Opentak ICU",
+            name: t("stream.opentak_icu"),
             url: `rtmps://${currentDomain}:1936/live/icu/${data.username}`,
           },
           {
-            name: "GoPro App",
+            name: t("stream.gopro_app"),
             url: `rtmps://${currentDomain}:1936/live/gopro/${data.username}?user=${data.username}&pass=${data.password}`,
             hideCredentials: true,
           },
           {
-            name: "UASTool",
+            name: t("stream.uastool"),
             url: `rtsp://${currentDomain}:8554/live/uas/${data.username}`,
           },
         ];
 
         const advLinks: StreamLinks[] = [
           {
-            name: "RTSPS",
+            name: t("stream.rtsps"),
             url: `rtsps://${currentDomain}:8322/live/icu/${data.username}`,
           },
           {
-            name: "RTSPS (with authentication)",
+            name: t("stream.rtsps_with_auth"),
             url: `rtsps://${data.username}:${data.password}@${currentDomain}:8322/live/icu/${data.username}`,
             hideCredentials: true,
           },
           {
-            name: "RTMPS",
+            name: t("stream.rtmps"),
             url: `rtmps://${currentDomain}:1936/live/icu/${data.username}`,
           },
           {
-            name: "RTMPS (with authentication)",
+            name: t("stream.rtmps_with_auth"),
             url: `rtmps://${data.username}:${data.password}@${currentDomain}:1936/live/icu/${data.username}`,
             hideCredentials: true,
           },
@@ -108,11 +109,6 @@ export const StreamPage = () => {
     fetchCredentials();
   }, []);
 
-  const copyToClipboard = (value: string) => {
-    toast.success("Copied to clipboard!");
-    navigator.clipboard.writeText(value);
-  };
-
   return (
     <div className="flex justify-center text-center">
       <div className="w-full max-w-xl space-y-4">
@@ -120,7 +116,7 @@ export const StreamPage = () => {
           <Link to="/">
             <ArrowLeftCircle className="size-8" />
           </Link>
-          <p className="text-2xl font-bold">Create a stream</p>
+          <p className="text-2xl font-bold"><TranslatedText id="stream.title"/></p>
         </div>
 
         {error && <p className="text-red-500">Error: {error}</p>}
@@ -130,18 +126,17 @@ export const StreamPage = () => {
             {/* User Info */}
             <div className="mt-6 space-y-6">
               <div className="text-left">
-                <Label className="font-semibold">Username</Label>
+                <Label className="font-semibold"><TranslatedText id="stream.passw"/></Label>
                 <div className="flex gap-2 mt-1">
                   <Input readOnly value={user.username} />
-                  <Button onClick={() => copyToClipboard(user.username)}>
-                    Copy
-                    <Copy />
+                  <Button onClick={() => copyToClipboard(user.username, t("common.copied"))}>
+                    <TranslatedText id="common.copy"/> <Copy />
                   </Button>
                 </div>
               </div>
 
               <div className="text-left">
-                <Label className="font-semibold">Password</Label>
+                <Label className="font-semibold"><TranslatedText id="stream.username"/></Label>
                 <div className="flex gap-2 mt-1">
                   <Input
                     readOnly
@@ -149,19 +144,18 @@ export const StreamPage = () => {
                     value={user.password}
                   />
                   <Button onClick={() => setShowPassword(!showPassword)}>
-                    {showPassword ? "Hide" : "Show"}
+                    {showPassword ? <TranslatedText id="common.hide"/> : <TranslatedText id="common.show"/>}
                     {showPassword ? <EyeClosed /> : <Eye />}
                   </Button>
-                  <Button onClick={() => copyToClipboard(user.password)}>
-                    Copy
-                    <Copy />
+                  <Button onClick={() => copyToClipboard(user.password, t("common.copied"))}>
+                    <TranslatedText id="common.copy"/> <Copy />
                   </Button>
                 </div>
               </div>
             </div>
 
             <div className="mt-12">
-              <p className="font-semibold text-xl text-left">Tools</p>
+              <p className="font-semibold text-xl text-left"><TranslatedText id="stream.tools"/></p>
 
               {/* Tools */}
               {toolLinks.map((link, idx) => (
@@ -188,13 +182,13 @@ export const StreamPage = () => {
                           }))
                         }
                       >
-                        {showToolPasswords[idx] ? "Hide" : "Show"}{" "}
+                        {showToolPasswords[idx] ? <TranslatedText id="common.hide"/> : <TranslatedText id="common.show"/>}{" "}
                         {showToolPasswords[idx] ? <EyeClosed /> : <Eye />}
                       </Button>
                     )}
 
-                    <Button onClick={() => copyToClipboard(link.url)}>
-                      Copy <Copy />
+                    <Button onClick={() => copyToClipboard(link.url, t("common.copied"))}>
+                      <TranslatedText id="common.copy"/> <Copy />
                     </Button>
                   </div>
                 </div>
@@ -206,7 +200,7 @@ export const StreamPage = () => {
                   className="flex items-center justify-between w-full font-semibold text-lg"
                   onClick={() => setIsAdvancedOpen(!isAdvancedOpen)}
                 >
-                  <span className="text-left">{`Advanced Links`}</span>
+                  <TranslatedText id="stream.advanced_links" className="text-left"/>
                   {isAdvancedOpen ? <ChevronUp /> : <ChevronDown />}
                 </button>
 
@@ -237,7 +231,7 @@ export const StreamPage = () => {
                                 }))
                               }
                             >
-                              {showAdvancedPasswords[idx] ? "Hide" : "Show"}{" "}
+                              {showAdvancedPasswords[idx] ? <TranslatedText id="common.hide"/> : <TranslatedText id="common.show"/>}{" "}
                               {showAdvancedPasswords[idx] ? (
                                 <EyeClosed />
                               ) : (
@@ -246,8 +240,8 @@ export const StreamPage = () => {
                             </Button>
                           )}
 
-                          <Button onClick={() => copyToClipboard(link.url)}>
-                            Copy <Copy />
+                          <Button onClick={() => copyToClipboard(link.url, t("common.copied"))}>
+                            <TranslatedText id="common.copy"/> <Copy />
                           </Button>
                         </div>
                       </div>

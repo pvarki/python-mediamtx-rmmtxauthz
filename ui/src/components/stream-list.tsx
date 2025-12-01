@@ -8,6 +8,7 @@ import { InputGroup, InputGroupAddon, InputGroupInput } from "./ui/input-group";
 import { Link } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import { StreamConfig } from "@/model/stream-config";
+import { TranslatedText } from "./translated-text";
 
 export const StreamList = () => {
   // TODO: Add Pagination
@@ -37,8 +38,8 @@ export const StreamList = () => {
     });
   }, [search, streams]);
 
-  if (isLoading) return <div>Loading...</div>;
-  if (error) return <div>Error: {(error as Error).message}</div>;
+  if (isLoading) return <div className="text-center"><TranslatedText id="home.loading"/></div>;
+  if (error) return <div className="text-center"><TranslatedText id="home.error_loading_streams" className=""/></div>;
 
   const streamListComponents = filteredData.map((item) => {
     const callsign = item.path.split("/")[3] ?? "unknown";
@@ -50,7 +51,7 @@ export const StreamList = () => {
         >
           <CardTitle className="text-lg">{item.path}</CardTitle>
           <div className="flex flex-row space-x-4 justify-between">
-            <CardDescription>{`Started by: ` + callsign}</CardDescription>
+            <CardDescription>{t("home.started_by") + callsign}</CardDescription>
             {item.urls.hls && (
               <Button
                 onClick={(e) => {
@@ -74,7 +75,7 @@ export const StreamList = () => {
       <div className="flex flex-row gap-4 items-center">
         <InputGroup>
           <InputGroupInput
-            placeholder="Search..."
+            placeholder={t("home.search")}
             value={search}
             onChange={(e) => setSearch(e.target.value)}
           />
@@ -83,7 +84,7 @@ export const StreamList = () => {
           </InputGroupAddon>
           <InputGroupAddon align="inline-end">
             {filteredData.length}{" "}
-            {filteredData.length == 1 ? "result" : "results"}
+            {filteredData.length == 1 ? t("home.result") : t("home.results")}
           </InputGroupAddon>
         </InputGroup>
       </div>

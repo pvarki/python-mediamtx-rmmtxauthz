@@ -12,6 +12,9 @@ import { Link } from "@tanstack/react-router";
 import { Card, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { MouseEventHandler } from "react";
+import { copyToClipboard } from "@/lib/clipboard";
+import { Toaster } from "@/components/ui/sonner";
+import { TFunction } from "i18next";
 
 function getIconForProtocol(protocol: string): JSX.Element {
   switch (protocol) {
@@ -27,6 +30,7 @@ function getIconForProtocol(protocol: string): JSX.Element {
 function getMouseEventHandlerForProtocol(
   protocol: string,
   url: string,
+  t: TFunction
 ): MouseEventHandler {
   switch (protocol) {
     case "hls":
@@ -34,7 +38,7 @@ function getMouseEventHandlerForProtocol(
     case "webrtc":
       return () => window.open(url);
     default:
-      return () => navigator.clipboard.writeText(url);
+      return () => copyToClipboard(url, t("common.copied"));
   }
 }
 
@@ -68,7 +72,7 @@ export const LivePage = () => {
         <div className="flex flex-row justify-between items-center">
           <CardTitle>{protocol.toUpperCase()}</CardTitle>
           <Button
-            onClick={getMouseEventHandlerForProtocol(protocol, url)}
+            onClick={getMouseEventHandlerForProtocol(protocol, url, t)}
             size="icon-lg"
           >
             {getIconForProtocol(protocol)}
@@ -89,6 +93,7 @@ export const LivePage = () => {
         </div>
         <div className="w-full max-w-xl space-y-4"> {protocols} </div>
       </div>
+      <Toaster position="top-center" />
     </div>
   );
 };

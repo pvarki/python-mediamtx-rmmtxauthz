@@ -1,23 +1,32 @@
 {
-  "cards": {
-    "broadcast": {
-      "description": "Aloita oma stream nyt.",
-      "title": "Aloita stream"
-    },
-    "docs": {
-      "description": "Lue oppaat.",
-      "title": "Dokumentaatio"
-    },
-    "watch": {
-      "description": "Katso aktiivisia streamejä.",
-      "title": "Katso streamit"
-    }
+  "common": {
+    "copied": "Kopioitu leikep\u00f6yd\u00e4lle!",
+    "copy": "Kopioi",
+    "hide": "Piilota",
+    "show": "N\u00e4yt\u00e4"
   },
-  "intro": {
-    "description": "Valitse alla oleva vaihtoehto aloittaaksesi.",
-    "title": "MediaMTX"
+  "home": {
+    "add": "Lis\u00e4\u00e4",
+    "documentation": "Dokumentaatio",
+    "error_loading_streams": "Tapahtui virhe kun streamej\u00e4 ladattiin. Kokeile my\u00f6hemmin uudestaan.",
+    "loading": "Ladataan...",
+    "result": "tulos",
+    "results": "tulosta",
+    "search": "Hae...",
+    "started_by": "Aloittaja: "
   },
-  "streams": {
-    "introtext": "Katso streamit"
+  "stream": {
+    "advanced_links": "Edistyneet linkit",
+    "gopro_app": "GoPro Sovellus",
+    "opentak_icu": "OpenTak ICU",
+    "passw": "Salasana",
+    "rtmps": "RTMPS",
+    "rtmps_with_auth": "RTMPS (Todennuksen kanssa)",
+    "rtsps": "RTSPS",
+    "rtsps_with_auth": "RTSPS (Todennuksen kanssa)",
+    "title": "Aloita stream",
+    "tools": "Ty\u00f6kalut",
+    "uastool": "UASTool",
+    "username": "K\u00e4ytt\u00e4j\u00e4tunnus"
   }
 }
