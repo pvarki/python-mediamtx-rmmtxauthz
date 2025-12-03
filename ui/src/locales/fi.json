@@ -16,10 +16,14 @@
     "started_by": "Aloittaja: "
   },
   "stream": {
+    "address": "Osoite",
     "advanced_links": "Edistyneet linkit",
     "gopro_app": "GoPro Sovellus",
     "opentak_icu": "OpenTak ICU",
     "passw": "Salasana",
+    "path": "Reitti",
+    "port": "Portti",
+    "protocol": "Protokolla",
     "rtmps": "RTMPS",
     "rtmps_with_auth": "RTMPS (Todennuksen kanssa)",
     "rtsps": "RTSPS",
