@@ -16,10 +16,14 @@
     "started_by": "Startad av: "
   },
   "stream": {
+    "address": "Adress",
     "advanced_links": "Avancerade l\u00e4nkar",
     "gopro_app": "GoPro-app",
     "opentak_icu": "OpenTak ICU",
     "passw": "L\u00f6senord",
+    "path": "V\u00e4g",
+    "port": "Port",
+    "protocol": "Protokoll",
     "rtmps": "RTMPS",
     "rtmps_with_auth": "RTMPS (med autentisering)",
     "rtsps": "RTSPS",
