@@ -6,8 +6,13 @@
     "module": "ESNext",
     "moduleResolution": "bundler",
     "paths": {
-      "@/*": ["./src/*"]
+      "@/*": [
+        "./src/*"
+      ]
     }
   },
-  "include": ["vite.config.ts", "module-federation/vite-importmap-shim.ts"]
+  "include": [
+    "vite.config.ts",
+    "module-federation/vite-importmap-shim.ts"
+  ]
 }

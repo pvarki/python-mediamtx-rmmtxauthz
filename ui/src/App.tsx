@@ -9,12 +9,13 @@ import {
 } from "@tanstack/react-router";
 
 import { HomePage } from "./pages/HomePage";
-import { WatchPage } from "./pages/watch/WatchPage";
+import { LivePage } from "./pages/LivePage";
 import { StreamPage } from "./pages/StreamPage";
 
 import enLang from "./locales/en.json";
 import fiLang from "./locales/fi.json";
 import svLang from "./locales/sv.json";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
 const RootLayoutComponent = () => (
   <div className="max-w-5xl mx-auto p-6">
@@ -32,10 +33,10 @@ const homeRoute = createRoute({
   component: HomePage,
 });
 
-const watchRoute = createRoute({
+export const watchRoute = createRoute({
   getParentRoute: () => rootRoute,
-  path: "watch",
-  component: WatchPage,
+  path: "live/$protocol/$callsign",
+  component: LivePage,
 });
 
 const streamRoute = createRoute({
@@ -74,6 +75,11 @@ export default ({ data }: Props) => {
   }, [i18n]);
 
   if (!ready) return null;
+  const queryClient = new QueryClient();
 
-  return <RouterProvider router={router} />;
+  return (
+    <QueryClientProvider client={queryClient}>
+      <RouterProvider router={router} />
+    </QueryClientProvider>
+  );
 };

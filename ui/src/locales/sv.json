@@ -1,1 +1,36 @@
-{}
+{
+  "common": {
+    "copied": "Kopierat till urklipp!",
+    "copy": "Kopiera",
+    "hide": "D\u00f6lj",
+    "show": "Visa"
+  },
+  "home": {
+    "add": "L\u00e4gg till",
+    "documentation": "Dokumentation",
+    "error_loading_streams": "Ett fel uppstod n\u00e4r str\u00f6mmar skulle l\u00e4sas in. F\u00f6rs\u00f6k igen senare.",
+    "loading": "L\u00e4ser in...",
+    "result": "resultat",
+    "results": "resultat",
+    "search": "S\u00f6k...",
+    "started_by": "Startad av: "
+  },
+  "stream": {
+    "address": "Adress",
+    "advanced_links": "Avancerade l\u00e4nkar",
+    "gopro_app": "GoPro-app",
+    "opentak_icu": "OpenTak ICU",
+    "passw": "L\u00f6senord",
+    "path": "V\u00e4g",
+    "port": "Port",
+    "protocol": "Protokoll",
+    "rtmps": "RTMPS",
+    "rtmps_with_auth": "RTMPS (med autentisering)",
+    "rtsps": "RTSPS",
+    "rtsps_with_auth": "RTSPS (med autentisering)",
+    "title": "Starta en str\u00f6m",
+    "tools": "Verktyg",
+    "uastool": "UASTool",
+    "username": "Anv\u00e4ndarnamn"
+  }
+}
