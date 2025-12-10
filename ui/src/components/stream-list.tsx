@@ -38,8 +38,18 @@ export const StreamList = () => {
     });
   }, [search, streams]);
 
-  if (isLoading) return <div className="text-center"><TranslatedText id="home.loading"/></div>;
-  if (error) return <div className="text-center"><TranslatedText id="home.error_loading_streams" className=""/></div>;
+  if (isLoading)
+    return (
+      <div className="text-center">
+        <TranslatedText id="home.loading" />
+      </div>
+    );
+  if (error)
+    return (
+      <div className="text-center">
+        <TranslatedText id="home.error_loading_streams" className="" />
+      </div>
+    );
 
   const streamListComponents = filteredData.map((item) => {
     const callsign = item.path.split("/")[3] ?? "unknown";
