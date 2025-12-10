@@ -24,7 +24,7 @@ export const HomePage = () => {
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-4">
-        {/*@ts-ignore*/ }
+        {/*@ts-ignore*/}
         <Link to="watch">
           <Card className="hover:border-primary hover:shadow-xl hover:-translate-y-1 cursor-pointer bg-card transition-all duration-300">
             <CardHeader className="flex flex-col items-center text-center">
@@ -37,7 +37,7 @@ export const HomePage = () => {
           </Card>
         </Link>
 
-        {/*@ts-ignore*/ }
+        {/*@ts-ignore*/}
         <Link to="stream">
           <Card className="hover:border-primary hover:shadow-xl hover:-translate-y-1 cursor-pointer bg-card transition-all duration-300">
             <CardHeader className="flex flex-col items-center text-center">
@@ -52,7 +52,7 @@ export const HomePage = () => {
           </Card>
         </Link>
 
-        {/*@ts-ignore*/ }
+        {/*@ts-ignore*/}
         <Link to="">
           <Card className="hover:border-primary hover:shadow-xl hover:-translate-y-1 cursor-pointer bg-card transition-all duration-300">
             <CardHeader className="flex flex-col items-center text-center">

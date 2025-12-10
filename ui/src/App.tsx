@@ -16,12 +16,11 @@ import enLang from "./locales/en.json";
 import fiLang from "./locales/fi.json";
 import svLang from "./locales/sv.json";
 
-
 const RootLayoutComponent = () => (
-    <div className="max-w-5xl mx-auto p-6">
-      <Outlet />
-    </div>
-)
+  <div className="max-w-5xl mx-auto p-6">
+    <Outlet />
+  </div>
+);
 
 const rootRoute = createRootRoute({
   component: RootLayoutComponent,
@@ -45,18 +44,11 @@ const streamRoute = createRoute({
   component: StreamPage,
 });
 
-const routeTree = rootRoute.addChildren([
-    homeRoute,
-    watchRoute,
-    streamRoute,
-]);
+const routeTree = rootRoute.addChildren([homeRoute, watchRoute, streamRoute]);
 
 interface Props {
-  data: {
-
-  };
+  data: {};
 }
-
 
 export const PRODUCT_SHORTNAME = "mtx";
 

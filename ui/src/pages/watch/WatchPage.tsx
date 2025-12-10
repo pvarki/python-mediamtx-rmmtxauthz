@@ -7,26 +7,24 @@ import {
   BreadcrumbItem,
   BreadcrumbLink,
   BreadcrumbSeparator,
-  BreadcrumbPage
-} from "@/components/ui/breadcrumb"
+  BreadcrumbPage,
+} from "@/components/ui/breadcrumb";
 import { DataTable } from "@/components/data-table";
 import { getColumns, StreamItem } from "./Columns";
 import { Link } from "@tanstack/react-router";
 
-
-
 export const WatchPage = () => {
   const { t, i18n } = useTranslation(PRODUCT_SHORTNAME);
 
-  const streamsUrl = "/api/v1/product/proxy/mtx/api/v1/proxy/streams"
+  const streamsUrl = "/api/v1/product/proxy/mtx/api/v1/proxy/streams";
   const [streams, setStreams] = useState([]);
   useEffect(() => {
     async function getStuff() {
-      console.log(`Fetching streams from ${streamsUrl}`)
+      console.log(`Fetching streams from ${streamsUrl}`);
       const resp = await fetch(streamsUrl);
-      setStreams(await resp.json())
+      setStreams(await resp.json());
     }
-    getStuff()
+    getStuff();
   }, []);
 
   const cachedTableData: StreamItem[] = useMemo(
@@ -36,8 +34,9 @@ export const WatchPage = () => {
         url: Object.entries(stream["urls"]).map(([protocol, url]) => ({
           protocol,
           url,
-        }))})),
-    [streams]
+        })),
+      })),
+    [streams],
   );
 
   return (
@@ -63,7 +62,11 @@ export const WatchPage = () => {
           <p className="text-2xl font-bold">Watch Streams</p>
         </div>
       </div>
-      <DataTable data={cachedTableData} columns={getColumns(t)} defaultSortKey="path" />
+      <DataTable
+        data={cachedTableData}
+        columns={getColumns(t)}
+        defaultSortKey="path"
+      />
     </div>
   );
 };

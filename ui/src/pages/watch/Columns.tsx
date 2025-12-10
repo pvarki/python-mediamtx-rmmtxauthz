@@ -1,13 +1,28 @@
 import { ColumnDef } from "@tanstack/react-table";
 import { Button } from "@/components/ui/button";
-import { ArrowUpDown, ArrowUp, ArrowDown, Video, Link, TrafficCone, Copy, SquareArrowOutUpRight } from "lucide-react";
+import {
+  ArrowUpDown,
+  ArrowUp,
+  ArrowDown,
+  Video,
+  Link,
+  TrafficCone,
+  Copy,
+  SquareArrowOutUpRight,
+} from "lucide-react";
 import { JSX, useState } from "react";
 import { TFunction } from "i18next";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
 export type StreamItem = {
-  path: string
-  url: { protocol: string; url: unknown; }[];
+  path: string;
+  url: { protocol: string; url: unknown }[];
 };
 
 export const getColumns = (t: TFunction): ColumnDef<StreamItem>[] => [
@@ -16,9 +31,7 @@ export const getColumns = (t: TFunction): ColumnDef<StreamItem>[] => [
     header: ({ column }): JSX.Element => (
       <Button
         variant="ghost"
-        onClick={() =>
-          column.toggleSorting(column.getIsSorted() === "asc")
-        }
+        onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
       >
         Path
         {column.getIsSorted() === "asc" ? (
@@ -35,20 +48,26 @@ export const getColumns = (t: TFunction): ColumnDef<StreamItem>[] => [
     accessorKey: "url",
     header: "Protocol",
     cell: ({ getValue }) => {
-      const urls = getValue() as { protocol: string; url: string; }[];
-      const [selectedProtocol, setSelectedProtocol] = useState<string | null>(null);
+      const urls = getValue() as { protocol: string; url: string }[];
+      const [selectedProtocol, setSelectedProtocol] = useState<string | null>(
+        null,
+      );
       const [copyMessage, setCopyMessage] = useState<string | null>(null);
 
-      const selectedUrlObj = urls.find(u => u.protocol === selectedProtocol);
+      const selectedUrlObj = urls.find((u) => u.protocol === selectedProtocol);
 
       const handleClick = () => {
         if (!selectedUrlObj) return;
 
-        if (selectedUrlObj.protocol === "hls" || selectedUrlObj.protocol === "webrtc") {
+        if (
+          selectedUrlObj.protocol === "hls" ||
+          selectedUrlObj.protocol === "webrtc"
+        ) {
           window.open(selectedUrlObj.url as string, "_blank");
         } else {
           // TODO: Add display label when copying
-          navigator.clipboard.writeText(selectedUrlObj.url as string)
+          navigator.clipboard
+            .writeText(selectedUrlObj.url as string)
             .then(() => {
               setCopyMessage("Copied!");
               setTimeout(() => setCopyMessage(null), 1500); // auto-hide after 1.5s
@@ -57,7 +76,6 @@ export const getColumns = (t: TFunction): ColumnDef<StreamItem>[] => [
               setCopyMessage("Failed to copy");
               setTimeout(() => setCopyMessage(null), 1500);
             });
-
         }
       };
 
@@ -68,7 +86,7 @@ export const getColumns = (t: TFunction): ColumnDef<StreamItem>[] => [
               <SelectValue placeholder="Protocol" />
             </SelectTrigger>
             <SelectContent>
-              {urls.map(item => (
+              {urls.map((item) => (
                 <SelectItem key={item.protocol} value={item.protocol}>
                   {item.protocol === "hls" && <Link />}
                   {item.protocol === "webrtc" && <Link />}
@@ -80,10 +98,7 @@ export const getColumns = (t: TFunction): ColumnDef<StreamItem>[] => [
               ))}
             </SelectContent>
           </Select>
-          <Button
-            onClick={handleClick}
-            disabled={!selectedProtocol}
-          >
+          <Button onClick={handleClick} disabled={!selectedProtocol}>
             {selectedProtocol === "hls" && <SquareArrowOutUpRight />}
             {selectedProtocol === "webrtc" && <SquareArrowOutUpRight />}
             {selectedProtocol === "rtsps" && <Copy />}
@@ -93,5 +108,5 @@ export const getColumns = (t: TFunction): ColumnDef<StreamItem>[] => [
         </div>
       );
     },
-  }
+  },
 ];
