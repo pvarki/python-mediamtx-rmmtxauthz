@@ -6,10 +6,7 @@ type TranslatedTextProps = {
   id: string;
 } & HTMLAttributes<HTMLSpanElement>;
 
-export function TranslatedText({
-  id,
-  ...props
-}: TranslatedTextProps): JSX.Element {
+export function TranslatedText({ id, ...props }: TranslatedTextProps): JSX.Element {
   const { t } = useTranslation(PRODUCT_SHORTNAME);
   return <span {...props}>{t(id)}</span>;
 }

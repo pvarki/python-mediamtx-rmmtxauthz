@@ -3,7 +3,11 @@ import { PRODUCT_SHORTNAME } from "@/App";
 import { useQuery } from "@tanstack/react-query";
 import { StreamConfig } from "@/model/stream-config";
 import { watchRoute } from "@/App";
-import { ArrowLeftCircle, LucideCopy, LucideLink } from "lucide-react";
+import {
+  ArrowLeftCircle,
+  LucideCopy,
+  LucideLink,
+} from "lucide-react";
 import { Link } from "@tanstack/react-router";
 import { Card, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -26,7 +30,7 @@ function getIconForProtocol(protocol: string): JSX.Element {
 function getMouseEventHandlerForProtocol(
   protocol: string,
   url: string,
-  t: TFunction,
+  t: TFunction
 ): MouseEventHandler {
   switch (protocol) {
     case "hls":
