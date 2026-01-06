@@ -3,21 +3,28 @@ import { PRODUCT_SHORTNAME } from "@/App";
 import { useQuery } from "@tanstack/react-query";
 import { StreamConfig } from "@/model/stream-config";
 import { watchRoute } from "@/App";
-import { ArrowLeftCircle, LucideCopy, LucideLink } from "lucide-react";
+import {
+  ArrowLeftCircle,
+  ChevronDown,
+  ChevronUp,
+  LucideCopy,
+  LucideGlobe,
+  LucideLink,
+  LucidePlay
+} from "lucide-react";
 import { Link } from "@tanstack/react-router";
 import { Card, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { MouseEventHandler } from "react";
+import { MouseEventHandler, useState } from "react";
 import { copyToClipboard } from "@/lib/clipboard";
 import { Toaster } from "@/components/ui/sonner";
 import { TFunction } from "i18next";
+import { TranslatedText } from "@/components/translated-text";
 
 function getIconForProtocol(protocol: string): JSX.Element {
   switch (protocol) {
-    case "hls":
-      return <LucideLink />;
-    case "webrtc":
-      return <LucideLink />;
+    case "browser":
+      return <LucidePlay/>
     default:
       return <LucideCopy />;
   }
@@ -29,9 +36,7 @@ function getMouseEventHandlerForProtocol(
   t: TFunction,
 ): MouseEventHandler {
   switch (protocol) {
-    case "hls":
-      return () => window.open(url);
-    case "webrtc":
+    case "browser":
       return () => window.open(url);
     default:
       return () => copyToClipboard(url, t("common.copied"));
@@ -44,6 +49,8 @@ export const LivePage = () => {
 
   const { protocol, callsign } = watchRoute.useParams();
   const streamPath = `/live/${protocol}/${callsign}`;
+
+  const [isAdvancedOpen,setIsAdvancedOpen] = useState(false);
 
   const {
     data: streams = [],
@@ -60,22 +67,37 @@ export const LivePage = () => {
 
   console.log(JSON.stringify(streams));
   var protocols: JSX.Element[] = [];
+  var mediaPlayers: JSX.Element = <></>;
   const stream = streams.find((item) => item.path === streamPath);
   console.log(JSON.stringify(stream));
   if (stream) {
+
+    mediaPlayers = (
+      <>
+           <Card className="p-4">
+            <div className="flex flex-row justify-between items-center">
+            <CardTitle className="gap-2 px-2 flex items-center"><LucideGlobe/> Open in Browser</CardTitle>
+            <Button className="cursor-pointer" onClick={getMouseEventHandlerForProtocol("browser", stream.urls.hls, t)}
+              >{getIconForProtocol("browser")}</Button>
+          </div>
+          </Card>
+      </>
+ 
+    )
+
     protocols = Object.entries(stream.urls).map(([protocol, url]) => (
-      <Card className="p-4">
-        <div className="flex flex-row justify-between items-center">
-          <CardTitle>{protocol.toUpperCase()}</CardTitle>
+        <div className="p-2 flex flex-row justify-between items-center">
+          <p>{protocol.toUpperCase()}</p>
           <Button
             onClick={getMouseEventHandlerForProtocol(protocol, url, t)}
-            size="icon-lg"
+            size="icon-sm"
           >
             {getIconForProtocol(protocol)}
           </Button>
         </div>
-      </Card>
+      
     ));
+
   }
 
   return (
@@ -87,7 +109,21 @@ export const LivePage = () => {
           </Link>
           <p className="text-2xl font-bold">{streamPath}</p>
         </div>
-        <div className="w-full max-w-xl space-y-4"> {protocols} </div>
+        {mediaPlayers}
+        <div className="mt-8 border rounded-lg p-4 text-left">
+                <button
+                  className="flex items-center justify-between w-full font-semibold text-lg"
+                  onClick={() => setIsAdvancedOpen(!isAdvancedOpen)}
+                >
+                  <TranslatedText id="stream.advanced_links" className="text-left"/>
+                  {isAdvancedOpen ? <ChevronUp /> : <ChevronDown />}
+                </button>
+
+                {isAdvancedOpen && (
+                    protocols
+                  )
+                }
+              </div>
       </div>
       <Toaster position="top-center" />
     </div>

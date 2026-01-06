@@ -38,5 +38,5 @@ async def get_streams(request: Request) -> Sequence[Dict[str, Any]]:
         LOGGER.warning("Setting RMMTX_MTX_ADDRESS from the request header")
         conf.mtx_address = request.headers.get("host", "__REQUEST_HOSTNAME__:1234").split(":", 1)[0]
         LOGGER.info("Setting RMMTX_MTX_ADDRESS is now: {}".format(conf.mtx_address))
-    streams = await MediaMTXControl.singleton().get_paths(insert_credentials=f"{user.username}:{user.mtxpassword}@")
+    streams = await MediaMTXControl.singleton().get_paths(username=user.username, password=user.mtxpassword)
     return streams

@@ -3,7 +3,7 @@ import { PRODUCT_SHORTNAME } from "@/App";
 import { useMemo, useState } from "react";
 import { Card, CardDescription, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Link as LucideLink, Search } from "lucide-react";
+import { Link as LucideLink, LucidePlay, Search } from "lucide-react";
 import { InputGroup, InputGroupAddon, InputGroupInput } from "./ui/input-group";
 import { Link } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
@@ -71,7 +71,7 @@ export const StreamList = () => {
                 }}
                 size="icon-lg"
               >
-                <LucideLink />
+                <LucidePlay />
               </Button>
             )}
           </div>
