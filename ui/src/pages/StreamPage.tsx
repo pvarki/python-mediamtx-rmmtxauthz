@@ -114,9 +114,7 @@ export const StreamPage = () => {
             {/* User Info */}
             <div className="mt-6 space-y-6">
               <div className="text-left">
-                <Label className="font-semibold">
-                  <TranslatedText id="stream.passw" />
-                </Label>
+                <Label className="font-semibold"><TranslatedText id="stream.username"/></Label>
                 <div className="flex flex-col md:flex-row gap-2 mt-1">
                   <Input readOnly value={user.username} />
                   <div>
@@ -131,9 +129,7 @@ export const StreamPage = () => {
                 </div>
               </div>
               <div className="text-left">
-                <Label className="font-semibold">
-                  <TranslatedText id="stream.username" />
-                </Label>
+                <Label className="font-semibold"><TranslatedText id="stream.passw"/></Label>
                 <div className="flex flex-col md:flex-row gap-2 mt-1">
                   <Input
                     readOnly

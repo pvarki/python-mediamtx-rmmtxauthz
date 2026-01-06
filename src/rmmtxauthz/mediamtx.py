@@ -39,7 +39,7 @@ class MediaMTXControl:
         # Fallback
         return aiohttp.ClientSession(auth=auth, base_url=cnf.api_url, raise_for_status=True)
 
-    async def get_paths(self, insert_credentials: str = "") -> Sequence[Dict[str, Any]]:
+    async def get_paths(self, username :str, password: str = "") -> Sequence[Dict[str, Any]]:
         """Get active paths and generate their corresponding urls for each protocol
         insert_credentials MUST be in format: username:password@"""
         ret = []
@@ -55,7 +55,13 @@ class MediaMTXControl:
                     "urls": {},
                 }
                 for pname, pinfo in protocols.items():
-                    url = f"{pinfo.proto}://{insert_credentials}{cnf.mtx_address}:{pinfo.port}{path}"
+                    if(pname == "rtmps"):
+                        url = f"{pinfo.proto}://{cnf.mtx_address}:{pinfo.port}{path}?user={username}&pass={password}"
+                    if(pname == "srt"):
+                        clean_path=path.lstrip("/")
+                        url = f"{pinfo.proto}://{cnf.mtx_address}:{pinfo.port}?streamid=read:{clean_path}:{username}:{password}"
+                    else:
+                        url = f"{pinfo.proto}://{username}:{password}@{cnf.mtx_address}:{pinfo.port}{path}"
                     item["urls"][pname] = url  # type: ignore[index]
                 ret.append(item)
         return ret
