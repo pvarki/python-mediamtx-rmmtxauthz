@@ -83,6 +83,15 @@ export const StreamPage = () => {
             url: `rtmps://${data.username}:${data.password}@${currentDomain}:1936/live/icu/${data.username}`,
             hideCredentials: true,
           },
+          {
+            name: t("stream.srt"),
+            url: `srt://${currentDomain}:8890?streamid=publish:/live/icu/${data.username}&pkt_size=1316`,
+          },
+          {
+            name: t("stream.srt_with_auth"),
+            url: `srt://${currentDomain}:8890?streamid=publish:live/icu/${data.username}:${data.username}:${data.password}&pkt_size=1316`,
+            hideCredentials: true,
+          },
         ];
 
         setAdvancedLinks(advLinks);
@@ -114,7 +123,9 @@ export const StreamPage = () => {
             {/* User Info */}
             <div className="mt-6 space-y-6">
               <div className="text-left">
-                <Label className="font-semibold"><TranslatedText id="stream.username"/></Label>
+                <Label className="font-semibold">
+                  <TranslatedText id="stream.username" />
+                </Label>
                 <div className="flex flex-col md:flex-row gap-2 mt-1">
                   <Input readOnly value={user.username} />
                   <div>
@@ -129,7 +140,9 @@ export const StreamPage = () => {
                 </div>
               </div>
               <div className="text-left">
-                <Label className="font-semibold"><TranslatedText id="stream.passw"/></Label>
+                <Label className="font-semibold">
+                  <TranslatedText id="stream.passw" />
+                </Label>
                 <div className="flex flex-col md:flex-row gap-2 mt-1">
                   <Input
                     readOnly
@@ -303,7 +316,7 @@ export const StreamPage = () => {
                   </div>
                 )}
               </div>
-              {/* 
+              {/*
               <div className="mt-8 border rounded-lg p-4 text-left">
                 <button
                   className="flex items-center justify-between w-full font-semibold text-lg"
