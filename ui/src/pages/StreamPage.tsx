@@ -183,16 +183,7 @@ export const StreamPage = () => {
                         className="font-bold text-gray-800"
                       />
                       <div className="flex flex-col md:flex-row gap-2 mt-1">
-                        <Input readOnly value={"RTMPS"} className="flex-1" />
-                        <div>
-                          <Button
-                            onClick={() =>
-                              copyToClipboard("RTMPS", t("common.copied"))
-                            }
-                          >
-                            <TranslatedText id="common.copy" /> <Copy />
-                          </Button>
-                        </div>
+                        <p>RTMPS</p>
                       </div>
                     </div>
                     <div className="text-left">
@@ -312,6 +303,7 @@ export const StreamPage = () => {
                   </div>
                 )}
               </div>
+              {/* 
               <div className="mt-8 border rounded-lg p-4 text-left">
                 <button
                   className="flex items-center justify-between w-full font-semibold text-lg"
@@ -349,7 +341,7 @@ export const StreamPage = () => {
                     </div>
                   </div>
                 )}
-              </div>
+              </div> */}
               {/* Advanced */}
               <div className="mt-8 border rounded-lg p-4 text-left">
                 <button
