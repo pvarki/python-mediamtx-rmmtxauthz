@@ -28,6 +28,8 @@
     "rtmps_with_auth": "RTMPS (med autentisering)",
     "rtsps": "RTSPS",
     "rtsps_with_auth": "RTSPS (med autentisering)",
+    "srt": "SRT",
+    "srt_with_auth": "SRT (med autentisering)",
     "title": "Starta en str\u00f6m",
     "tools": "Verktyg",
     "uastool": "UASTool",
