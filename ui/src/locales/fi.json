@@ -28,6 +28,8 @@
     "rtmps_with_auth": "RTMPS (Todennuksen kanssa)",
     "rtsps": "RTSPS",
     "rtsps_with_auth": "RTSPS (Todennuksen kanssa)",
+    "srt": "SRT",
+    "srt_with_auth": "SRT (Todennuksen kanssa)",
     "title": "Aloita stream",
     "tools": "Ty\u00f6kalut",
     "uastool": "UASTool",

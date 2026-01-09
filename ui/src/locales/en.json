@@ -28,6 +28,8 @@
     "rtmps_with_auth": "RTMPS (with authentication)",
     "rtsps": "RTSPS",
     "rtsps_with_auth": "RTSPS (with authentication)",
+    "srt": "SRT",
+    "srt_with_auth": "SRT (with authentication)",
     "title": "Start a stream",
     "tools": "Tools",
     "uastool": "UASTool",
