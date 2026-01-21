@@ -9,7 +9,6 @@ import {
   ChevronUp,
   LucideCopy,
   LucideGlobe,
-  LucideLink,
   LucidePlay,
 } from "lucide-react";
 import { Link } from "@tanstack/react-router";
@@ -20,6 +19,7 @@ import { copyToClipboard } from "@/lib/clipboard";
 import { Toaster } from "@/components/ui/sonner";
 import { TFunction } from "i18next";
 import { TranslatedText } from "@/components/translated-text";
+import { OnboardingGuide } from "@/components/OnboardingGuide";
 
 function getIconForProtocol(protocol: string): JSX.Element {
   switch (protocol) {
@@ -76,7 +76,8 @@ export const LivePage = () => {
         <Card className="p-4">
           <div className="flex flex-row justify-between items-center">
             <CardTitle className="gap-2 px-2 flex items-center">
-              <LucideGlobe /> Open in Browser
+              <LucideGlobe />
+              <TranslatedText id="live.open_in_browser" />
             </CardTitle>
             <Button
               className="cursor-pointer"
@@ -97,6 +98,7 @@ export const LivePage = () => {
       <div className="p-2 flex flex-row justify-between items-center">
         <p>{protocol.toUpperCase()}</p>
         <Button
+          className="cursor-pointer"
           onClick={getMouseEventHandlerForProtocol(protocol, url, t)}
           size="icon-sm"
         >
@@ -116,19 +118,28 @@ export const LivePage = () => {
           <p className="text-2xl font-bold">{streamPath}</p>
         </div>
         {mediaPlayers}
-        <div className="mt-8 border rounded-lg p-4 text-left">
-          <button
-            className="flex items-center justify-between w-full font-semibold text-lg"
+        <div className="items-center justify-between font-semibold mt-8 border rounded-lg text-left">
+          <div
+            className="flex flex-row items-center justify-between border-0 m-0 rounded-lg p-4 cursor-pointer"
             onClick={() => setIsAdvancedOpen(!isAdvancedOpen)}
           >
             <TranslatedText id="stream.advanced_links" className="text-left" />
-            {isAdvancedOpen ? <ChevronUp /> : <ChevronDown />}
-          </button>
-
-          {isAdvancedOpen && protocols}
+            <Button
+              variant="ghost"
+              className="flex items-center font-semibold text-lg cursor-pointer p-0 w-9"
+              onClick={(e) => {
+                e.stopPropagation();
+                setIsAdvancedOpen(!isAdvancedOpen);
+              }}
+            >
+              {isAdvancedOpen ? <ChevronUp /> : <ChevronDown />}
+            </Button>
+          </div>
+          {isAdvancedOpen && <div className="p-4">{protocols}</div>}
         </div>
       </div>
       <Toaster position="top-center" />
+      <OnboardingGuide />
     </div>
   );
 };
