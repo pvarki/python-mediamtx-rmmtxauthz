@@ -8,12 +8,70 @@
   "home": {
     "add": "Lis\u00e4\u00e4",
     "documentation": "Dokumentaatio",
+    "documentation_link": "https://docs.pvarki.fi/fi/docs/guides/mtx-guide/katso-striimia-0SUHzvwK33",
     "error_loading_streams": "Tapahtui virhe kun streamej\u00e4 ladattiin. Kokeile my\u00f6hemmin uudestaan.",
     "loading": "Ladataan...",
     "result": "tulos",
     "results": "tulosta",
     "search": "Hae...",
     "started_by": "Aloittaja: "
+  },
+  "live": {
+    "open_in_browser": "Avaa selaimessa"
+  },
+  "onboarding": {
+    "back": "Takaisin",
+    "clickToEnlarge": "Klikkaa suurentaaksesi",
+    "completion": "Perehdytt\u00e4minen valmis!",
+    "completionDesc": "Olet valmis ja voit nyt ty\u00f6skennell\u00e4 t\u00e4ysill\u00e4 teholla.",
+    "finish": "Valmis",
+    "imageMissing": "Kuva ei ole saatavilla",
+    "next": "Seuraava",
+    "of": "/",
+    "progressSaved": "Perehdytt\u00e4misen edistyminen on tallennettu.",
+    "review": "Tarkista perehdytt\u00e4minen",
+    "step": "Vaihe",
+    "steps": {
+      "home": {
+        "stream": {
+          "description": "Aloittaaksesi suoratoiston, napsauta ensin 'Lis\u00e4\u00e4'-painiketta.",
+          "title": "Suoratoiston aloittaminen"
+        },
+        "watch": {
+          "description": "Palvelimella t\u00e4ll\u00e4 hetkell\u00e4 k\u00e4ynniss\u00e4 olevat suoratoistot n\u00e4kyv\u00e4t luettelona etusivulla. Aloittaaksesi katselun, napsauta ensin haluamaasi suoratoistoa luettelosta. Huomautus: '\u25b6' -symbolin napsauttaminen on nopea tapa aloittaa katselu suoraan.",
+          "title": "Suoratoiston katsominen"
+        },
+        "welcome": {
+          "description": "MediaMTX on suoratoistopalvelu, jonka avulla voit luoda ja katsella videol\u00e4hetyksi\u00e4.",
+          "title": "Tervetuloa MediaMTX-palveluun!"
+        }
+      },
+      "stream": {
+        "opentak1": {
+          "description": "Napsauta hammasrataskuvaketta avataksesi asetukset.",
+          "title": "Suoratoiston aloittaminen - Vaihe 2"
+        },
+        "opentak2": {
+          "description": "Napsauta 'Streaming Settings' avataksesi suoratoistoasetukset.",
+          "title": "Suoratoiston aloittaminen - Vaihe 3"
+        },
+        "opentak3": {
+          "description": "Kopioi vaiheesta 1 arvot kohdista 'Username', 'Password', 'Protocol', 'Address', 'Port' ja 'Path' OpenTAK ICU -asetuksiin.",
+          "title": "Suoratoiston aloittaminen - Vaihe 4"
+        },
+        "stream1": {
+          "description": "Aloittaaksesi suoratoiston OpenTAK ICU:lla, laajenna 'OpenTAK ICU' -valikko. T\u00e4m\u00e4 valikko sis\u00e4lt\u00e4\u00e4 kaikki tarvittavat tiedot suoratoiston aloittamiseen sovelluksessa.",
+          "title": "Suoratoiston aloittaminen - Vaihe 1"
+        }
+      },
+      "watch": {
+        "watch1": {
+          "description": "Katsellaksesi suoratoistoa, napsauta 'Avaa selaimessa' -painiketta. Lis\u00e4\u00e4 vaihtoehtoja on lueteltu kohdassa 'Vaihtoehtoiset linkit', jotka voi avata esimerkiksi VLC:ll\u00e4.",
+          "title": "Suoratoiston katsominen"
+        }
+      }
+    },
+    "title": "MediaMTX -sovelluksen perehdytt\u00e4minen"
   },
   "stream": {
     "address": "Osoite",

@@ -64,6 +64,7 @@ export const StreamList = () => {
             <CardDescription>{t("home.started_by") + callsign}</CardDescription>
             {item.urls.hls && (
               <Button
+                className="cursor-pointer"
                 onClick={(e) => {
                   e.stopPropagation();
                   e.preventDefault();

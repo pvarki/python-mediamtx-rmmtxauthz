@@ -16,6 +16,7 @@ import { TranslatedText } from "@/components/translated-text";
 import { copyToClipboard } from "@/lib/clipboard";
 import { useTranslation } from "react-i18next";
 import { PRODUCT_SHORTNAME } from "@/App";
+import { OnboardingGuide } from "@/components/OnboardingGuide";
 
 interface Userinfo {
   username: string;
@@ -130,6 +131,7 @@ export const StreamPage = () => {
                   <Input readOnly value={user.username} />
                   <div>
                     <Button
+                      className="cursor-pointer"
                       onClick={() =>
                         copyToClipboard(user.username, t("common.copied"))
                       }
@@ -150,7 +152,10 @@ export const StreamPage = () => {
                     value={user.password}
                   />
                   <div className="flex flex-row gap-2 mt-1">
-                    <Button onClick={() => setShowPassword(!showPassword)}>
+                    <Button
+                      className="cursor-pointer"
+                      onClick={() => setShowPassword(!showPassword)}
+                    >
                       {showPassword ? (
                         <TranslatedText id="common.hide" />
                       ) : (
@@ -159,6 +164,7 @@ export const StreamPage = () => {
                       {showPassword ? <EyeClosed /> : <Eye />}
                     </Button>
                     <Button
+                      className="cursor-pointer"
                       onClick={() =>
                         copyToClipboard(user.password, t("common.copied"))
                       }
@@ -176,20 +182,25 @@ export const StreamPage = () => {
               </p>
 
               {/* Tools */}
-              <div className="mt-8 border rounded-lg p-4 text-left">
-                <button
-                  className="flex items-center justify-between w-full font-semibold text-lg"
+              <div className="items-center justify-between font-semibold mt-8 border rounded-lg text-left">
+                <div
+                  className="flex flex-row items-center justify-between border-0 m-0 rounded-lg p-4 cursor-pointer"
                   onClick={() => setIsOpenTakIcuOpen(!isOpenTakIcuOpen)}
                 >
                   <TranslatedText
                     id="stream.opentak_icu"
                     className="text-left"
                   />
-                  {isOpenTakIcuOpen ? <ChevronUp /> : <ChevronDown />}
-                </button>
-
+                  <Button
+                    variant="ghost"
+                    className="flex items-center font-semibold text-lg cursor-pointer p-0 w-9"
+                    onClick={() => setIsOpenTakIcuOpen(!isOpenTakIcuOpen)}
+                  >
+                    {isOpenTakIcuOpen ? <ChevronUp /> : <ChevronDown />}
+                  </Button>
+                </div>
                 {isOpenTakIcuOpen && (
-                  <div className="mt-4 space-y-4">
+                  <div className="space-y-4 p-4">
                     <div className="text-left">
                       <TranslatedText
                         id="stream.protocol"
@@ -212,6 +223,7 @@ export const StreamPage = () => {
                         />
                         <div>
                           <Button
+                            className="cursor-pointer"
                             onClick={() =>
                               copyToClipboard(currentDomain, t("common.copied"))
                             }
@@ -230,6 +242,7 @@ export const StreamPage = () => {
                         <Input readOnly value={"1936"} className="flex-1" />
                         <div>
                           <Button
+                            className="cursor-pointer"
                             onClick={() =>
                               copyToClipboard("1936", t("common.copied"))
                             }
@@ -252,6 +265,7 @@ export const StreamPage = () => {
                         />
                         <div>
                           <Button
+                            className="cursor-pointer"
                             onClick={() =>
                               copyToClipboard(
                                 `/live/icu/${user.username}`,
@@ -267,16 +281,22 @@ export const StreamPage = () => {
                   </div>
                 )}
               </div>
-              <div className="mt-8 border rounded-lg p-4 text-left">
-                <button
-                  className="flex items-center justify-between w-full font-semibold text-lg"
+              <div className="items-center justify-between font-semibold mt-8 border rounded-lg text-left">
+                <div
+                  className="flex flex-row items-center justify-between border-0 m-0 rounded-lg p-4 cursor-pointer"
                   onClick={() => setIsGoProAppOpen(!isGoProAppOpen)}
                 >
                   <TranslatedText id="stream.gopro_app" className="text-left" />
-                  {isOpenTakIcuOpen ? <ChevronUp /> : <ChevronDown />}
-                </button>
+                  <Button
+                    variant="ghost"
+                    className="flex items-center font-semibold text-lg cursor-pointer p-0 w-9"
+                    onClick={() => setIsGoProAppOpen(!isGoProAppOpen)}
+                  >
+                    {isGoProAppOpen ? <ChevronUp /> : <ChevronDown />}
+                  </Button>
+                </div>
                 {isGoProAppOpen && (
-                  <div className="mt-4 space-y-4">
+                  <div className="space-y-4 p-4">
                     <div className="text-left">
                       <Label className="font-semibold">
                         <TranslatedText id="stream.address" />
@@ -289,6 +309,7 @@ export const StreamPage = () => {
                         />
                         <div className="flex flex-row gap-2 mt-1">
                           <Button
+                            className="cursor-pointer"
                             onClick={() =>
                               setShowGoProAppLink(!showGoProAppLink)
                             }
@@ -301,6 +322,7 @@ export const StreamPage = () => {
                             {showGoProAppLink ? <EyeClosed /> : <Eye />}
                           </Button>
                           <Button
+                            className="cursor-pointer"
                             onClick={() =>
                               copyToClipboard(
                                 `rtmps://${currentDomain}:1936/live/gopro/${user.username}?user=${user.username}&pass=${user.password}`,
@@ -356,20 +378,25 @@ export const StreamPage = () => {
                 )}
               </div> */}
               {/* Advanced */}
-              <div className="mt-8 border rounded-lg p-4 text-left">
-                <button
-                  className="flex items-center justify-between w-full font-semibold text-lg"
+              <div className="items-center justify-between font-semibold mt-8 border rounded-lg text-left">
+                <div
+                  className="flex flex-row items-center justify-between border-0 m-0 rounded-lg p-4 cursor-pointer"
                   onClick={() => setIsAdvancedOpen(!isAdvancedOpen)}
                 >
                   <TranslatedText
                     id="stream.advanced_links"
                     className="text-left"
                   />
-                  {isAdvancedOpen ? <ChevronUp /> : <ChevronDown />}
-                </button>
-
+                  <Button
+                    variant="ghost"
+                    className="flex items-center font-semibold text-lg cursor-pointer p-0 w-9"
+                    onClick={() => setIsAdvancedOpen(!isAdvancedOpen)}
+                  >
+                    {isAdvancedOpen ? <ChevronUp /> : <ChevronDown />}
+                  </Button>
+                </div>
                 {isAdvancedOpen && (
-                  <div className="mt-4 space-y-4">
+                  <div className="space-y-4 p-4">
                     {advancedLinks.map((link, idx) => (
                       <div key={idx} className="text-left">
                         <p className="font-bold text-gray-800">{link.name}</p>
@@ -388,6 +415,7 @@ export const StreamPage = () => {
                           <div className="flex flex-row gap-2 mt-1">
                             {link.hideCredentials && (
                               <Button
+                                className="cursor-pointer"
                                 onClick={() =>
                                   setShowAdvancedPasswords((prev) => ({
                                     ...prev,
@@ -408,6 +436,7 @@ export const StreamPage = () => {
                               </Button>
                             )}
                             <Button
+                              className="cursor-pointer"
                               onClick={() =>
                                 copyToClipboard(link.url, t("common.copied"))
                               }
@@ -426,6 +455,7 @@ export const StreamPage = () => {
         )}
       </div>
       <Toaster position="top-center" />
+      <OnboardingGuide />
     </div>
   );
 };

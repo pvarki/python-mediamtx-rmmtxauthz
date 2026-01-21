@@ -16,6 +16,7 @@ import enLang from "./locales/en.json";
 import fiLang from "./locales/fi.json";
 import svLang from "./locales/sv.json";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { MetaData, MetaProvider } from "./lib/metadata";
 
 const RootLayoutComponent = () => (
   <div className="max-w-5xl mx-auto p-6">
@@ -49,11 +50,12 @@ const routeTree = rootRoute.addChildren([homeRoute, watchRoute, streamRoute]);
 
 interface Props {
   data: {};
+  meta: MetaData;
 }
 
 export const PRODUCT_SHORTNAME = "mtx";
 
-export default ({ data }: Props) => {
+export default ({ data, meta }: Props) => {
   const [ready, setReady] = useState(false);
   const { t, i18n } = useTranslation(PRODUCT_SHORTNAME);
 
@@ -78,8 +80,10 @@ export default ({ data }: Props) => {
   const queryClient = new QueryClient();
 
   return (
-    <QueryClientProvider client={queryClient}>
-      <RouterProvider router={router} />
-    </QueryClientProvider>
+    <MetaProvider meta={meta}>
+      <QueryClientProvider client={queryClient}>
+        <RouterProvider router={router} />
+      </QueryClientProvider>
+    </MetaProvider>
   );
 };

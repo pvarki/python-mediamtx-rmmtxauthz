@@ -8,12 +8,70 @@
   "home": {
     "add": "Add",
     "documentation": "Documentation",
+    "documentation_link": "https://docs.pvarki.fi/en/docs/guides/mtx-guide/watch-stream-i7cQZkpBTh",
     "error_loading_streams": "There was an error when loading streams. Please try again later.",
     "loading": "Loading...",
     "result": "result",
     "results": "results",
     "search": "Search...",
     "started_by": "Started by: "
+  },
+  "live": {
+    "open_in_browser": "Open in Browser"
+  },
+  "onboarding": {
+    "back": "Back",
+    "clickToEnlarge": "Click to enlarge",
+    "completion": "Onboarding Completed!",
+    "completionDesc": "You're all set and ready to operate at full capacity.",
+    "finish": "Finish",
+    "imageMissing": "Image not available",
+    "next": "Next",
+    "of": "of",
+    "progressSaved": "Your onboarding progress has been saved.",
+    "review": "Review onboarding",
+    "step": "Step",
+    "steps": {
+      "home": {
+        "stream": {
+          "description": "To start a stream, first click on the 'Add' button.",
+          "title": "Starting a Stream"
+        },
+        "watch": {
+          "description": "Streams that are currently running on the server will be displayed in a list on the home page. To start watching, first click on the desired stream on the list. Note: Clicking on the '\u25b6' symbol is a quick way to directly start watching.",
+          "title": "Watching a Stream"
+        },
+        "welcome": {
+          "description": "Media MTX is a streaming service that allows you to create and watch video streams.",
+          "title": "Welcome to MediaMTX!"
+        }
+      },
+      "stream": {
+        "opentak1": {
+          "description": "Click on the gear icon to open settings.",
+          "title": "Starting a Stream - Step 2"
+        },
+        "opentak2": {
+          "description": "Click on 'Streaming Settings' to open the streaming settings.",
+          "title": "Starting a Stream - Step 3"
+        },
+        "opentak3": {
+          "description": "From step 1, copy over the values for 'Username', 'Password', 'Protocol', 'Address', 'Port' and 'Path' to the OpenTAK ICU settings",
+          "title": "Starting a Stream - Step 4"
+        },
+        "stream1": {
+          "description": "To begin a stream with OpenTAK ICU, expand the 'OpenTAK ICU' menu. This menu has all the information necessary to start a stream in the app.",
+          "title": "Starting a Stream - Step 1"
+        }
+      },
+      "watch": {
+        "watch1": {
+          "description": "To watch the stream, click on the 'Open in Browser' button. More options are listed under 'Advanced Links', which can be opened with e.g. VLC.",
+          "title": "Watching a Stream"
+        }
+      }
+    },
+    "title": "Onboard to MediaMTX"
   },
   "stream": {
     "address": "Address",

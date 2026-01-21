@@ -8,12 +8,70 @@
   "home": {
     "add": "L\u00e4gg till",
     "documentation": "Dokumentation",
+    "documentation_link": "https://docs.pvarki.fi/en/docs/guides/mtx-guide/watch-stream-i7cQZkpBTh",
     "error_loading_streams": "Ett fel uppstod n\u00e4r str\u00f6mmar skulle l\u00e4sas in. F\u00f6rs\u00f6k igen senare.",
     "loading": "L\u00e4ser in...",
     "result": "resultat",
     "results": "resultat",
     "search": "S\u00f6k...",
     "started_by": "Startad av: "
+  },
+  "live": {
+    "open_in_browser": "\u00d6ppna i webbl\u00e4saren"
+  },
+  "onboarding": {
+    "back": "Tillbaka",
+    "clickToEnlarge": "Klicka f\u00f6r att f\u00f6rstora",
+    "completion": "Introduktionen \u00e4r slutf\u00f6rd!",
+    "completionDesc": "Du \u00e4r redo och kan nu arbeta i full kapacitet.",
+    "finish": "Slutf\u00f6r",
+    "imageMissing": "Bild inte tillg\u00e4nglig",
+    "next": "N\u00e4sta",
+    "of": "av",
+    "progressSaved": "Dina introduktionsframsteg har sparats.",
+    "review": "Granska introduktion",
+    "step": "Steg",
+    "steps": {
+      "home": {
+        "stream": {
+          "description": "F\u00f6r att starta en str\u00f6m, klicka f\u00f6rst p\u00e5 knappen L\u00e4gg till.",
+          "title": "Starta en str\u00f6m"
+        },
+        "watch": {
+          "description": "Str\u00f6mmar som f\u00f6r n\u00e4rvarande k\u00f6rs p\u00e5 servern visas i en lista p\u00e5 startsidan. F\u00f6r att b\u00f6rja titta, klicka f\u00f6rst p\u00e5 \u00f6nskad str\u00f6m i listan. Obs: Att klicka p\u00e5 symbolen '\u25b6' \u00e4r ett snabbt s\u00e4tt att b\u00f6rja titta direkt.",
+          "title": "Titta p\u00e5 en str\u00f6m"
+        },
+        "welcome": {
+          "description": "MediaMTX \u00e4r en str\u00f6mningstj\u00e4nst som l\u00e5ter dig skapa och titta p\u00e5 videostr\u00f6mmar.",
+          "title": "V\u00e4lkommen till MediaMTX!"
+        }
+      },
+      "stream": {
+        "opentak1": {
+          "description": "Klicka p\u00e5 kugghjulsikonen f\u00f6r att \u00f6ppna inst\u00e4llningar.",
+          "title": "Starta en str\u00f6m - Steg 2"
+        },
+        "opentak2": {
+          "description": "Klicka p\u00e5 'Streaming Settings' f\u00f6r att \u00f6ppna str\u00f6mningsinst\u00e4llningarna.",
+          "title": "Starta en str\u00f6m - Steg 3"
+        },
+        "opentak3": {
+          "description": "Kopiera v\u00e4rdena f\u00f6r 'Username', 'Password', 'Protocol', 'Address', 'Port' och 'Path' fr\u00e5n steg 1 till inst\u00e4llningarna i OpenTAK ICU.",
+          "title": "Starta en str\u00f6m - Steg 4"
+        },
+        "stream1": {
+          "description": "F\u00f6r att p\u00e5b\u00f6rja en str\u00f6m med OpenTAK ICU, expandera menyn 'OpenTAK ICU'. Denna meny inneh\u00e5ller all information som beh\u00f6vs f\u00f6r att starta en str\u00f6m i appen.",
+          "title": "Starta en str\u00f6m - Steg 1"
+        }
+      },
+      "watch": {
+        "watch1": {
+          "description": "F\u00f6r att titta p\u00e5 str\u00f6mmen, klicka p\u00e5 knappen '\u00d6ppna i webbl\u00e4saren'. Fler alternativ listas under 'Avancerade l\u00e4nkar', som kan \u00f6ppnas med t.ex. VLC.",
+          "title": "Titta p\u00e5 en str\u00f6m"
+        }
+      }
+    },
+    "title": "Introduktion till MediaMTX"
   },
   "stream": {
     "address": "Adress",
