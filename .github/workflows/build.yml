@@ -45,10 +45,13 @@ jobs:
           detailed_summary: true
           check_name: 'JUnit report (local)'
 
-  devel_shell:
+  docker_builds:
     runs-on: ubuntu-latest
     steps:
-    - uses: pvarki/ci@main
-      with:
-        dockerfile-target: devel_shell
-        image-tag: rmmtxauthz_api:devel_shell
+      - uses: actions/checkout@v5
+        with:
+          submodules: recursive
+      - name: Build test target
+        run: docker build --target test -t rmmtxauthz:test .
+      - name: Build production target
+        run: docker build --target production -t rmmtxauthz:production .
