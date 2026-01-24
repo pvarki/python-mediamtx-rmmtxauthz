@@ -3,7 +3,7 @@ on:
 
 jobs:
   test:
-    runs-on: ubuntu-latest
+    runs-on: arc-runner-set
     permissions:
       contents: write
       pull-requests: write
@@ -46,7 +46,7 @@ jobs:
           check_name: 'JUnit report (local)'
 
   docker_builds:
-    runs-on: ubuntu-latest
+    runs-on: arc-runner-set
     steps:
       - uses: actions/checkout@v5
         with:
