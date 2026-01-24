@@ -3,7 +3,7 @@ on:
 
 jobs:
   test:
-    runs-on: ubuntu-latest
+    runs-on: arc-runner-set
     permissions:
       contents: write
       pull-requests: write
@@ -45,10 +45,13 @@ jobs:
           detailed_summary: true
           check_name: 'JUnit report (local)'
 
-  devel_shell:
-    runs-on: ubuntu-latest
+  docker_builds:
+    runs-on: arc-runner-set
     steps:
-    - uses: pvarki/ci@main
-      with:
-        dockerfile-target: devel_shell
-        image-tag: rmmtxauthz_api:devel_shell
+      - uses: actions/checkout@v5
+        with:
+          submodules: recursive
+      - name: Build test target
+        run: docker build --target test -t rmmtxauthz:test .
+      - name: Build production target
+        run: docker build --target production -t rmmtxauthz:production .
