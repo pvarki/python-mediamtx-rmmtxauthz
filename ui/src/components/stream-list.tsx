@@ -27,6 +27,7 @@ export const StreamList = () => {
       if (!resp.ok) throw new Error("Network response was not ok");
       return resp.json();
     },
+    refetchInterval: 15 * 1000, // 1 Minute
   });
 
   const filteredData = useMemo(() => {
