@@ -158,8 +158,13 @@ export function OnboardingGuide() {
   const location = useLocation();
   const meta = useMeta();
 
+  let pathKey = location.pathname;
+  if (location.pathname !== "/" && location.pathname !== "/stream") {
+    pathKey = "/live";
+  }
+
   let relevantSteps = HOME_PAGE_ONBOARDING_STEPS(meta.theme);
-  switch (location.pathname) {
+  switch (pathKey) {
     case "/":
       relevantSteps = HOME_PAGE_ONBOARDING_STEPS(meta.theme);
       break;
@@ -212,11 +217,12 @@ export function OnboardingGuide() {
     if (!meta.callsign || !deployment) return;
 
     const deploymentHash = hashString(deployment);
-    const storageKey = `${deploymentHash}-mtx-onboarding-${meta.callsign}-${location.pathname}`;
+
+    const storageKey = `${deploymentHash}-mtx-onboarding-${meta.callsign}-${pathKey}`;
     const seenOnboarding = localStorage.getItem(storageKey);
 
     const completedSteps = localStorage.getItem(
-      `${deploymentHash}-mtx-onboarding-steps-${meta.callsign}-${location.pathname}`,
+      `${deploymentHash}-mtx-onboarding-steps-${meta.callsign}-${pathKey}`,
     );
 
     if (!seenOnboarding) {
@@ -241,7 +247,7 @@ export function OnboardingGuide() {
         setCanReview(true);
       }
     }
-  }, [meta.callsign, deployment]);
+  }, [meta.callsign, deployment, pathKey]);
 
   useEffect(() => {
     if (
@@ -295,7 +301,7 @@ export function OnboardingGuide() {
           newCompleted.push(step.id);
         }
         localStorage.setItem(
-          `${deploymentHash}-mtx-onboarding-steps-${meta.callsign}-${location.pathname}`,
+          `${deploymentHash}-mtx-onboarding-steps-${meta.callsign}-${pathKey}`,
           JSON.stringify(newCompleted),
         );
         setCompleted(newCompleted);
@@ -315,7 +321,7 @@ export function OnboardingGuide() {
       if (deployment) {
         const deploymentHash = hashString(deployment);
         localStorage.setItem(
-          `${deploymentHash}-mtx-onboarding-steps-${meta.callsign}-${location.pathname}`,
+          `${deploymentHash}-mtx-onboarding-steps-${meta.callsign}-${pathKey}`,
           JSON.stringify(newCompleted),
         );
       }
@@ -325,7 +331,7 @@ export function OnboardingGuide() {
       if (deployment) {
         const deploymentHash = hashString(deployment);
         localStorage.setItem(
-          `${deploymentHash}-mtx-onboarding-${meta.callsign}-${location.pathname}`,
+          `${deploymentHash}-mtx-onboarding-${meta.callsign}-${pathKey}`,
           "true",
         );
       }

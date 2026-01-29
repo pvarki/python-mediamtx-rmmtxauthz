@@ -59,11 +59,10 @@ export default ({ data, meta }: Props) => {
   const [ready, setReady] = useState(false);
   const { t, i18n } = useTranslation(PRODUCT_SHORTNAME);
 
-  const router = useMemo( 
-    () => createRouter({ routeTree, 
-      basepath: "/product/mtx" }), 
-      [data],
-    );
+  const router = useMemo(
+    () => createRouter({ routeTree, basepath: "/product/mtx" }),
+    [data],
+  );
 
   useEffect(() => {
     console.log("Registering");
