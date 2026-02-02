@@ -1,15 +1,15 @@
 {
   "common": {
-    "copied": "Kopioitu leikep\u00f6yd\u00e4lle!",
+    "copied": "Kopioitu leikepöydälle!",
     "copy": "Kopioi",
     "hide": "Piilota",
-    "show": "N\u00e4yt\u00e4"
+    "show": "Näytä"
   },
   "home": {
-    "add": "Lis\u00e4\u00e4",
+    "add": "Lisää",
     "documentation": "Dokumentaatio",
     "documentation_link": "https://docs.pvarki.fi/fi/docs/guides/mtx-guide/katso-striimia-0SUHzvwK33",
-    "error_loading_streams": "Tapahtui virhe kun streamej\u00e4 ladattiin. Kokeile my\u00f6hemmin uudestaan.",
+    "error_loading_streams": "Tapahtui virhe kun streamejä ladattiin. Kokeile myöhemmin uudestaan.",
     "loading": "Ladataan...",
     "result": "tulos",
     "results": "tulosta",
@@ -22,27 +22,27 @@
   "onboarding": {
     "back": "Takaisin",
     "clickToEnlarge": "Klikkaa suurentaaksesi",
-    "completion": "Perehdytt\u00e4minen valmis!",
-    "completionDesc": "Olet valmis ja voit nyt ty\u00f6skennell\u00e4 t\u00e4ysill\u00e4 teholla.",
+    "completion": "Perehdyttäminen valmis!",
+    "completionDesc": "Olet valmis ja voit nyt työskennellä täysillä teholla.",
     "finish": "Valmis",
     "imageMissing": "Kuva ei ole saatavilla",
     "next": "Seuraava",
     "of": "/",
-    "progressSaved": "Perehdytt\u00e4misen edistyminen on tallennettu.",
-    "review": "Tarkista perehdytt\u00e4minen",
+    "progressSaved": "Perehdyttämisen edistyminen on tallennettu.",
+    "review": "Tarkista perehdyttäminen",
     "step": "Vaihe",
     "steps": {
       "home": {
         "stream": {
-          "description": "Aloittaaksesi suoratoiston, napsauta ensin 'Lis\u00e4\u00e4'-painiketta.",
+          "description": "Aloittaaksesi suoratoiston, napsauta ensin 'Lisää'-painiketta.",
           "title": "Suoratoiston aloittaminen"
         },
         "watch": {
-          "description": "Palvelimella t\u00e4ll\u00e4 hetkell\u00e4 k\u00e4ynniss\u00e4 olevat suoratoistot n\u00e4kyv\u00e4t luettelona etusivulla. Aloittaaksesi katselun, napsauta ensin haluamaasi suoratoistoa luettelosta. Huomautus: '\u25b6' -symbolin napsauttaminen on nopea tapa aloittaa katselu suoraan.",
+          "description": "Palvelimella tällä hetkellä käynnissä olevat suoratoistot näkyvät luettelona etusivulla. Aloittaaksesi katselun, napsauta ensin haluamaasi suoratoistoa luettelosta. Huomautus: '▶' -symbolin napsauttaminen on nopea tapa aloittaa katselu suoraan.",
           "title": "Suoratoiston katsominen"
         },
         "welcome": {
-          "description": "MediaMTX on suoratoistopalvelu, jonka avulla voit luoda ja katsella videol\u00e4hetyksi\u00e4.",
+          "description": "MediaMTX on suoratoistopalvelu, jonka avulla voit luoda ja katsella videolähetyksiä.",
           "title": "Tervetuloa MediaMTX-palveluun!"
         }
       },
@@ -60,18 +60,18 @@
           "title": "Suoratoiston aloittaminen - Vaihe 4"
         },
         "stream1": {
-          "description": "Aloittaaksesi suoratoiston OpenTAK ICU:lla, laajenna 'OpenTAK ICU' -valikko. T\u00e4m\u00e4 valikko sis\u00e4lt\u00e4\u00e4 kaikki tarvittavat tiedot suoratoiston aloittamiseen sovelluksessa.",
+          "description": "Aloittaaksesi suoratoiston OpenTAK ICU:lla, laajenna 'OpenTAK ICU' -valikko. Tämä valikko sisältää kaikki tarvittavat tiedot suoratoiston aloittamiseen sovelluksessa.",
           "title": "Suoratoiston aloittaminen - Vaihe 1"
         }
       },
       "watch": {
         "watch1": {
-          "description": "Katsellaksesi suoratoistoa, napsauta 'Avaa selaimessa' -painiketta. Lis\u00e4\u00e4 vaihtoehtoja on lueteltu kohdassa 'Vaihtoehtoiset linkit', jotka voi avata esimerkiksi VLC:ll\u00e4.",
+          "description": "Katsellaksesi suoratoistoa, napsauta 'Avaa selaimessa' -painiketta. Lisää vaihtoehtoja on lueteltu kohdassa 'Vaihtoehtoiset linkit', jotka voi avata esimerkiksi VLC:llä.",
           "title": "Suoratoiston katsominen"
         }
       }
     },
-    "title": "MediaMTX -sovelluksen perehdytt\u00e4minen"
+    "title": "MediaMTX -sovelluksen perehdyttäminen"
   },
   "stream": {
     "address": "Osoite",
@@ -89,8 +89,8 @@
     "srt": "SRT",
     "srt_with_auth": "SRT (Todennuksen kanssa)",
     "title": "Aloita stream",
-    "tools": "Ty\u00f6kalut",
+    "tools": "Työkalut",
     "uastool": "UASTool",
-    "username": "K\u00e4ytt\u00e4j\u00e4tunnus"
+    "username": "Käyttäjätunnus"
   }
 }
