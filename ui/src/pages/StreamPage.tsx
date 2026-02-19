@@ -9,12 +9,13 @@ import {
   ChevronDown,
   ChevronUp,
   ArrowLeftCircle,
+  DownloadIcon,
 } from "lucide-react";
 import { Toaster } from "@/components/ui/sonner";
 import { Link } from "@tanstack/react-router";
 import { TranslatedText } from "@/components/translated-text";
 import { copyToClipboard } from "@/lib/clipboard";
-import { useTranslation } from "react-i18next";
+import { Trans, useTranslation } from "react-i18next";
 import { PRODUCT_SHORTNAME } from "@/App";
 import { OnboardingGuide } from "@/components/OnboardingGuide";
 
@@ -41,15 +42,48 @@ export const StreamPage = () => {
   const [isOpenTakIcuOpen, setIsOpenTakIcuOpen] = useState(false);
   const [isGoProAppOpen, setIsGoProAppOpen] = useState(false);
   const [showGoProAppLink, setShowGoProAppLink] = useState(false);
-  const [isUasToolOpen, setIsUasToolOpen] = useState(false);
-  const [showToolPasswords, setShowToolPasswords] = useState<
-    Record<number, boolean>
-  >({});
+
   const [showAdvancedPasswords, setShowAdvancedPasswords] = useState<
     Record<number, boolean>
   >({});
 
   const currentDomain = window.location.hostname.replace(/^mtls./, "");
+
+  const generateOpenTakIcuUrl = ({
+    protocol,
+    address,
+    port,
+    path,
+    username,
+    password,
+  }: {
+    protocol: string;
+    address: string;
+    port?: string;
+    path?: string;
+    username?: string;
+    password?: string;
+  }) => {
+    const params = new URLSearchParams();
+
+    if (protocol) params.append("protocol", protocol);
+    if (address) params.append("address", address);
+    if (port) params.append("port", port);
+    if (path) params.append("path", path);
+    if (username) params.append("username", username);
+    if (password) params.append("password", password);
+
+    return `opentakicu://import?${params.toString()}`;
+  };
+
+  const openTakIcuUrl = generateOpenTakIcuUrl({
+    protocol: "rtmps",
+    address: currentDomain,
+    port: "1936",
+    path: `/live/icu/${user?.username}`,
+    username: user?.username,
+    password: user?.password,
+  });
 
   useEffect(() => {
     async function fetchCredentials() {
@@ -182,14 +216,14 @@ export const StreamPage = () => {
               </p>
 
               {/* Tools */}
-              <div className="items-center justify-between font-semibold mt-8 border rounded-lg text-left">
+              <div className="items-center justify-between mt-8 border rounded-lg text-left">
                 <div
                   className="flex flex-row items-center justify-between border-0 m-0 rounded-lg p-4 cursor-pointer"
                   onClick={() => setIsOpenTakIcuOpen(!isOpenTakIcuOpen)}
                 >
                   <TranslatedText
                     id="stream.opentak_icu"
-                    className="text-left"
+                    className="text-left font-bold"
                   />
                   <Button
                     variant="ghost"
@@ -200,8 +234,23 @@ export const StreamPage = () => {
                   </Button>
                 </div>
                 {isOpenTakIcuOpen && (
-                  <div className="space-y-4 p-4">
-                    <div className="text-left">
+                  <div className="space-y-4 p-4 pt-0">
+                    <div className="flex flex-col gap-4">
+                      <a href={openTakIcuUrl} target="_blank">
+                        <Button className="cursor-pointer w-full h-auto py-2 whitespace-normal wrap-break-word">
+                          <TranslatedText id="stream.import.auto" />
+                        </Button>
+                      </a>
+
+                      <TranslatedText
+                        id="stream.import.warning"
+                        className="text-sm text-muted-foreground"
+                      />
+
+                      <TranslatedText id="stream.import.manual" />
+                    </div>
+
+                    <div className="text-left space-y-1">
                       <TranslatedText
                         id="stream.protocol"
                         className="font-bold text-gray-800"

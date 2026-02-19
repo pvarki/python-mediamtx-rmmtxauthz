@@ -47,21 +47,25 @@
         }
       },
       "stream": {
+        "opentak0": {
+          "description": "OpenTAK_ICU kommer att tillhandahållas till Android-enheter efter anslutning till en TAK-server. Du kan importera inställningar automatiskt till OpenTAK_ICU. Efter importen kommer du att kunna starta en ström.",
+          "title": "Importera inställningar automatiskt"
+        },
         "opentak1": {
-          "description": "Klicka på kugghjulsikonen för att öppna inställningar.",
-          "title": "Starta en ström - Steg 2"
+          "description": "Du kan vid behov importera inställningarna manuellt. Klicka på kugghjulsikonen för att öppna inställningar.",
+          "title": "Starta en ström manuellt - Steg 1"
         },
         "opentak2": {
           "description": "Klicka på 'Streaming Settings' för att öppna strömningsinställningarna.",
-          "title": "Starta en ström - Steg 3"
+          "title": "Starta en ström manuellt - Steg 2"
         },
         "opentak3": {
-          "description": "Kopiera värdena för 'Username', 'Password', 'Protocol', 'Address', 'Port' och 'Path' från steg 1 till inställningarna i OpenTAK ICU.",
-          "title": "Starta en ström - Steg 4"
+          "description": "Kopiera värdena för 'Username', 'Password', 'Protocol', 'Address', 'Port' och 'Path' från steg 1 till inställningarna i OpenTAK ICU. Du kan nu starta.",
+          "title": "Starta en ström manuellt - Steg 3"
         },
         "stream1": {
           "description": "För att påbörja en ström med OpenTAK ICU, expandera menyn 'OpenTAK ICU'. Denna meny innehåller all information som behövs för att starta en ström i appen.",
-          "title": "Starta en ström - Steg 1"
+          "title": "Starta en ström"
         }
       },
       "watch": {
@@ -91,6 +95,12 @@
     "title": "Starta en ström",
     "tools": "Verktyg",
     "uastool": "UASTool",
-    "username": "Användarnamn"
+    "username": "Användarnamn",
+    "import": {
+      "auto": "Auto-importera inställningar till OpenTAK_ICU",
+      "warning": "Kräver OpenTAK_ICU version 1.5.4 eller nyare!",
+      "install": "Ladda ner OpenTAK_ICU från GitHub till Android.",
+      "manual": "Eller importera manuellt genom att kopiera dessa inställningar till inställningarna i OpenTAK_ICU:"
+    }
   }
 }
