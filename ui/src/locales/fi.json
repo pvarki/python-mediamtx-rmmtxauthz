@@ -94,13 +94,19 @@
     "srt_with_auth": "SRT (Todennuksen kanssa)",
     "title": "Aloita stream",
     "tools": "Työkalut",
-    "uastool": "UASTool",
+    "uastool": "UAS Tool",
     "username": "Käyttäjätunnus",
     "import": {
       "auto": "Asetusten automaattinen tuonti OpenTAK_ICU:un",
       "warning": "Vaatii OpenTAK_ICUn version 1.5.4 tai uudemman!",
       "install": "Lataa OpenTAK_ICU GitHubista Androidille.",
       "manual": "Tai tuo manuaalisesti kopioimalla nämä asetukset OpenTAK_ICUn asetuksiin:"
-    }
+    },
+    "uastool_import": "Tuo asetukset UAS Tool -sovellukseen",
+    "stream_packages": "Lataa striimipaketit",
+    "download_atak_rtmps": "ATAK RTMPS",
+    "download_browser_hls": "Selain HLS",
+    "download_vlc_srt": "VLC SRT",
+    "download_vlc_hls": "VLC HLS"
   }
 }

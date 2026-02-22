@@ -94,13 +94,19 @@
     "srt_with_auth": "SRT (with authentication)",
     "title": "Start a stream",
     "tools": "Tools",
-    "uastool": "UASTool",
+    "uastool": "UAS Tool",
     "username": "Username",
     "import": {
       "auto": "Auto import settings to OpenTAK_ICU",
       "warning": "Requires OpenTAK_ICU version 1.5.4 or newer!",
       "install": "Download OpenTAK_ICU from GitHub on Android.",
       "manual": "Or import manually by copying these settings to OpenTAK_ICU settings:"
-    }
+    },
+    "uastool_import": "Import settings to UAS Tool",
+    "stream_packages": "Download Stream Packages",
+    "download_atak_rtmps": "ATAK RTMPS",
+    "download_browser_hls": "Browser HLS",
+    "download_vlc_srt": "VLC SRT",
+    "download_vlc_hls": "VLC HLS"
   }
 }

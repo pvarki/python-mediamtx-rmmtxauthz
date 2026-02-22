@@ -94,13 +94,19 @@
     "srt_with_auth": "SRT (med autentisering)",
     "title": "Starta en ström",
     "tools": "Verktyg",
-    "uastool": "UASTool",
+    "uastool": "UAS Tool",
     "username": "Användarnamn",
     "import": {
       "auto": "Auto-importera inställningar till OpenTAK_ICU",
       "warning": "Kräver OpenTAK_ICU version 1.5.4 eller nyare!",
       "install": "Ladda ner OpenTAK_ICU från GitHub till Android.",
       "manual": "Eller importera manuellt genom att kopiera dessa inställningar till inställningarna i OpenTAK_ICU:"
-    }
+    },
+    "uastool_import": "Importera inställningar till UAS Tool",
+    "stream_packages": "Ladda ner strömpaket",
+    "download_atak_rtmps": "ATAK RTMPS",
+    "download_browser_hls": "Webbläsare HLS",
+    "download_vlc_srt": "VLC SRT",
+    "download_vlc_hls": "VLC HLS"
   }
 }
