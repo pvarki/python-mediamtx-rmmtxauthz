@@ -7,9 +7,12 @@ import {
   ArrowLeftCircle,
   ChevronDown,
   ChevronUp,
+  Crosshair,
+  Globe,
   LucideCopy,
   LucideGlobe,
   LucidePlay,
+  MonitorPlay,
 } from "lucide-react";
 import { Link } from "@tanstack/react-router";
 import { Card, CardTitle } from "@/components/ui/card";
@@ -20,6 +23,7 @@ import { Toaster } from "@/components/ui/sonner";
 import { TFunction } from "i18next";
 import { TranslatedText } from "@/components/translated-text";
 import { OnboardingGuide } from "@/components/OnboardingGuide";
+import { useStreamPackages } from "@/hooks/useStreamPackages";
 
 function getIconForProtocol(protocol: string): JSX.Element {
   switch (protocol) {
@@ -118,6 +122,8 @@ export const LivePage = () => {
           <p className="text-2xl font-bold">{streamPath}</p>
         </div>
         {mediaPlayers}
+        {/*<StreamPackageDropdown streamPath={streamPath} />*/}
+
         <div className="items-center justify-between font-semibold mt-8 border rounded-lg text-left">
           <div
             className="flex flex-row items-center justify-between border-0 m-0 rounded-lg p-4 cursor-pointer"
@@ -143,3 +149,71 @@ export const LivePage = () => {
     </div>
   );
 };
+
+interface StreamPackageDropdownProps {
+  streamPath: string;
+}
+
+function StreamPackageDropdown({ streamPath }: StreamPackageDropdownProps) {
+  const [isStreamPackagesOpen, setIsStreamPackagesOpen] = useState(false);
+
+  const {
+    downloadAtakRtmps,
+    downloadBrowserHls,
+    downloadVlcSrt,
+    downloadVlcHls,
+  } = useStreamPackages(streamPath);
+
+  return (
+    <div className="items-center justify-between font-semibold mt-8 border rounded-lg text-left">
+      <div
+        className="flex flex-row items-center justify-between border-0 m-0 rounded-lg p-4 cursor-pointer"
+        onClick={() => setIsStreamPackagesOpen(!isStreamPackagesOpen)}
+      >
+        <TranslatedText id="stream.stream_packages" className="text-left" />
+        <Button
+          variant="ghost"
+          className="flex items-center font-semibold text-lg cursor-pointer p-0 w-9"
+          onClick={(e) => {
+            e.stopPropagation();
+            setIsStreamPackagesOpen(!isStreamPackagesOpen);
+          }}
+        >
+          {isStreamPackagesOpen ? <ChevronUp /> : <ChevronDown />}
+        </Button>
+      </div>
+      {isStreamPackagesOpen && (
+        <div className="grid grid-cols-2 gap-4 p-4 pt-0">
+          <Button
+            className="cursor-pointer h-auto py-4 whitespace-normal wrap-break-word flex flex-col items-center gap-2"
+            onClick={downloadAtakRtmps}
+          >
+            <Crosshair className="size-6" />
+            <TranslatedText id="stream.download_atak_rtmps" />
+          </Button>
+          <Button
+            className="cursor-pointer h-auto py-4 whitespace-normal wrap-break-word flex flex-col items-center gap-2"
+            onClick={downloadBrowserHls}
+          >
+            <Globe className="size-6" />
+            <TranslatedText id="stream.download_browser_hls" />
+          </Button>
+          <Button
+            className="cursor-pointer h-auto py-4 whitespace-normal wrap-break-word flex flex-col items-center gap-2"
+            onClick={downloadVlcSrt}
+          >
+            <MonitorPlay className="size-6" />
+            <TranslatedText id="stream.download_vlc_srt" />
+          </Button>
+          <Button
+            className="cursor-pointer h-auto py-4 whitespace-normal wrap-break-word flex flex-col items-center gap-2"
+            onClick={downloadVlcHls}
+          >
+            <MonitorPlay className="size-6" />
+            <TranslatedText id="stream.download_vlc_hls" />
+          </Button>
+        </div>
+      )}
+    </div>
+  );
+}

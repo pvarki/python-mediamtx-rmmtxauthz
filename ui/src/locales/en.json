@@ -47,21 +47,25 @@
         }
       },
       "stream": {
+        "opentak0": {
+          "description": "OpenTAK_ICU will be provided to android devices after having connected to a TAK server. You can autoimport settings to OpenTAK_ICU. After importing you will be able to start a stream.",
+          "title": "Auto importing settings"
+        },
         "opentak1": {
-          "description": "Click on the gear icon to open settings.",
-          "title": "Starting a Stream - Step 2"
+          "description": "You can import settings manually if needed. Click on the gear icon to open settings.",
+          "title": "Starting a Stream Manually - Step 1"
         },
         "opentak2": {
           "description": "Click on 'Streaming Settings' to open the streaming settings.",
-          "title": "Starting a Stream - Step 3"
+          "title": "Starting a Stream Manually - Step 2"
         },
         "opentak3": {
-          "description": "From step 1, copy over the values for 'Username', 'Password', 'Protocol', 'Address', 'Port' and 'Path' to the OpenTAK ICU settings",
-          "title": "Starting a Stream - Step 4"
+          "description": "From step 1, copy over the values for 'Username', 'Password', 'Protocol', 'Address', 'Port' and 'Path' to the OpenTAK ICU settings. You can now start",
+          "title": "Starting a Stream Manually - Step 3"
         },
         "stream1": {
           "description": "To begin a stream with OpenTAK ICU, expand the 'OpenTAK ICU' menu. This menu has all the information necessary to start a stream in the app.",
-          "title": "Starting a Stream - Step 1"
+          "title": "Starting a Stream"
         }
       },
       "watch": {
@@ -90,7 +94,19 @@
     "srt_with_auth": "SRT (with authentication)",
     "title": "Start a stream",
     "tools": "Tools",
-    "uastool": "UASTool",
-    "username": "Username"
+    "uastool": "UAS Tool",
+    "username": "Username",
+    "import": {
+      "auto": "Auto import settings to OpenTAK_ICU",
+      "warning": "Requires OpenTAK_ICU version 1.5.4 or newer!",
+      "install": "Download OpenTAK_ICU from GitHub on Android.",
+      "manual": "Or import manually by copying these settings to OpenTAK_ICU settings:"
+    },
+    "uastool_import": "Import settings to UAS Tool",
+    "stream_packages": "Download Stream Packages",
+    "download_atak_rtmps": "ATAK RTMPS",
+    "download_browser_hls": "Browser HLS",
+    "download_vlc_srt": "VLC SRT",
+    "download_vlc_hls": "VLC HLS"
   }
 }

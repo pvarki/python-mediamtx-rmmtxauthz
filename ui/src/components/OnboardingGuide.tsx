@@ -66,6 +66,13 @@ function STREAM_PAGE_ONBOARDING_STEPS(theme: string): OnboardingStep[] {
       mobileImage: `/ui/mtx/assets/Onboarding/${theme}/mobile/ON_BOARDING_START_A_STREAM.png`,
     },
     {
+      id: "opentak0",
+      title: "onboarding.steps.stream.opentak0.title",
+      description: "onboarding.steps.stream.opentak0.description",
+      image: `/ui/mtx/assets/Onboarding/${theme}/ON_BOARDING_IMPORT.png`,
+      mobileImage: `/ui/mtx/assets/Onboarding/${theme}/mobile/ON_BOARDING_IMPORT.png`,
+    },
+    {
       id: "opentak1",
       title: "onboarding.steps.stream.opentak1.title",
       description: "onboarding.steps.stream.opentak1.description",

@@ -9,14 +9,16 @@ import {
   ChevronDown,
   ChevronUp,
   ArrowLeftCircle,
+  DownloadIcon,
 } from "lucide-react";
 import { Toaster } from "@/components/ui/sonner";
 import { Link } from "@tanstack/react-router";
 import { TranslatedText } from "@/components/translated-text";
 import { copyToClipboard } from "@/lib/clipboard";
-import { useTranslation } from "react-i18next";
+import { Trans, useTranslation } from "react-i18next";
 import { PRODUCT_SHORTNAME } from "@/App";
 import { OnboardingGuide } from "@/components/OnboardingGuide";
+import { useStreamPackages } from "@/hooks/useStreamPackages";
 
 interface Userinfo {
   username: string;
@@ -42,14 +44,111 @@ export const StreamPage = () => {
   const [isGoProAppOpen, setIsGoProAppOpen] = useState(false);
   const [showGoProAppLink, setShowGoProAppLink] = useState(false);
   const [isUasToolOpen, setIsUasToolOpen] = useState(false);
-  const [showToolPasswords, setShowToolPasswords] = useState<
-    Record<number, boolean>
-  >({});
+
   const [showAdvancedPasswords, setShowAdvancedPasswords] = useState<
     Record<number, boolean>
   >({});
 
   const currentDomain = window.location.hostname.replace(/^mtls./, "");
+
+  const generateOpenTakIcuUrl = ({
+    protocol,
+    address,
+    port,
+    path,
+    username,
+    password,
+  }: {
+    protocol: string;
+    address: string;
+    port?: string;
+    path?: string;
+    username?: string;
+    password?: string;
+  }) => {
+    const params = new URLSearchParams();
+
+    if (protocol) params.append("protocol", protocol);
+    if (address) params.append("address", address);
+    if (port) params.append("port", port);
+    if (path) params.append("path", path);
+    if (username) params.append("username", username);
+    if (password) params.append("password", password);
+
+    return `opentakicu://import?${params.toString()}`;
+  };
+
+  const openTakIcuUrl = generateOpenTakIcuUrl({
+    protocol: "rtmps",
+    address: currentDomain,
+    port: "1936",
+    path: `/live/icu/${user?.username}`,
+    username: user?.username,
+    password: user?.password,
+  });
+
+  const generateUasToolUrl = () => {
+    const callsign = user?.username ?? "";
+    const username = user?.username ?? "";
+    const password = user?.password ?? "";
+    const domain = currentDomain;
+
+    const params: Record<string, string> = {
+      key1: "uastool.ROUTES_WAYPOINTS_OVERLAY",
+      type1: "boolean",
+      value1: "true",
+      key2: "uastool.fov_use_dted",
+      type2: "boolean",
+      value2: "true",
+      key3: "uastool.pref_cot_broadcast",
+      type3: "boolean",
+      value3: "true",
+      key4: "uastool.pref_broadcast_size",
+      type4: "string",
+      value4: "1920x1080 (high)",
+      key5: "uastool.pref_broadcast_ssl",
+      type5: "boolean",
+      value5: "true",
+      key6: "uastool.pref_cached_network_endpoints",
+      type6: "string",
+      value6: domain,
+      key7: "uastool.pref_callsign",
+      type7: "string",
+      value7: `UAS-${callsign}`,
+      key8: "uastool.pref_poi_id_template",
+      type8: "string",
+      value8: "%-POI",
+      key9: "uastool.pref_ui_ar_on",
+      type9: "boolean",
+      value9: "true",
+      key10: "uastool.pref_ui_dont_show_warning",
+      type10: "boolean",
+      value10: "true",
+      key11: "uastool.pref_video_broadcast_bitrate",
+      type11: "string",
+      value11: "100000",
+      key12: "uastool.pref_video_broadcast_destination",
+      type12: "string",
+      value12: "SRT (Video Management System)",
+      key13: "uastool.pref_video_observer_url",
+      type13: "string",
+      value13: `rtsps://${domain}:8322/live/uas/${callsign}?tcp`,
+      key14: "uastool.pref_srt_dest_host",
+      type14: "string",
+      value14: domain,
+      key15: "uastool.pref_srt_dest_port",
+      type15: "string",
+      value15: "8890",
+      key16: "uastool.pref_srt_stream_id",
+      type16: "string",
+      value16: `publish:live/uas/${callsign}:${username}:${password}`,
+    };
+
+    const searchParams = new URLSearchParams(params);
+    return `tak://com.atakmap.app/preference?${searchParams.toString()}`;
+  };
+
+  const uasToolUrl = generateUasToolUrl();
 
   useEffect(() => {
     async function fetchCredentials() {
@@ -86,7 +185,7 @@ export const StreamPage = () => {
           },
           {
             name: t("stream.srt"),
-            url: `srt://${currentDomain}:8890?streamid=publish:/live/icu/${data.username}&pkt_size=1316`,
+            url: `srt://${currentDomain}:8890?streamid=publish:live/icu/${data.username}&pkt_size=1316`,
           },
           {
             name: t("stream.srt_with_auth"),
@@ -182,14 +281,14 @@ export const StreamPage = () => {
               </p>
 
               {/* Tools */}
-              <div className="items-center justify-between font-semibold mt-8 border rounded-lg text-left">
+              <div className="items-center justify-between mt-8 border rounded-lg text-left">
                 <div
                   className="flex flex-row items-center justify-between border-0 m-0 rounded-lg p-4 cursor-pointer"
                   onClick={() => setIsOpenTakIcuOpen(!isOpenTakIcuOpen)}
                 >
                   <TranslatedText
                     id="stream.opentak_icu"
-                    className="text-left"
+                    className="text-left font-bold"
                   />
                   <Button
                     variant="ghost"
@@ -200,8 +299,23 @@ export const StreamPage = () => {
                   </Button>
                 </div>
                 {isOpenTakIcuOpen && (
-                  <div className="space-y-4 p-4">
-                    <div className="text-left">
+                  <div className="space-y-4 p-4 pt-0">
+                    <div className="flex flex-col gap-4">
+                      <a href={openTakIcuUrl} target="_blank">
+                        <Button className="cursor-pointer w-full h-auto py-2 whitespace-normal wrap-break-word">
+                          <TranslatedText id="stream.import.auto" />
+                        </Button>
+                      </a>
+
+                      <TranslatedText
+                        id="stream.import.warning"
+                        className="text-sm text-muted-foreground"
+                      />
+
+                      <TranslatedText id="stream.import.manual" />
+                    </div>
+
+                    <div className="text-left space-y-1">
                       <TranslatedText
                         id="stream.protocol"
                         className="font-bold text-gray-800"
@@ -338,45 +452,32 @@ export const StreamPage = () => {
                   </div>
                 )}
               </div>
-              {/*
-              <div className="mt-8 border rounded-lg p-4 text-left">
-                <button
-                  className="flex items-center justify-between w-full font-semibold text-lg"
+              <div className="items-center justify-between font-semibold mt-8 border rounded-lg text-left">
+                <div
+                  className="flex flex-row items-center justify-between border-0 m-0 rounded-lg p-4 cursor-pointer"
                   onClick={() => setIsUasToolOpen(!isUasToolOpen)}
                 >
                   <TranslatedText id="stream.uastool" className="text-left" />
-                  {isUasToolOpen ? <ChevronUp /> : <ChevronDown />}
-                </button>
+                  <Button
+                    variant="ghost"
+                    className="flex items-center font-semibold text-lg cursor-pointer p-0 w-9"
+                    onClick={() => setIsUasToolOpen(!isUasToolOpen)}
+                  >
+                    {isUasToolOpen ? <ChevronUp /> : <ChevronDown />}
+                  </Button>
+                </div>
                 {isUasToolOpen && (
-                  <div className="mt-4 space-y-4">
-                    <div className="text-left">
-                      <TranslatedText
-                        id="stream.address"
-                        className="font-bold text-gray-800"
-                      />
-                      <div className="flex flex-col md:flex-row gap-2 mt-1">
-                        <Input
-                          readOnly
-                          value={`rtsp://${currentDomain}:8554/live/uas/${user.username}`}
-                          className="flex-1"
-                        />
-                        <div>
-                          <Button
-                            onClick={() =>
-                              copyToClipboard(
-                                `rtsp://${currentDomain}:8554/live/uas/${user.username}`,
-                                t("common.copied"),
-                              )
-                            }
-                          >
-                            <TranslatedText id="common.copy" /> <Copy />
-                          </Button>
-                        </div>
-                      </div>
+                  <div className="space-y-4 p-4 pt-0">
+                    <div className="flex flex-col gap-4">
+                      <a href={uasToolUrl}>
+                        <Button className="cursor-pointer w-full h-auto py-2 whitespace-normal wrap-break-word">
+                          <TranslatedText id="stream.uastool_import" />
+                        </Button>
+                      </a>
                     </div>
                   </div>
                 )}
-              </div> */}
+              </div>
               {/* Advanced */}
               <div className="items-center justify-between font-semibold mt-8 border rounded-lg text-left">
                 <div

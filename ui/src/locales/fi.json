@@ -47,21 +47,25 @@
         }
       },
       "stream": {
+        "opentak0": {
+          "description": "OpenTAK_ICU toimitetaan Android-laitteille TAK-palvelimeen yhdistämisen jälkeen. Voit tuoda asetukset automaattisesti OpenTAK_ICU-sovellukseen. Tuonnin jälkeen voit aloittaa striimauksen.",
+          "title": "Asetusten automaattinen tuonti"
+        },
         "opentak1": {
-          "description": "Napsauta hammasrataskuvaketta avataksesi asetukset.",
-          "title": "Suoratoiston aloittaminen - Vaihe 2"
+          "description": "Voit tuoda asetukset tarvittaessa manuaalisesti. Napsauta hammasrataskuvaketta avataksesi asetukset.",
+          "title": "Suoratoiston aloittaminen manuaalisesti - Vaihe 1"
         },
         "opentak2": {
           "description": "Napsauta 'Streaming Settings' avataksesi suoratoistoasetukset.",
-          "title": "Suoratoiston aloittaminen - Vaihe 3"
+          "title": "Suoratoiston aloittaminen manuaalisesti - Vaihe 2"
         },
         "opentak3": {
-          "description": "Kopioi vaiheesta 1 arvot kohdista 'Username', 'Password', 'Protocol', 'Address', 'Port' ja 'Path' OpenTAK ICU -asetuksiin.",
-          "title": "Suoratoiston aloittaminen - Vaihe 4"
+          "description": "Kopioi vaiheesta 1 arvot kohdista 'Username', 'Password', 'Protocol', 'Address', 'Port' ja 'Path' OpenTAK ICU -asetuksiin. Voit nyt aloittaa.",
+          "title": "Suoratoiston aloittaminen manuaalisesti - Vaihe 3"
         },
         "stream1": {
           "description": "Aloittaaksesi suoratoiston OpenTAK ICU:lla, laajenna 'OpenTAK ICU' -valikko. Tämä valikko sisältää kaikki tarvittavat tiedot suoratoiston aloittamiseen sovelluksessa.",
-          "title": "Suoratoiston aloittaminen - Vaihe 1"
+          "title": "Suoratoiston aloittaminen"
         }
       },
       "watch": {
@@ -90,7 +94,19 @@
     "srt_with_auth": "SRT (Todennuksen kanssa)",
     "title": "Aloita stream",
     "tools": "Työkalut",
-    "uastool": "UASTool",
-    "username": "Käyttäjätunnus"
+    "uastool": "UAS Tool",
+    "username": "Käyttäjätunnus",
+    "import": {
+      "auto": "Asetusten automaattinen tuonti OpenTAK_ICU:un",
+      "warning": "Vaatii OpenTAK_ICUn version 1.5.4 tai uudemman!",
+      "install": "Lataa OpenTAK_ICU GitHubista Androidille.",
+      "manual": "Tai tuo manuaalisesti kopioimalla nämä asetukset OpenTAK_ICUn asetuksiin:"
+    },
+    "uastool_import": "Tuo asetukset UAS Tool -sovellukseen",
+    "stream_packages": "Lataa striimipaketit",
+    "download_atak_rtmps": "ATAK RTMPS",
+    "download_browser_hls": "Selain HLS",
+    "download_vlc_srt": "VLC SRT",
+    "download_vlc_hls": "VLC HLS"
   }
 }
