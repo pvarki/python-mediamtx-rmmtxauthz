@@ -122,7 +122,7 @@ export const LivePage = () => {
           <p className="text-2xl font-bold">{streamPath}</p>
         </div>
         {mediaPlayers}
-        <StreamPackageDropdown streamPath={streamPath} />
+        {/*<StreamPackageDropdown streamPath={streamPath} />*/}
 
         <div className="items-center justify-between font-semibold mt-8 border rounded-lg text-left">
           <div
