@@ -78,7 +78,7 @@ async def return_product_description_extended(language: str, request: Request) -
             icon="/ui/mtx/mtxlogo.svg",
             description="Videon suoratoistopalvelu",
             language=language,
-            docs="https://docs.pvarki.fi/",
+            docs="https://docs.pvarki.fi/fi/docs/guides/mtx-guide",
             component=ProductComponent(type="component", ref=f"/ui/{shortname}/remoteEntry.js"),
         )
     if language == "sv":
@@ -88,7 +88,7 @@ async def return_product_description_extended(language: str, request: Request) -
             icon="/ui/mtx/mtxlogo.svg",
             description="Videoströmningstjänst",
             language=language,
-            docs="https://docs.pvarki.fi/",
+            docs="https://docs.pvarki.fi/sv/docs/guides/mtx-guide",
             component=ProductComponent(type="component", ref=f"/ui/{shortname}/remoteEntry.js"),
         )
     return ProductDescriptionExtended(
@@ -97,6 +97,6 @@ async def return_product_description_extended(language: str, request: Request) -
         icon="/ui/mtx/mtxlogo.svg",
         description="Video streaming service",
         language=language,
-        docs="https://docs.pvarki.fi/",
+        docs="https://docs.pvarki.fi/en/docs/guides/mtx-guide",
         component=ProductComponent(type="component", ref=f"/ui/{shortname}/remoteEntry.js"),
     )

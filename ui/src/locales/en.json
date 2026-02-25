@@ -8,7 +8,7 @@
   "home": {
     "add": "Add",
     "documentation": "Documentation",
-    "documentation_link": "https://docs.pvarki.fi/en/docs/guides/mtx-guide/watch-stream-i7cQZkpBTh",
+    "documentation_link": "https://docs.pvarki.fi/en/docs/guides/mtx-guide",
     "error_loading_streams": "There was an error when loading streams. Please try again later.",
     "loading": "Loading...",
     "result": "result",
