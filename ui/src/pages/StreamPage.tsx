@@ -142,7 +142,7 @@ export const StreamPage = () => {
       key16:"uastool.pref_video_observer_url",
       type16:"string",
       value16:`rtmps://${domain}:1936/live/uas/${callsign}?user=${username}&pass=${password}`,
-    };
+    }; 
 
     const searchParams = new URLSearchParams(params);
     return `tak://com.atakmap.app/preference?${searchParams.toString()}`;
