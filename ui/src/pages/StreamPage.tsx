@@ -94,7 +94,6 @@ export const StreamPage = () => {
     const domain = currentDomain;
 
     const params: Record<string, string> = {
-      key1: "uastool.ROUTES_WAYPOINTS_OVERLAY",
       key1:"uastool.pref_callsign",
       type1:"string",
       value1:`UAS-${callsign}`,
