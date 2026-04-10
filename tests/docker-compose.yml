@@ -12,7 +12,7 @@ x-postgres_env: &postgres_env
 services:
 
   postgres:
-    image: postgres:12
+    image: ${HUB_DOCKER_REPO:-docker.io/}postgres:12
     volumes:
       - ./pg_init:/docker-entrypoint-initdb.d
       - pg_data:/var/lib/postgresql/data
@@ -28,6 +28,19 @@ services:
       timeout: 5s
       retries: 3
       start_period: 5s
+
+  mediamtx:
+    image: ${HUB_DOCKER_REPO:-docker.io/}bluenviron/mediamtx:1.12.3
+    networks:
+      - intranet
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    volumes:
+      - ./mediamtx.yml:/mediamtx.yml
+    environment:
+      MTX_RTSPTRANSPORTS: "tcp"  # Can't do UDP without host mode network
+    ports:
+      - "9997:9997"  # Control API
 
 
 networks:
