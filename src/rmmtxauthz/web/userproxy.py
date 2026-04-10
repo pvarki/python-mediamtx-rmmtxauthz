@@ -22,7 +22,7 @@ userrouterproxy = APIRouter(dependencies=[Depends(MTLSHeader(auto_error=True))])
 @userrouterproxy.post("/credentials", response_model=UserCredentials)
 async def get_credentials(request: Request, user_request: UserCRUDRequest) -> UserCredentials:
     """Get my MediaMTX credentials"""
-    comes_from_rm(request)
+    comes_from_rm(request, allow_proxy=True)
     user = await User.by_username(user_request.callsign)
     return UserCredentials(username=user.username, password=user.mtxpassword)
 
@@ -30,7 +30,7 @@ async def get_credentials(request: Request, user_request: UserCRUDRequest) -> Us
 @userrouterproxy.post("/streams")
 async def get_streams(request: Request, user_request: UserCRUDRequest) -> Sequence[Dict[str, Any]]:
     """Get streams"""
-    comes_from_rm(request)
+    comes_from_rm(request, allow_proxy=True)
     user = await User.by_username(user_request.callsign)
     conf = RMMTXSettings.singleton()
     if conf.mtx_address == "__REQUEST_HOSTNAME__":

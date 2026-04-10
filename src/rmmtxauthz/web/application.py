@@ -6,7 +6,7 @@ import logging
 from contextlib import asynccontextmanager
 
 from fastapi import FastAPI
-from libadvian.logging import init_logging
+from libpvarki.logging import init_logging, add_trace_and_audit
 from libadvian.tasks import TaskMaster
 
 from rmmtxauthz import __version__
@@ -64,6 +64,7 @@ def get_app() -> FastAPI:
     """Returns the FastAPI application."""
     config = RMMTXSettings.singleton()
     loglevel = getattr(logging, config.log_level.upper(), 30)
+    add_trace_and_audit()
     init_logging(loglevel)
     LOGGER.debug("Active config: {}".format(config))
     return get_app_no_init()

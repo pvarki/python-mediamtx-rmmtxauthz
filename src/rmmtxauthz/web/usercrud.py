@@ -17,10 +17,14 @@ LOGGER = logging.getLogger(__name__)
 crudrouter = APIRouter(dependencies=[Depends(MTLSHeader(auto_error=True))])
 
 
-def comes_from_rm(request: Request) -> None:
+def comes_from_rm(request: Request, allow_proxy: bool = False) -> None:
     """Check the CN, raises 403 if not"""
     payload = request.state.mtlsdn
     if payload.get("CN") != RMMTXSettings.singleton().rmcn:
+        LOGGER.audit("Request CN {} does not match {}".format(payload.get("CN"), RMMTXSettings.singleton().rmcn))  # type: ignore[attr-defined]  # pylint: disable=C0301
+        raise HTTPException(status_code=403)
+    if not allow_proxy and (request.headers.get("X-Rasenmaeher-Proxy") == "productproxy"):
+        LOGGER.audit("Productproxy headers present but not allowed")  # type: ignore[attr-defined]
         raise HTTPException(status_code=403)
 
 

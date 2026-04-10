@@ -15,6 +15,7 @@ hrouter = APIRouter()
 @hrouter.get("/healthcheck")
 async def request_healthcheck() -> ProductHealthCheckResponse:
     """Check that we are healthy, return accordingly"""
+
     users_count = 0
     async for _user in User.list():
         users_count += 1

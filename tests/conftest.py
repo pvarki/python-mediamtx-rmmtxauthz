@@ -6,7 +6,7 @@ import logging
 
 import pytest
 import pytest_asyncio
-from libadvian.logging import init_logging
+from libpvarki.logging import init_logging, add_trace_and_audit
 from libadvian.testhelpers import monkeysession, nice_tmpdir_mod, nice_tmpdir_ses  # pylint: disable=unused-import
 from pytest_docker.plugin import Services
 from fastapi import FastAPI
@@ -16,6 +16,7 @@ from rmmtxauthz.db.dbinit import init_db, drop_db
 from rmmtxauthz.config import RMMTXSettings
 
 
+add_trace_and_audit()
 init_logging(logging.DEBUG)
 LOGGER = logging.getLogger(__name__)
 
