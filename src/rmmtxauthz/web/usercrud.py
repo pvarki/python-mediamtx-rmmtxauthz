@@ -11,6 +11,7 @@ from ..config import RMMTXSettings
 from ..db.engine import EngineWrapper
 from ..db.errors import NotFound
 from ..db.user import User
+from ..mediamtx import MediaMTXControl
 
 LOGGER = logging.getLogger(__name__)
 
@@ -46,6 +47,7 @@ async def user_created(
     """New device cert was created"""
     comes_from_rm(request)
     await create_user(user)
+    await MediaMTXControl.singleton().ensure_srt_pass()
     result = OperationResultResponse(success=True)
     return result
 
@@ -77,6 +79,7 @@ async def user_promoted(
     except NotFound:
         LOGGER.warning("User '{}' did not exist, creating transparently".format(user.callsign))
         dbuser = await create_user(user)
+        await MediaMTXControl.singleton().ensure_srt_pass()
     with EngineWrapper.singleton().get_session() as session:
         dbuser.is_rmadmin = True
         session.add(dbuser)
@@ -112,6 +115,7 @@ async def user_updated(
 ) -> OperationResultResponse:
     """Device callsign updated"""
     comes_from_rm(request)
+    await MediaMTXControl.singleton().ensure_srt_pass()
     # We do not really care, but check that the user exists for create if not
     try:
         dbuser = await User.by_rmuuid(user.uuid)
