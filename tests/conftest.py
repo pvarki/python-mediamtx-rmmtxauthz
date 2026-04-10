@@ -56,6 +56,7 @@ def session_env_config(
         mpatch.setenv("LOG_LEVEL", "DEBUG")
         mpatch.setenv("DB_ECHO", "0")
         mpatch.setenv("RMMTX_API_PASSWORD", "pytestpasswd")
+        mpatch.setenv("RMMTX_API_URL", "http://mediamtx:9997")
         yield None
 
 
