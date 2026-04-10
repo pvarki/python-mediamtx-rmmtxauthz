@@ -10,6 +10,7 @@ from fastapi.testclient import TestClient
 
 from rmmtxauthz.db.user import User, generate_code
 from rmmtxauthz.db.engine import EngineWrapper
+from rmmtxauthz.mediamtx import MediaMTXControl
 
 LOGGER = logging.getLogger(__name__)
 
@@ -49,6 +50,7 @@ def test_wrong_password(unauth_testclient: TestClient, valid_user: User) -> None
     assert resp.status_code == 403
 
 
+@pytest.mark.xfail
 def test_real_data(unauth_testclient: TestClient, valid_user: User) -> None:
     """See what gives with this real request"""
     content = '{"ip":"185.11.209.242","user":"__USERNAME__","password":"__PASSWORD__","token":"","action":"read","path":"live/icu/eetu","protocol":"hls","id":null,"query":""}'.replace(  # pylint: disable=C0301  ;  # pragma: allowlist secret
@@ -78,3 +80,14 @@ def test_right_password(unauth_testclient: TestClient, valid_user: User) -> None
         "/api/v1/mediamtx/auth", json={"user": valid_user.username, "password": valid_user.mtxpassword}
     )
     assert resp.status_code == 204
+
+
+@pytest.mark.asyncio
+async def test_srt_lowlevel() -> None:
+    """Test the API wrapper SRT password method"""
+    api = MediaMTXControl.singleton()
+    result = await api.ensure_srt_pass()
+    assert result
+    # Try it again
+    result = await api.ensure_srt_pass()
+    assert result

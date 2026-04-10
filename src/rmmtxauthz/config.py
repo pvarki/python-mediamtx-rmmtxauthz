@@ -76,6 +76,8 @@ class RMMTXSettings(BaseSettings):  # pylint: disable=too-few-public-methods
     api_username: str = Field(default="rmmtxauthz", description="Username for *this* integration to use")
     api_password: str = Field(default="CHANGEME", description="Password for *this* integration to use")
     api_url: str = Field(default="https://mediamtx:9997", description="URL for the MediaMTX control API")
+    srt_pub_password: str = Field(default="CHANGEME", description="SRT Password for *this* integration to use")
+    srt_read_password: str = Field(default="CHANGEME", description="SRT Password for *this* integration to use")
 
     mtx_address: str = Field(default="__REQUEST_HOSTNAME__", description="Public address for MediaMTX server")
     mtx_hls_port: int = Field(default=9888, description="HLS stream port")

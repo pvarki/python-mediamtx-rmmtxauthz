@@ -52,11 +52,13 @@ def session_env_config(
 ) -> Generator[None, None, None]:
     """Test env variables"""
     with monkeysession.context() as mpatch:
-        mpatch.setenv("LOG_CONSOLE_FORMATTER", "utc")
+        mpatch.setenv("LOG_CONSOLE_FORMATTER", "local")
         mpatch.setenv("LOG_LEVEL", "DEBUG")
         mpatch.setenv("DB_ECHO", "0")
         mpatch.setenv("RMMTX_API_PASSWORD", "pytestpasswd")
-        mpatch.setenv("RMMTX_API_URL", "http://mediamtx:9997")
+        mpatch.setenv("RMMTX_API_URL", "http://127.0.0.1:19997")
+        mpatch.setenv("RMMTX_SRT_PUB_PASSWORD", "pytestsrtpub")
+        mpatch.setenv("RMMTX_SRT_READ_PASSWORD", "pytestsrtread")
         yield None
 
 

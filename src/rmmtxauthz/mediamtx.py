@@ -39,6 +39,32 @@ class MediaMTXControl:
         # Fallback
         return aiohttp.ClientSession(auth=auth, base_url=cnf.api_url, raise_for_status=True)
 
+    async def ensure_srt_pass(self) -> bool:
+        """Ensure SRT password for authentication is set to server config"""
+        cnf = RMMTXSettings.singleton()
+        async with self.get_session() as session:
+            resp = await session.patch(
+                "/v3/config/pathdefaults/patch",
+                json={
+                    "srtPublishPassphrase": cnf.srt_pub_password,
+                    "srtReadPassphrase": cnf.srt_read_password,
+                },
+                raise_for_status=False,
+            )
+            if resp.status != 200:
+                payload = await resp.json()
+                LOGGER.error("Patch failed: %s", payload)
+                return False
+            resp = await session.get("/v3/config/pathdefaults/get")
+            cfg = await resp.json()
+            if cfg.get("srtPublishPassphrase") != cnf.srt_pub_password:
+                LOGGER.error("Read back srtPublishPassphrase not what we expect")
+                return False
+            if cfg.get("srtReadPassphrase") != cnf.srt_read_password:
+                LOGGER.error("Read back srtReadPassphrase not what we expect")
+                return False
+            return True
+
     async def get_paths(self, username: str, password: str = "") -> Sequence[Dict[str, Any]]:
         """Get active paths and generate their corresponding urls for each protocol
         insert_credentials MUST be in format: username:password@"""

@@ -40,7 +40,7 @@ services:
     environment:
       MTX_RTSPTRANSPORTS: "tcp"  # Can't do UDP without host mode network
     ports:
-      - "9997:9997"  # Control API
+      - "19997:9997"  # Control API
 
 
 networks:
