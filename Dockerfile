@@ -115,22 +115,6 @@ RUN --mount=type=ssh source /.venv/bin/activate \
     && chmod a+x /docker-entrypoint.sh \
     && true
 
-################################################
-# Build RUNE instructions from local submodule #
-################################################
-FROM builder_base AS rune_build
-COPY ./poetry.lock ./pyproject.toml ./README.rst /app/
-COPY ./rune /app/rune
-WORKDIR /app
-RUN --mount=type=ssh source /.venv/bin/activate \
-    && poetry install --no-interaction --no-ansi  --no-root \
-    && ls -lah -R \
-    && mkdir -p /opt/templates \
-    && cd /app/rune \
-    && rune src json >/opt/templates/mediamtx.json \
-    && true
-
-
 #########################
 # Main production build #
 #########################
@@ -140,7 +124,6 @@ COPY --from=production_build /tmp/wheelhouse /tmp/wheelhouse
 COPY --from=production_build /ui_build /ui_build
 COPY --from=production_build /docker-entrypoint.sh /docker-entrypoint.sh
 COPY --from=production_build /container-init.sh /container-init.sh
-COPY --from=rune_build /opt/templates/mediamtx.json /opt/templates/mediamtx.json
 WORKDIR /app
 # Install system level deps for running the package (not devel versions for building wheels)
 # and install the wheels we built in the previous step. generate default config
@@ -168,7 +151,6 @@ ENTRYPOINT ["/usr/bin/tini", "--", "/docker-entrypoint.sh"]
 #####################################
 FROM builder_base AS devel_build
 COPY --from=pvarki/kw_product_init:latest /kw_product_init /kw_product_init
-COPY --from=rune_build /opt/templates/mediamtx.json /opt/templates/mediamtx.json
 # Install deps
 COPY . /app
 COPY ./docker/entrypoint-dev.sh /entrypoint-dev.sh
