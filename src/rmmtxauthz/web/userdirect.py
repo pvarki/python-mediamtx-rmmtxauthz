@@ -7,7 +7,7 @@ from fastapi import APIRouter, Depends, Request
 from libpvarki.middleware import MTLSHeader
 
 from ..db.user import User
-from ..schema.userdirect import UserCredentials
+from ..schema.userdirect import UserCredentials, SRTPasswords
 from ..mediamtx import MediaMTXControl
 from ..config import RMMTXSettings
 
@@ -26,7 +26,17 @@ def get_callsign(request: Request) -> str:
 async def get_credentials(request: Request) -> UserCredentials:
     """Get my MediaMTX credentials"""
     user = await User.by_username(get_callsign(request))
-    return UserCredentials(username=user.username, password=user.mtxpassword)
+    return UserCredentials(
+        username=user.username, password=user.mtxpassword, stream_ro_password=user.stream_ro_password
+    )
+
+
+@userrouter.get("/srt_default", response_model=SRTPasswords)
+async def get_srt_default(request: Request) -> SRTPasswords:
+    """Get default SRT passwords"""
+    _user = await User.by_username(get_callsign(request))
+    cnf = RMMTXSettings.singleton()
+    return SRTPasswords(publish=cnf.srt_pub_password, read=cnf.srt_read_password)
 
 
 @userrouter.get("/streams")

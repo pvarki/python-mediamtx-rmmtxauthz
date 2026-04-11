@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
@@ -20,9 +20,15 @@ import { PRODUCT_SHORTNAME } from "@/App";
 import { OnboardingGuide } from "@/components/OnboardingGuide";
 import { useStreamPackages } from "@/hooks/useStreamPackages";
 
-interface Userinfo {
+interface UserCredentials {
   username: string;
   password: string;
+  stream_ro_password: string;
+}
+
+interface SRTPasswords {
+  publish: string;
+  read: string;
 }
 
 interface StreamLinks {
@@ -34,10 +40,10 @@ interface StreamLinks {
 export const StreamPage = () => {
   const { t } = useTranslation(PRODUCT_SHORTNAME);
 
-  const [user, setUser] = useState<Userinfo | null>(null);
+  const [user, setUser] = useState<UserCredentials | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [showPassword, setShowPassword] = useState(false);
-  const [advancedLinks, setAdvancedLinks] = useState<StreamLinks[]>([]);
+  const [srtPasswords, setSrtPasswords] = useState<SRTPasswords | null>(null);
 
   const [isAdvancedOpen, setIsAdvancedOpen] = useState(false);
   const [isOpenTakIcuOpen, setIsOpenTakIcuOpen] = useState(false);
@@ -87,10 +93,13 @@ export const StreamPage = () => {
     password: user?.password,
   });
 
-  const generateUasToolUrl = () => {
-    const callsign = user?.username ?? "";
-    const username = user?.username ?? "";
-    const password = user?.password ?? "";
+  const uasToolUrl = useMemo(() => {
+    if (!user || !srtPasswords) return "";
+
+    const callsign = user.username;
+    const username = user.username;
+    const password = user.password;
+    const readOnlyPassword = user.stream_ro_password;
     const domain = currentDomain;
 
     const params: Record<string, string> = {
@@ -138,67 +147,74 @@ export const StreamPage = () => {
       value14: `publish:live/uas/${callsign}:${username}:${password}`,
       key15: "uastool.pref_video_observer_url",
       type15: "string",
-      value15: `rtmps://${domain}:1936/live/uas/${callsign}?user=${username}&pass=${password}`,
+      value15: `rtmps://${domain}:1936/live/uas/${callsign}?user=${username}&pass=${readOnlyPassword}`,
+      key16: "uastool.pref_srt_passphrase",
+      type16: "string",
+      value16: srtPasswords.publish,
     };
 
     const searchParams = new URLSearchParams(params);
     return `tak://com.atakmap.app/preference?${searchParams.toString()}`;
-  };
+  }, [user, srtPasswords, currentDomain]);
 
-  const uasToolUrl = generateUasToolUrl();
+  const advancedLinks = useMemo<StreamLinks[]>(() => {
+    if (!user || !srtPasswords) return [];
+
+    return [
+      {
+        name: t("stream.rtsps"),
+        url: `rtsps://${currentDomain}:8322/live/icu/${user.username}`,
+      },
+      {
+        name: t("stream.rtsps_with_auth"),
+        url: `rtsps://${user.username}:${user.password}@${currentDomain}:8322/live/icu/${user.username}`,
+        hideCredentials: true,
+      },
+      {
+        name: t("stream.rtmps"),
+        url: `rtmps://${currentDomain}:1936/live/icu/${user.username}`,
+      },
+      {
+        name: t("stream.rtmps_with_auth"),
+        url: `rtmps://${user.username}:${user.password}@${currentDomain}:1936/live/icu/${user.username}`,
+        hideCredentials: true,
+      },
+      {
+        name: t("stream.srt"),
+        url: `srt://${currentDomain}:8890?streamid=publish:live/icu/${user.username}&pkt_size=1316`,
+      },
+      {
+        name: t("stream.srt_with_auth"),
+        url: `srt://${currentDomain}:8890?streamid=publish:live/icu/${user.username}:${user.username}:${user.password}&passphrase=${srtPasswords.publish}&pkt_size=1316`,
+        hideCredentials: true,
+      },
+    ];
+  }, [user, srtPasswords, currentDomain, t]);
 
   useEffect(() => {
-    async function fetchCredentials() {
+    async function fetchAllData() {
       try {
-        const response = await fetch(
-          "/api/v1/product/proxy/mtx/api/v1/proxy/credentials",
-        );
+        const [credentialsRes, srtRes] = await Promise.all([
+          fetch("/api/v1/product/proxy/mtx/api/v1/proxy/credentials"),
+          fetch("/api/v1/product/proxy/mtx/api/v1/proxy/srt_default"),
+        ]);
 
-        if (!response.ok) {
-          throw new Error(`HTTP error: ${response.status}`);
-        }
+        if (!credentialsRes.ok)
+          throw new Error(`Credentials HTTP error: ${credentialsRes.status}`);
+        if (!srtRes.ok) throw new Error(`SRT HTTP error: ${srtRes.status}`);
 
-        const data: Userinfo = await response.json();
-        setUser(data);
+        const userData: UserCredentials = await credentialsRes.json();
+        const srtData: SRTPasswords = await srtRes.json();
 
-        const advLinks: StreamLinks[] = [
-          {
-            name: t("stream.rtsps"),
-            url: `rtsps://${currentDomain}:8322/live/icu/${data.username}`,
-          },
-          {
-            name: t("stream.rtsps_with_auth"),
-            url: `rtsps://${data.username}:${data.password}@${currentDomain}:8322/live/icu/${data.username}`,
-            hideCredentials: true,
-          },
-          {
-            name: t("stream.rtmps"),
-            url: `rtmps://${currentDomain}:1936/live/icu/${data.username}`,
-          },
-          {
-            name: t("stream.rtmps_with_auth"),
-            url: `rtmps://${data.username}:${data.password}@${currentDomain}:1936/live/icu/${data.username}`,
-            hideCredentials: true,
-          },
-          {
-            name: t("stream.srt"),
-            url: `srt://${currentDomain}:8890?streamid=publish:live/icu/${data.username}&pkt_size=1316`,
-          },
-          {
-            name: t("stream.srt_with_auth"),
-            url: `srt://${currentDomain}:8890?streamid=publish:live/icu/${data.username}:${data.username}:${data.password}&pkt_size=1316`,
-            hideCredentials: true,
-          },
-        ];
-
-        setAdvancedLinks(advLinks);
+        setUser(userData);
+        setSrtPasswords(srtData);
       } catch (err: any) {
-        console.error("Error fetching credentials:", err);
+        console.error("Error fetching data:", err);
         setError(err.message ?? "Failed to load credentials");
       }
     }
 
-    fetchCredentials();
+    fetchAllData();
   }, []);
 
   return (
@@ -215,7 +231,7 @@ export const StreamPage = () => {
 
         {error && <p className="text-red-500">Error: {error}</p>}
 
-        {user && (
+        {user && srtPasswords && (
           <div>
             {/* User Info */}
             <div className="mt-6 space-y-6">

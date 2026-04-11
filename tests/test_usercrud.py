@@ -115,3 +115,18 @@ async def test_unauth_crud(dbinstance: None, unauth_testclient: TestClient, crud
 
     resp = unauth_testclient.post("/api/v1/users/revoked", json=payload)
     assert resp.status_code == 403
+
+
+@pytest.mark.asyncio
+async def test_proxy_disallow(dbinstance: None, testclient: TestClient, crudrequest: UserCRUDRequest) -> None:
+    """Test transparent create on update"""
+    _ = dbinstance
+    user = crudrequest
+    testclient.headers.update(
+        {
+            "X-Rasenmaeher-Proxy": "productproxy",
+            "X-Proxy-Callsign": user.callsign,
+        }
+    )
+    resp = testclient.post("/api/v1/users/promoted", json=user.model_dump())
+    assert resp.status_code == 403
