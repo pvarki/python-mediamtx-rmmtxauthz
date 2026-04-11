@@ -8,6 +8,9 @@ class UserCredentials(BaseModel):
 
     username: str = Field(description="MediaMTX username")
     password: str = Field(description="MediaMTX password")
+    stream_ro_password: str = Field(
+        description="Plaintext password user can pass along for read/playback of their streams",
+    )
 
     model_config = ConfigDict(
         extra="forbid",
@@ -16,6 +19,7 @@ class UserCredentials(BaseModel):
                 {
                     "username": "KOIRA11a",
                     "password": "SomethingRandom",  # pragma: allowlist secret
+                    "stream_ro_password": "SomethingRandom",  # pragma: allowlist secret
                 },
             ],
         },

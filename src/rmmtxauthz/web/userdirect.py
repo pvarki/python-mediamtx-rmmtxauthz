@@ -26,7 +26,9 @@ def get_callsign(request: Request) -> str:
 async def get_credentials(request: Request) -> UserCredentials:
     """Get my MediaMTX credentials"""
     user = await User.by_username(get_callsign(request))
-    return UserCredentials(username=user.username, password=user.mtxpassword)
+    return UserCredentials(
+        username=user.username, password=user.mtxpassword, stream_ro_password=user.stream_ro_password
+    )
 
 
 @userrouter.get("/srt_default", response_model=SRTPasswords)

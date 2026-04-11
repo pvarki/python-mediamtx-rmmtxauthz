@@ -24,7 +24,9 @@ async def get_credentials(request: Request, user_request: UserCRUDRequest) -> Us
     """Get my MediaMTX credentials"""
     comes_from_rm(request, allow_proxy=True)
     user = await User.by_username(user_request.callsign)
-    return UserCredentials(username=user.username, password=user.mtxpassword)
+    return UserCredentials(
+        username=user.username, password=user.mtxpassword, stream_ro_password=user.stream_ro_password
+    )
 
 
 @userrouterproxy.post("/srt_default", response_model=SRTPasswords)
