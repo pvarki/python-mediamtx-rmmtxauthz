@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useMemo } from "react";
 import {
   StreamPackageParams,
   getAtakRtmps,
@@ -6,6 +6,8 @@ import {
   getVlcHls,
   getVlcSrt,
 } from "./packages";
+import { useCredentials } from "@/hooks/useCredentials";
+import { getBaseDomain } from "@/lib/stream-utils";
 
 function downloadFile(content: string, filename: string, mimeType: string) {
   const blob = new Blob([content], { type: mimeType });
@@ -22,32 +24,8 @@ function sanitizeFilename(streamPath: string) {
 }
 
 export function useStreamPackages(streamPath: string) {
-  const currentDomain = useMemo(
-    () => window.location.hostname.replace(/^mtls./, ""),
-    [],
-  );
-  const [credentials, setCredentials] = useState<{
-    username: string;
-    password: string;
-  } | null>(null);
-
-  useEffect(() => {
-    async function fetchCredentials() {
-      const response = await fetch(
-        "/api/v1/product/proxy/mtx/api/v1/proxy/credentials",
-      );
-
-      if (!response.ok) {
-        throw new Error(`HTTP error: ${response.status}`);
-      }
-
-      const data: { username: string; password: string } =
-        await response.json();
-      setCredentials(data);
-    }
-
-    fetchCredentials();
-  }, []);
+  const currentDomain = useMemo(() => getBaseDomain(), []);
+  const { data: credentials } = useCredentials();
 
   const params: StreamPackageParams | null = credentials
     ? {
@@ -58,39 +36,55 @@ export function useStreamPackages(streamPath: string) {
       }
     : null;
 
+  const stableParams = useMemo(
+    () => params,
+    [
+      params?.streamPath,
+      params?.currentDomain,
+      params?.username,
+      params?.password,
+    ],
+  );
+
   const downloadAtakRtmps = useCallback(() => {
-    if (!params) return;
-    const content = getAtakRtmps(params);
-    const filename = `atak-rtmps-${sanitizeFilename(params.streamPath)}.xml`;
+    if (!stableParams) return;
+    const content = getAtakRtmps(stableParams);
+    const filename = `atak-rtmps-${sanitizeFilename(
+      stableParams.streamPath,
+    )}.xml`;
     downloadFile(content, filename, "application/xml");
-  }, [params]);
+  }, [stableParams]);
 
   const downloadBrowserHls = useCallback(() => {
-    if (!params) return;
-    const content = getBrowserHls(params);
-    const filename = `browser-hls-${sanitizeFilename(params.streamPath)}.htm`;
+    if (!stableParams) return;
+    const content = getBrowserHls(stableParams);
+    const filename = `browser-hls-${sanitizeFilename(
+      stableParams.streamPath,
+    )}.htm`;
     downloadFile(content, filename, "text/html");
-  }, [params]);
+  }, [stableParams]);
 
   const downloadVlcSrt = useCallback(() => {
-    if (!params) return;
-    const content = getVlcSrt(params);
-    const filename = `vlc-srt-${sanitizeFilename(params.streamPath)}.m3u`;
+    if (!stableParams) return;
+    const content = getVlcSrt(stableParams);
+    const filename = `vlc-srt-${sanitizeFilename(stableParams.streamPath)}.m3u`;
     downloadFile(content, filename, "application/xml");
-  }, [params]);
+  }, [stableParams]);
 
   const downloadVlcHls = useCallback(() => {
-    if (!params) return;
-    const content = getVlcHls(params);
-    const filename = `vlc-hls-${sanitizeFilename(params.streamPath)}.m3u8`;
+    if (!stableParams) return;
+    const content = getVlcHls(stableParams);
+    const filename = `vlc-hls-${sanitizeFilename(
+      stableParams.streamPath,
+    )}.m3u8`;
     downloadFile(content, filename, "text/html");
-  }, [params]);
+  }, [stableParams]);
 
   return {
     downloadAtakRtmps,
     downloadBrowserHls,
     downloadVlcHls,
     downloadVlcSrt,
-    ready: params !== null,
+    ready: stableParams !== null,
   };
 }

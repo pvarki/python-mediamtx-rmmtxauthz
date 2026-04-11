@@ -3,7 +3,11 @@
     "copied": "Kopioitu leikepöydälle!",
     "copy": "Kopioi",
     "hide": "Piilota",
-    "show": "Näytä"
+    "show": "Näytä",
+    "retry": "Yritä uudelleen",
+    "back": "Takaisin",
+    "next": "Seuraava",
+    "close": "Sulje"
   },
   "home": {
     "add": "Lisää",
@@ -13,7 +17,8 @@
     "loading": "Ladataan...",
     "result": "tulos",
     "results": "tulosta",
-    "search": "Hae...",
+    "description": "Lähetä, katso ja hallitse suoria videolähetyksiä yhdistetyiltä laitteilta.",
+    "search": "Hae striimejä...",
     "started_by": "Aloittaja: "
   },
   "live": {
@@ -31,50 +36,7 @@
     "progressSaved": "Perehdyttämisen edistyminen on tallennettu.",
     "review": "Tarkista perehdyttäminen",
     "step": "Vaihe",
-    "steps": {
-      "home": {
-        "stream": {
-          "description": "Aloittaaksesi suoratoiston, napsauta ensin 'Lisää'-painiketta.",
-          "title": "Suoratoiston aloittaminen"
-        },
-        "watch": {
-          "description": "Palvelimella tällä hetkellä käynnissä olevat suoratoistot näkyvät luettelona etusivulla. Aloittaaksesi katselun, napsauta ensin haluamaasi suoratoistoa luettelosta. Huomautus: '▶' -symbolin napsauttaminen on nopea tapa aloittaa katselu suoraan.",
-          "title": "Suoratoiston katsominen"
-        },
-        "welcome": {
-          "description": "MediaMTX on suoratoistopalvelu, jonka avulla voit luoda ja katsella videolähetyksiä.",
-          "title": "Tervetuloa MediaMTX-palveluun!"
-        }
-      },
-      "stream": {
-        "opentak0": {
-          "description": "OpenTAK_ICU toimitetaan Android-laitteille TAK-palvelimeen yhdistämisen jälkeen. Voit tuoda asetukset automaattisesti OpenTAK_ICU-sovellukseen. Tuonnin jälkeen voit aloittaa striimauksen.",
-          "title": "Asetusten automaattinen tuonti"
-        },
-        "opentak1": {
-          "description": "Voit tuoda asetukset tarvittaessa manuaalisesti. Napsauta hammasrataskuvaketta avataksesi asetukset.",
-          "title": "Suoratoiston aloittaminen manuaalisesti - Vaihe 1"
-        },
-        "opentak2": {
-          "description": "Napsauta 'Streaming Settings' avataksesi suoratoistoasetukset.",
-          "title": "Suoratoiston aloittaminen manuaalisesti - Vaihe 2"
-        },
-        "opentak3": {
-          "description": "Kopioi vaiheesta 1 arvot kohdista 'Username', 'Password', 'Protocol', 'Address', 'Port' ja 'Path' OpenTAK ICU -asetuksiin. Voit nyt aloittaa.",
-          "title": "Suoratoiston aloittaminen manuaalisesti - Vaihe 3"
-        },
-        "stream1": {
-          "description": "Aloittaaksesi suoratoiston OpenTAK ICU:lla, laajenna 'OpenTAK ICU' -valikko. Tämä valikko sisältää kaikki tarvittavat tiedot suoratoiston aloittamiseen sovelluksessa.",
-          "title": "Suoratoiston aloittaminen"
-        }
-      },
-      "watch": {
-        "watch1": {
-          "description": "Katsellaksesi suoratoistoa, napsauta 'Avaa selaimessa' -painiketta. Lisää vaihtoehtoja on lueteltu kohdassa 'Vaihtoehtoiset linkit', jotka voi avata esimerkiksi VLC:llä.",
-          "title": "Suoratoiston katsominen"
-        }
-      }
-    },
+    "steps": {},
     "title": "MediaMTX -sovelluksen perehdyttäminen"
   },
   "stream": {
@@ -108,5 +70,84 @@
     "download_browser_hls": "Selain HLS",
     "download_vlc_srt": "VLC SRT",
     "download_vlc_hls": "VLC HLS"
+  },
+  "streams": {
+    "startBroadcasting": "Aloita lähetys",
+    "noStreams": "Ei lähetyksiä saatavilla",
+    "noStreamsHint": "Aloita lähetys nähdäksesi striimejä täällä.",
+    "noSearchResults": "Ei striimejä haulle '{{query}}'",
+    "clearSearch": "Tyhjennä haku",
+    "live": "LIVE",
+    "offline": "EI KÄYTÖSSÄ",
+    "errorLoading": "Striimejä ei voitu ladata",
+    "errorLoadingStale": "Striimiluettelo voi olla vanhentunut"
+  },
+  "video": {
+    "backToStreams": "Takaisin striimeihin",
+    "connectionOptions": "Yhteysasetukset",
+    "credentials": "Tunnukset",
+    "play": "Toista striimi",
+    "streamNotFound": "Striimiä ei löytynyt",
+    "streamNotFoundHint": "Tämä striimi on saattanut päättyä tai URL on virheellinen.",
+    "streamOffline": "Striimi ei ole käytössä",
+    "streamOfflineHint": "Tämä striimi ei lähetä tällä hetkellä.",
+    "playbackError": "Toisto epäonnistui",
+    "playbackErrorHint": "Striimiin ei saatu yhteyttä. Se on saattanut päättyä.",
+    "credentialsError": "Tunnuksia ei voitu ladata",
+    "downloadPackages": "Lataa paketit",
+    "downloadBrowser": "Selain",
+    "downloadVlc": "VLC",
+    "downloadTak": "TAK",
+    "advancedLinks": "Lisälinkit"
+  },
+  "broadcast": {
+    "title": "Aloita lähetys",
+    "selectTool": "Valitse lähetystyökalu",
+    "opentak_icu": "OpenTAK ICU",
+    "opentak_icu_desc": "Lähetä ATAKista OpenTAK ICU:n kautta",
+    "opentak_icu_step1": "Asenna OpenTAK ICU -sovellus",
+    "opentak_icu_step2": "Käytä tuontipainiketta asetusten tuontiin",
+    "opentak_icu_step3": "Aloita striimaus",
+    "opentak_icu_guide": "OpenTAK ICU -striimaus",
+    "opentak_icu_guide_url": "https://docs.pvarki.fi/fi/docs/guides/mtx-guide/opentak-icu-f0iwedgGde",
+    "gopro": "GoPro",
+    "gopro_desc": "Lähetä GoProlla",
+    "gopro_step1": "Asenna GoPro Quick -sovellus",
+    "gopro_step2": "Yhdistä GoPro sovellukseen",
+    "gopro_step3": "Käytä linkkiä striimauksen aloittamiseen",
+    "gopro_guide": "GoPro-striimaus",
+    "gopro_guide_url": "https://docs.pvarki.fi/fi/docs/guides/mtx-guide/gopro-C3E58GqT35",
+    "uastool": "UAS Tool",
+    "uastool_desc": "Lähetä ATAKista UAS Toolin kautta",
+    "uastool_step1": "Asenna ATAK ja UAS Tool -lisäosa",
+    "uastool_step2": "Käytä tuontipainiketta asetusten tuontiin",
+    "uastool_step3": "Aloita striimaus",
+    "uastool_guide": "UAS Tool -striimaus",
+    "uastool_guide_url": "https://docs.pvarki.fi/fi/docs/guides/mtx-guide/uas-tool-CX4y0uY0IF",
+    "advanced": "Lisäasetukset",
+    "advanced_desc": "Manuaaliset protokolla-URLit ja tunnukset",
+    "guideHint": "Jos tarvitset lisäohjeita, käytä Opas-painiketta",
+    "importSettings": "Tuo asetukset",
+    "guide": "Opas",
+    "guideSteps": {
+      "opentak_icu": {
+        "auto_import": {
+          "title": "Asetusten automaattinen tuonti",
+          "description": "OpenTAK ICU toimitetaan Android-laitteille TAK-palvelimeen yhdistämisen jälkeen. Käytä yllä olevaa Tuo asetukset -painiketta automaattiseen tuontiin. Tuonnin jälkeen voit aloittaa striimauksen."
+        },
+        "manual_settings": {
+          "title": "Asetusten avaaminen manuaalisesti",
+          "description": "Jos automaattinen tuonti ei ole käytettävissä, avaa OpenTAK ICU ja napsauta hammasrataskuvaketta avataksesi asetukset."
+        },
+        "streaming_settings": {
+          "title": "Suoratoistoasetukset",
+          "description": "Siirry kohtaan 'Streaming Settings' määrittääksesi suoratoistoparametrit."
+        },
+        "copy_values": {
+          "title": "Arvojen määrittäminen",
+          "description": "Syötä Protokolla (RTMPS), Osoite, Portti (1936), Reitti, Käyttäjätunnus ja Salasana. Nämä arvot näkyvät yllä pikavaiheissa."
+        }
+      }
+    }
   }
 }
