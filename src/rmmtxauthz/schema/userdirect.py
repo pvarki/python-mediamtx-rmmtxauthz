@@ -4,7 +4,7 @@ from pydantic import Field, BaseModel, ConfigDict
 
 
 class UserCredentials(BaseModel):
-    """Request to add product interoperability."""
+    """Users credentials"""
 
     username: str = Field(description="MediaMTX username")
     password: str = Field(description="MediaMTX password")
@@ -16,6 +16,25 @@ class UserCredentials(BaseModel):
                 {
                     "username": "KOIRA11a",
                     "password": "SomethingRandom",  # pragma: allowlist secret
+                },
+            ],
+        },
+    )
+
+
+class SRTPasswords(BaseModel):
+    """SRT passwords"""
+
+    publish: str = Field(description="Publish password")
+    read: str = Field(description="Read password")
+
+    model_config = ConfigDict(
+        extra="forbid",
+        json_schema_extra={
+            "examples": [
+                {
+                    "publish": "SomethingElseRandom",  # pragma: allowlist secret
+                    "read": "SomethingRandom",  # pragma: allowlist secret
                 },
             ],
         },
