@@ -20,9 +20,10 @@ import { PRODUCT_SHORTNAME } from "@/App";
 import { OnboardingGuide } from "@/components/OnboardingGuide";
 import { useStreamPackages } from "@/hooks/useStreamPackages";
 
-interface Userinfo {
+interface UserCredentials {
   username: string;
   password: string;
+  stream_ro_password: string;
 }
 
 interface SRTPasswords {
@@ -39,7 +40,7 @@ interface StreamLinks {
 export const StreamPage = () => {
   const { t } = useTranslation(PRODUCT_SHORTNAME);
 
-  const [user, setUser] = useState<Userinfo | null>(null);
+  const [user, setUser] = useState<UserCredentials | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [showPassword, setShowPassword] = useState(false);
   const [srtPasswords, setSrtPasswords] = useState<SRTPasswords | null>(null);
@@ -98,6 +99,7 @@ export const StreamPage = () => {
     const callsign = user.username;
     const username = user.username;
     const password = user.password;
+    const readOnlyPassword = user.stream_ro_password;
     const domain = currentDomain;
 
     const params: Record<string, string> = {
@@ -145,7 +147,7 @@ export const StreamPage = () => {
       value14: `publish:live/uas/${callsign}:${username}:${password}`,
       key15: "uastool.pref_video_observer_url",
       type15: "string",
-      value15: `rtmps://${domain}:1936/live/uas/${callsign}?user=${username}&pass=${password}`,
+      value15: `rtmps://${domain}:1936/live/uas/${callsign}?user=${username}&pass=${readOnlyPassword}`,
       key16: "uastool.pref_srt_passphrase",
       type16: "string",
       value16: srtPasswords.publish,
@@ -201,7 +203,7 @@ export const StreamPage = () => {
           throw new Error(`Credentials HTTP error: ${credentialsRes.status}`);
         if (!srtRes.ok) throw new Error(`SRT HTTP error: ${srtRes.status}`);
 
-        const userData: Userinfo = await credentialsRes.json();
+        const userData: UserCredentials = await credentialsRes.json();
         const srtData: SRTPasswords = await srtRes.json();
 
         setUser(userData);
