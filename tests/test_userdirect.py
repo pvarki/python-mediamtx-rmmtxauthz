@@ -44,3 +44,4 @@ def test_credentials(user_testclient: TestClient, valid_user: User) -> None:
     payload = resp.json()
     assert payload["username"] == valid_user.username
     assert payload["password"] == valid_user.mtxpassword
+    assert payload["stream_ro_password"] == valid_user.stream_ro_password

@@ -44,3 +44,4 @@ def test_credentials(testclient: TestClient, valid_user: User, usercrud: UserCRU
     LOGGER.debug(payload)
     assert payload["username"] == valid_user.username
     assert payload["password"] == valid_user.mtxpassword
+    assert payload["stream_ro_password"] == valid_user.stream_ro_password
