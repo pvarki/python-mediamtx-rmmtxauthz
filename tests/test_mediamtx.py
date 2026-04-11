@@ -3,6 +3,7 @@
 from typing import Generator
 import logging
 import uuid
+import json
 
 
 import pytest
@@ -68,19 +69,19 @@ def test_wrong_password(unauth_testclient: TestClient, valid_user: User) -> None
     assert resp.status_code == 403
 
 
-@pytest.mark.xfail
 def test_real_data(unauth_testclient: TestClient, valid_user: User) -> None:
     """See what gives with this real request"""
-    content = '{"ip":"185.11.209.242","user":"__USERNAME__","password":"__PASSWORD__","token":"","action":"read","path":"live/icu/eetu","protocol":"hls","id":null,"query":""}'.replace(  # pylint: disable=C0301  ;  # pragma: allowlist secret
+    content = '{"action":"read","id":"e14b6658-fa32-4a21-b0ac-ab1bc135dcf6","ip":"185.11.209.242","password":"__PASSWORD__","path":"live/icu/Eetu2","protocol":"srt","query":"","user":"__USERNAME__"}'.replace(  # pylint: disable=C0301  ;  # pragma: allowlist secret
         "__USERNAME__",
         valid_user.username,
     ).replace(
         "__PASSWORD__", valid_user.mtxpassword  # pragma: allowlist secret
     )
-    LOGGER.debug("POSTing '{}'".format(content))
+    payload = json.loads(content)
+    LOGGER.debug("POSTing '{}'".format(payload))
     resp = unauth_testclient.post(
         "/api/v1/mediamtx/auth",
-        content=content,
+        json=payload,
     )
     assert resp.status_code == 204
 
