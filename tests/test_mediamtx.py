@@ -11,6 +11,7 @@ from fastapi.testclient import TestClient
 from rmmtxauthz.db.user import User, generate_code
 from rmmtxauthz.db.engine import EngineWrapper
 from rmmtxauthz.mediamtx import MediaMTXControl
+from rmmtxauthz.config import RMMTXSettings
 
 LOGGER = logging.getLogger(__name__)
 
@@ -26,6 +27,23 @@ def valid_user(dbinstance: None) -> Generator[User, None, None]:
         dbuser = User(
             rmuuid=str(uuid.uuid4()),
             username=f"koira_{generate_code(4)}",
+        )
+        session.add(dbuser)
+        session.commit()
+        session.refresh(dbuser)
+        yield dbuser
+        session.delete(dbuser)
+        session.commit()
+
+
+@pytest.fixture(scope="module")
+def another_valid_user(dbinstance: None) -> Generator[User, None, None]:
+    """A different valid user"""
+    _ = dbinstance
+    with EngineWrapper.singleton().get_session() as session:
+        dbuser = User(
+            rmuuid=str(uuid.uuid4()),
+            username=f"mayra_{generate_code(4)}",
         )
         session.add(dbuser)
         session.commit()
@@ -70,16 +88,95 @@ def test_real_data(unauth_testclient: TestClient, valid_user: User) -> None:
 def test_wrong_username(unauth_testclient: TestClient, valid_user: User) -> None:
     """Test without password"""
     _ = valid_user
-    resp = unauth_testclient.post("/api/v1/mediamtx/auth", json={"user": "nosuchuser", "password": "wrongpassword"})
+    resp = unauth_testclient.post(
+        "/api/v1/mediamtx/auth",
+        json={"user": "nosuchuser", "password": "wrongpassword", "action": "read"},  # pragma: allowlist secret
+    )
     assert resp.status_code == 403
 
 
 def test_right_password(unauth_testclient: TestClient, valid_user: User) -> None:
     """Test without password"""
     resp = unauth_testclient.post(
-        "/api/v1/mediamtx/auth", json={"user": valid_user.username, "password": valid_user.mtxpassword}
+        "/api/v1/mediamtx/auth",
+        json={"user": valid_user.username, "password": valid_user.mtxpassword, "action": "read"},
     )
     assert resp.status_code == 204
+
+
+@pytest.mark.parametrize(
+    "path_prefix", [pytest.param(path_prefix, id=path_prefix) for path_prefix in RMMTXSettings.singleton().user_paths]
+)
+def test_publish_valid_path(unauth_testclient: TestClient, valid_user: User, path_prefix: str) -> None:
+    """Test valid user paths"""
+    resp = unauth_testclient.post(
+        "/api/v1/mediamtx/auth",
+        json={
+            "user": valid_user.username,
+            "password": valid_user.mtxpassword,
+            "path": f"{path_prefix}/{valid_user.username}",
+            "action": "publish",
+        },
+    )
+    assert resp.status_code == 204
+    resp2 = unauth_testclient.post(
+        "/api/v1/mediamtx/auth",
+        json={
+            "user": valid_user.username,
+            "password": valid_user.mtxpassword,
+            "path": f"{path_prefix}/{valid_user.username}/more",
+            "action": "publish",
+        },
+    )
+    assert resp2.status_code == 204
+
+
+def test_publish_path_wrong_tool(unauth_testclient: TestClient, valid_user: User) -> None:
+    """Test invalid tool but otherwise fine"""
+    resp = unauth_testclient.post(
+        "/api/v1/mediamtx/auth",
+        json={
+            "user": valid_user.username,
+            "password": valid_user.mtxpassword,
+            "path": f"live/nosuchtool/{valid_user.username}",
+            "action": "publish",
+        },
+    )
+    assert resp.status_code == 403
+
+
+@pytest.mark.parametrize("tool", [pytest.param(tool, id=tool) for tool in RMMTXSettings.singleton().tools])
+def test_publish_path_wrong_prefix(unauth_testclient: TestClient, valid_user: User, tool: str) -> None:
+    """Test invalid tool but otherwise fine"""
+    resp = unauth_testclient.post(
+        "/api/v1/mediamtx/auth",
+        json={
+            "user": valid_user.username,
+            "password": valid_user.mtxpassword,
+            "path": f"nosuchprefix/{tool}/{valid_user.username}",
+            "action": "publish",
+        },
+    )
+    assert resp.status_code == 403
+
+
+@pytest.mark.parametrize(
+    "path_prefix", [pytest.param(prefix, id=prefix) for prefix in RMMTXSettings.singleton().user_paths]
+)
+def test_publish_path_wrong_callsign(
+    unauth_testclient: TestClient, valid_user: User, path_prefix: str, another_valid_user: User
+) -> None:
+    """Test valid user paths"""
+    resp = unauth_testclient.post(
+        "/api/v1/mediamtx/auth",
+        json={
+            "user": valid_user.username,
+            "password": valid_user.mtxpassword,
+            "path": f"{path_prefix}/{another_valid_user.username}",
+            "action": "publish",
+        },
+    )
+    assert resp.status_code == 403
 
 
 @pytest.mark.asyncio

@@ -65,6 +65,26 @@ async def check_productuser(authreq: MTXAuthReq) -> Optional[Response]:
     return None
 
 
+def user_publish_rules(authreq: MTXAuthReq, dbuser: User) -> Optional[Response]:
+    """Rules for publishing"""
+    conf = RMMTXSettings.singleton()
+    path_prefix_matched = False
+    if authreq.path is None:
+        LOGGER.error("Path cannot be None")
+        raise HTTPException(status_code=403)
+    for prefix in conf.user_paths:
+        if authreq.path.startswith(f"{prefix}/{dbuser.username}"):
+            path_prefix_matched = True
+            break
+    if not path_prefix_matched:
+        LOGGER.audit(  # type: ignore[attr-defined]
+            "{} is not allowed to {} on {}".format(authreq.user, authreq.action, authreq.path),
+            extra=make_log_extra(authreq),
+        )
+        raise HTTPException(status_code=403)
+    return Response(status_code=204)
+
+
 async def check_rmuser(authreq: MTXAuthReq) -> Optional[Response]:
     """Check RM user credentials"""
     if not authreq.user or not authreq.password:
@@ -85,19 +105,14 @@ async def check_rmuser(authreq: MTXAuthReq) -> Optional[Response]:
             )
             raise HTTPException(status_code=403)
         # User path based rules
-        if authreq.path:
-            conf = RMMTXSettings.singleton()
-            path_prefix_matched = False
-            for prefix in conf.user_paths:
-                if authreq.path.startswith(f"{prefix}/{dbuser.username}"):
-                    path_prefix_matched = True
-                    break
-            if not path_prefix_matched:
-                LOGGER.audit(  # type: ignore[attr-defined]
-                    "{} is not allowed to {} on {}".format(authreq.user, authreq.action, authreq.path),
-                    extra=make_log_extra(authreq),
-                )
-                raise HTTPException(status_code=403)
+        if authreq.action in ("read", "playback"):
+            # Reads are allowed
+            return Response(status_code=204)
+        if authreq.action == "publish":
+            # Publishing has specific rules
+            if resp := user_publish_rules(authreq, dbuser):
+                return resp
+        # FIXME: When we have all rules in place change to deny-by-default
         return Response(status_code=204)
     except (NotFound, Deleted) as exc:
         LOGGER.audit("Invalid user {}: {}".format(authreq.user, exc), extra=make_log_extra(authreq))  # type: ignore[attr-defined]  # pylint: disable=C0301
