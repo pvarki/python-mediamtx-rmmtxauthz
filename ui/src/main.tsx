@@ -12,6 +12,16 @@ import {
   redirect,
 } from "@tanstack/react-router";
 
+async function enableMocking() {
+  if (import.meta.env.VITE_MOCK !== "true") return;
+  const { worker } = await import("./mocks/browser");
+  await worker.start({
+    onUnhandledRequest: "bypass",
+    serviceWorker: { url: "/mockServiceWorker.js" },
+  });
+  console.log("[MOCK] MSW enabled, MTX integration API calls are mocked");
+}
+
 const rootRoute = createRootRoute({
   component: () => (
     <>
@@ -24,9 +34,11 @@ const mtxRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: "product/mtx/$",
   component: () => {
-    const SAMPLE_DATA = { data: {} };
-    // @ts-ignore
-    return <App data={SAMPLE_DATA} />;
+    const MOCK_META = {
+      theme: "default",
+      callsign: "DemoUser",
+    };
+    return <App data={{}} meta={MOCK_META} />;
   },
 });
 
@@ -56,8 +68,10 @@ if (__USE_GLOBAL_CSS__ == true) {
   import("./index.css");
 }
 
-ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
-  <React.StrictMode>
-    <RouterProvider router={router} />
-  </React.StrictMode>,
-);
+enableMocking().then(() => {
+  ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
+    <React.StrictMode>
+      <RouterProvider router={router} />
+    </React.StrictMode>,
+  );
+});

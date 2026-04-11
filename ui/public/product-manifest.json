@@ -1,0 +1,19 @@
+{
+  "shortname": "mtx",
+  "title": {
+    "en": "MTX: MediaMTX",
+    "fi": "MTX: MediaMTX",
+    "sv": "MTX: MediaMTX"
+  },
+  "description": {
+    "en": "Video streaming service",
+    "fi": "Videon suoratoistopalvelu",
+    "sv": "Videoströmningstjänst"
+  },
+  "icon": "/ui/mtx/mtxlogo.svg",
+  "docs": "https://docs.pvarki.fi/",
+  "component": {
+    "type": "component",
+    "ref": "mtx"
+  }
+}
