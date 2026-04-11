@@ -88,7 +88,7 @@ class MediaMTXControl:
                 for pname, pinfo in cnf.protocols.items():
                     if pname == "rtmps":
                         url = f"{pinfo.proto}://{cnf.mtx_address}:{pinfo.port}{path}?user={username}&pass={password}"
-                    if pname == "srt":
+                    elif pname == "srt":
                         clean_path = path.lstrip("/")
                         url = (
                             f"{pinfo.proto}://{cnf.mtx_address}:{pinfo.port}"
