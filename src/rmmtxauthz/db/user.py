@@ -6,6 +6,7 @@ import logging
 import uuid
 import secrets
 import string
+import functools
 
 
 from sqlmodel import Field, select
@@ -19,11 +20,11 @@ LOGGER = logging.getLogger(__name__)
 CODE_ALPHABET = string.ascii_uppercase + string.digits
 
 
-def generate_code(size: int = 12) -> str:
+def generate_code(size: int = 12, prefix: str = "") -> str:
     """Generate a code"""
     code = "".join(secrets.choice(CODE_ALPHABET) for _ in range(size))
     code = code.replace("0", "O").replace("1", "I")
-    return code
+    return f"{prefix}{code}"
 
 
 class User(ORMBaseModel, table=True):
@@ -35,6 +36,10 @@ class User(ORMBaseModel, table=True):
     username: str = Field(index=True, unique=True, description="Unique username")
     mtxpassword: str = Field(
         description="Plaintext password we give to user for using MediaMTX", default_factory=generate_code
+    )
+    stream_ro_password: str = Field(
+        description="Plaintext password user can pass along for read/playback of their streams",
+        default_factory=functools.partial(generate_code, 8, "RO_"),
     )
     is_rmadmin: bool = Field(default=False, description="User has admin role in RASENMAEHER")
 

@@ -65,7 +65,7 @@ async def check_productuser(authreq: MTXAuthReq) -> Optional[Response]:
     return None
 
 
-def user_publish_rules(authreq: MTXAuthReq, dbuser: User) -> Optional[Response]:
+def user_publish_path_rules(authreq: MTXAuthReq, dbuser: User) -> Optional[Response]:
     """Rules for publishing"""
     conf = RMMTXSettings.singleton()
     path_prefix_matched = False
@@ -85,6 +85,24 @@ def user_publish_rules(authreq: MTXAuthReq, dbuser: User) -> Optional[Response]:
     return Response(status_code=204)
 
 
+def ro_rules(authreq: MTXAuthReq, dbuser: User) -> Optional[Response]:
+    """Rules for using the read-only password for user"""
+    # Only read/playback is allowed
+    if authreq.action not in ("read", "playback"):
+        LOGGER.audit(  # type: ignore[attr-defined]
+            "read-only {} requesting {}".format(authreq.user, authreq.action), extra=make_log_extra(authreq)
+        )
+        raise HTTPException(status_code=403)
+    # Use same path rules as for publish for the specific RO password
+    if resp := user_publish_path_rules(authreq, dbuser):
+        return resp
+    LOGGER.audit(  # type: ignore[attr-defined]
+        "read-only permissions check for {} fell through, deny-by-default".format(authreq.user),
+        extra=make_log_extra(authreq),
+    )
+    raise HTTPException(status_code=403)
+
+
 async def check_rmuser(authreq: MTXAuthReq) -> Optional[Response]:
     """Check RM user credentials"""
     if not authreq.user or not authreq.password:
@@ -92,7 +110,7 @@ async def check_rmuser(authreq: MTXAuthReq) -> Optional[Response]:
         raise HTTPException(status_code=401)
     try:
         dbuser = await User.by_username(authreq.user)
-        if authreq.password != dbuser.mtxpassword:
+        if authreq.password not in (dbuser.mtxpassword, dbuser.stream_ro_password):
             LOGGER.audit("Wrong password for {}".format(authreq.user), extra=make_log_extra(authreq))  # type: ignore[attr-defined]  # pylint: disable=C0301
             raise HTTPException(status_code=403)
         if dbuser.is_rmadmin:
@@ -104,13 +122,18 @@ async def check_rmuser(authreq: MTXAuthReq) -> Optional[Response]:
                 "{} is not admin requesting {}".format(authreq.user, authreq.action), extra=make_log_extra(authreq)
             )
             raise HTTPException(status_code=403)
+        # read-only rules
+        if authreq.password == dbuser.stream_ro_password:
+            if resp := user_publish_path_rules(authreq, dbuser):
+                return resp
+
         # User path based rules
         if authreq.action in ("read", "playback"):
             # Reads are allowed
             return Response(status_code=204)
         if authreq.action == "publish":
             # Publishing has specific rules
-            if resp := user_publish_rules(authreq, dbuser):
+            if resp := user_publish_path_rules(authreq, dbuser):
                 return resp
         # Checks fell through
         LOGGER.audit(  # type: ignore[attr-defined]
