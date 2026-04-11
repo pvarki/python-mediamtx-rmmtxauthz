@@ -92,8 +92,8 @@ export const StreamPage = () => {
     password: user?.password,
   });
 
-const uasToolUrl = useMemo(() => {
-    if (!user || !srtPasswords) return ""; 
+  const uasToolUrl = useMemo(() => {
+    if (!user || !srtPasswords) return "";
 
     const callsign = user.username;
     const username = user.username;
@@ -148,7 +148,7 @@ const uasToolUrl = useMemo(() => {
       value15: `rtmps://${domain}:1936/live/uas/${callsign}?user=${username}&pass=${password}`,
       key16: "uastool.pref_srt_passphrase",
       type16: "string",
-      value16: srtPasswords.publish
+      value16: srtPasswords.publish,
     };
 
     const searchParams = new URLSearchParams(params);
@@ -189,15 +189,16 @@ const uasToolUrl = useMemo(() => {
     ];
   }, [user, srtPasswords, currentDomain, t]);
 
-useEffect(() => {
+  useEffect(() => {
     async function fetchAllData() {
       try {
         const [credentialsRes, srtRes] = await Promise.all([
           fetch("/api/v1/product/proxy/mtx/api/v1/proxy/credentials"),
-          fetch("/api/v1/product/proxy/mtx/api/v1/proxy/srt_default")
+          fetch("/api/v1/product/proxy/mtx/api/v1/proxy/srt_default"),
         ]);
 
-        if (!credentialsRes.ok) throw new Error(`Credentials HTTP error: ${credentialsRes.status}`);
+        if (!credentialsRes.ok)
+          throw new Error(`Credentials HTTP error: ${credentialsRes.status}`);
         if (!srtRes.ok) throw new Error(`SRT HTTP error: ${srtRes.status}`);
 
         const userData: Userinfo = await credentialsRes.json();
@@ -205,7 +206,6 @@ useEffect(() => {
 
         setUser(userData);
         setSrtPasswords(srtData);
-        
       } catch (err: any) {
         console.error("Error fetching data:", err);
         setError(err.message ?? "Failed to load credentials");
