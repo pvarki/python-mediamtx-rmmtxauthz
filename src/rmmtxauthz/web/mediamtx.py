@@ -112,8 +112,12 @@ async def check_rmuser(authreq: MTXAuthReq) -> Optional[Response]:
             # Publishing has specific rules
             if resp := user_publish_rules(authreq, dbuser):
                 return resp
-        # FIXME: When we have all rules in place change to deny-by-default
-        return Response(status_code=204)
+        # Checks fell through
+        LOGGER.audit(  # type: ignore[attr-defined]
+            "User permissions check for {} fell through, deny-by-default".format(authreq.user),
+            extra=make_log_extra(authreq),
+        )
+        raise HTTPException(status_code=403)
     except (NotFound, Deleted) as exc:
         LOGGER.audit("Invalid user {}: {}".format(authreq.user, exc), extra=make_log_extra(authreq))  # type: ignore[attr-defined]  # pylint: disable=C0301
         raise HTTPException(status_code=403) from exc
