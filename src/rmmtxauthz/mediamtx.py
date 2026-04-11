@@ -42,6 +42,12 @@ class MediaMTXControl:
     async def ensure_srt_pass(self) -> bool:
         """Ensure SRT password for authentication is set to server config"""
         cnf = RMMTXSettings.singleton()
+        if cnf.srt_read_password == "CHANGEME":  # pragma: allowlist secret #nosec
+            raise ValueError("SRT read password must not be default")
+        if cnf.srt_pub_password == "CHANGEME":  # pragma: allowlist secret #nosec
+            raise ValueError("SRT pub password must not be default")
+        if cnf.srt_pub_password == cnf.srt_read_password:
+            raise ValueError("SRT read and publish password must be different")
         async with self.get_session() as session:
             resp = await session.patch(
                 "/v3/config/pathdefaults/patch",

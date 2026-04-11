@@ -67,10 +67,4 @@ def get_app() -> FastAPI:
     add_trace_and_audit()
     init_logging(loglevel)
     LOGGER.debug("Active config: {}".format(config))
-    if config.srt_read_password == "CHANGEME":  # pragma: allowlist secret #nosec
-        raise ValueError("SRT read password must not be default")
-    if config.srt_pub_password == "CHANGEME":  # pragma: allowlist secret #nosec
-        raise ValueError("SRT pub password must not be default")
-    if config.srt_pub_password == config.srt_read_password:
-        raise ValueError("SRT read and publish password must be different")
     return get_app_no_init()
