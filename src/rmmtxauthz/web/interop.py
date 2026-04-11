@@ -45,5 +45,7 @@ async def get_authz(
     """Get authz info for the product"""
     payload = request.state.mtlsdn
     product = await Product.by_cn(payload.get("CN"))
-    result = ProductAuthzResponse(type="basic", username=product.certcn, password=product.mtxpassword)
+    result = ProductAuthzResponse(
+        type="basic", username=product.certcn, password=product.mtxpassword, ro_password=product.stream_ro_password
+    )
     return result

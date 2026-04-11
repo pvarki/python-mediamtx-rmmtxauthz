@@ -3,6 +3,7 @@
 from __future__ import annotations
 from typing import Self
 import logging
+import functools
 
 from sqlmodel import Field, select
 
@@ -22,6 +23,10 @@ class Product(ORMBaseModel, table=True):
     certcn: str = Field(index=True, unique=True, description="")
     mtxpassword: str = Field(
         description="Plaintext password we give to product for using MediaMTX", default_factory=generate_code
+    )
+    stream_ro_password: str = Field(
+        description="Plaintext password user can pass along for read/playback of any stream",
+        default_factory=functools.partial(generate_code, 8, "RO_"),
     )
 
     @classmethod

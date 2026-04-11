@@ -56,9 +56,16 @@ async def check_productuser(authreq: MTXAuthReq) -> Optional[Response]:
         raise HTTPException(status_code=401)
     try:
         dbproduct = await Product.by_cn(authreq.user)
-        if authreq.password != dbproduct.mtxpassword:
+        if authreq.password not in (dbproduct.mtxpassword, dbproduct.stream_ro_password):
             LOGGER.audit("Wrong password for {}".format(authreq.user), extra=make_log_extra(authreq))  # type: ignore[attr-defined]  # pylint: disable=C0301
             raise HTTPException(status_code=403)
+        if authreq.password == dbproduct.stream_ro_password:
+            if authreq.action not in ("read", "playback"):
+                LOGGER.audit(  # type: ignore[attr-defined]
+                    "read-only {} requesting {}".format(authreq.user, authreq.action), extra=make_log_extra(authreq)
+                )
+                raise HTTPException(status_code=403)
+        # By default products are allowed to do everything
         return Response(status_code=204)
     except (NotFound, Deleted):
         pass
