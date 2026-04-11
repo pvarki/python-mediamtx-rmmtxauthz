@@ -59,6 +59,7 @@ def session_env_config(
         mpatch.setenv("RMMTX_API_URL", "http://127.0.0.1:19997")
         mpatch.setenv("RMMTX_SRT_PUB_PASSWORD", "pytestsrtpub")
         mpatch.setenv("RMMTX_SRT_READ_PASSWORD", "pytestsrtread")
+        mpatch.setenv("RMMTX_USER_PATH_PREFIXES", "live,undead")  # Test multiple prefix config
         # Force end re-read
         RMMTXSettings._singleton = None  # pylint: disable=W0212
         yield None

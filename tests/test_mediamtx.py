@@ -104,6 +104,7 @@ def test_right_password(unauth_testclient: TestClient, valid_user: User) -> None
     assert resp.status_code == 204
 
 
+# NOTE: Our ENV monkeypatches have not taken affect at the time parametrize runs
 @pytest.mark.parametrize(
     "path_prefix", [pytest.param(path_prefix, id=path_prefix) for path_prefix in RMMTXSettings.singleton().user_paths]
 )
@@ -131,20 +132,23 @@ def test_publish_valid_path(unauth_testclient: TestClient, valid_user: User, pat
     assert resp2.status_code == 204
 
 
-def test_publish_path_wrong_tool(unauth_testclient: TestClient, valid_user: User) -> None:
+# NOTE: Our ENV monkeypatches have not taken affect at the time parametrize runs
+@pytest.mark.parametrize("prefix", [pytest.param(prefix, id=prefix) for prefix in ("live", "undead")])
+def test_publish_path_wrong_tool(unauth_testclient: TestClient, valid_user: User, prefix: str) -> None:
     """Test invalid tool but otherwise fine"""
     resp = unauth_testclient.post(
         "/api/v1/mediamtx/auth",
         json={
             "user": valid_user.username,
             "password": valid_user.mtxpassword,
-            "path": f"live/nosuchtool/{valid_user.username}",
+            "path": f"{prefix}/nosuchtool/{valid_user.username}",
             "action": "publish",
         },
     )
     assert resp.status_code == 403
 
 
+# NOTE: Our ENV monkeypatches have not taken affect at the time parametrize runs
 @pytest.mark.parametrize("tool", [pytest.param(tool, id=tool) for tool in RMMTXSettings.singleton().tools])
 def test_publish_path_wrong_prefix(unauth_testclient: TestClient, valid_user: User, tool: str) -> None:
     """Test invalid tool but otherwise fine"""
@@ -160,6 +164,7 @@ def test_publish_path_wrong_prefix(unauth_testclient: TestClient, valid_user: Us
     assert resp.status_code == 403
 
 
+# NOTE: Our ENV monkeypatches have not taken affect at the time parametrize runs
 @pytest.mark.parametrize(
     "path_prefix", [pytest.param(prefix, id=prefix) for prefix in RMMTXSettings.singleton().user_paths]
 )
