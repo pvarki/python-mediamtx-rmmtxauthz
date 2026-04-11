@@ -1,6 +1,6 @@
 """Configurations"""
 
-from typing import ClassVar, Optional, Annotated, NamedTuple, Dict
+from typing import ClassVar, Optional, Annotated, NamedTuple, Dict, Sequence
 import logging
 
 from pydantic import Field
@@ -87,6 +87,13 @@ class RMMTXSettings(BaseSettings):  # pylint: disable=too-few-public-methods
     mtx_srt_port: int = Field(default=8890, description="SRT stream port")
     mtx_protocols: str = Field(default="hls,webrtc,rtsps,rtmps,srt", description="Which protocols to generate URLs for")
 
+    user_path_prefixes: str = Field(
+        default="live", description="Valid path prefixes for users (path format PREFIX/TOOL/CALLSIGN)"
+    )
+    user_path_tools: str = Field(
+        default="icu,gopro,uas,ipcam", description="Valid tool components for users (path format PREFIX/TOOL/CALLSIGN)"
+    )
+
     model_config = SettingsConfigDict(env_prefix="RMMTX_", extra="ignore")
 
     _singleton: ClassVar[Optional["RMMTXSettings"]] = None
@@ -97,6 +104,16 @@ class RMMTXSettings(BaseSettings):  # pylint: disable=too-few-public-methods
         if not RMMTXSettings._singleton:
             RMMTXSettings._singleton = RMMTXSettings()
         return RMMTXSettings._singleton
+
+    @property
+    def prefixes(self) -> Sequence[str]:
+        """Return user_path_prefixes as list"""
+        return [prefix.strip() for prefix in str(self.user_path_prefixes).split(",")]
+
+    @property
+    def tools(self) -> Sequence[str]:
+        """Return user_path_tools as list"""
+        return [tool.strip() for tool in str(self.user_path_tools).split(",")]
 
     @property
     def protocols(self) -> Dict[str, Protocol]:
