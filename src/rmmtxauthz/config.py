@@ -2,6 +2,7 @@
 
 from typing import ClassVar, Optional, Annotated, NamedTuple, Dict, Sequence
 import logging
+from functools import cached_property
 
 from pydantic import Field
 from pydantic.types import StringConstraints
@@ -105,17 +106,26 @@ class RMMTXSettings(BaseSettings):  # pylint: disable=too-few-public-methods
             RMMTXSettings._singleton = RMMTXSettings()
         return RMMTXSettings._singleton
 
-    @property
+    @cached_property
     def prefixes(self) -> Sequence[str]:
         """Return user_path_prefixes as list"""
         return [prefix.strip() for prefix in str(self.user_path_prefixes).split(",")]
 
-    @property
+    @cached_property
     def tools(self) -> Sequence[str]:
         """Return user_path_tools as list"""
         return [tool.strip() for tool in str(self.user_path_tools).split(",")]
 
-    @property
+    @cached_property
+    def user_paths(self) -> Sequence[str]:
+        """Valid tool path prefixes"""
+        ret = []
+        for prefix in self.prefixes:
+            for tool in self.tools:
+                ret.append(f"{prefix}/{tool}")
+        return ret
+
+    @cached_property
     def protocols(self) -> Dict[str, Protocol]:
         """Protocols to generate URLs for, keued by config name, value is tuple for actual URL
         protocol and port"""

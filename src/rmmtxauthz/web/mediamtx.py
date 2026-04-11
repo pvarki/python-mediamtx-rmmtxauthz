@@ -84,6 +84,20 @@ async def check_rmuser(authreq: MTXAuthReq) -> Optional[Response]:
                 "{} is not admin requesting {}".format(authreq.user, authreq.action), extra=make_log_extra(authreq)
             )
             raise HTTPException(status_code=403)
+        # User path based rules
+        if authreq.path:
+            conf = RMMTXSettings.singleton()
+            path_prefix_matched = False
+            for prefix in conf.user_paths:
+                if authreq.path.startswith(f"{prefix}/{dbuser.username}"):
+                    path_prefix_matched = True
+                    break
+            if not path_prefix_matched:
+                LOGGER.audit(  # type: ignore[attr-defined]
+                    "{} is not allowed to {} on {}".format(authreq.user, authreq.action, authreq.path),
+                    extra=make_log_extra(authreq),
+                )
+                raise HTTPException(status_code=403)
         return Response(status_code=204)
     except (NotFound, Deleted) as exc:
         LOGGER.audit("Invalid user {}: {}".format(authreq.user, exc), extra=make_log_extra(authreq))  # type: ignore[attr-defined]  # pylint: disable=C0301
