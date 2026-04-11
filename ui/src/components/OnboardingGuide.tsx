@@ -164,22 +164,23 @@ export function OnboardingGuide() {
   const { deployment } = useHealthCheck();
   const location = useLocation();
   const meta = useMeta();
+  const theme = meta?.theme || "default";
 
   let pathKey = location.pathname;
   if (location.pathname !== "/" && location.pathname !== "/stream") {
     pathKey = "/live";
   }
 
-  let relevantSteps = HOME_PAGE_ONBOARDING_STEPS(meta.theme);
+  let relevantSteps = HOME_PAGE_ONBOARDING_STEPS(theme);
   switch (pathKey) {
     case "/":
-      relevantSteps = HOME_PAGE_ONBOARDING_STEPS(meta.theme);
+      relevantSteps = HOME_PAGE_ONBOARDING_STEPS(theme);
       break;
     case "/stream":
-      relevantSteps = STREAM_PAGE_ONBOARDING_STEPS(meta.theme);
+      relevantSteps = STREAM_PAGE_ONBOARDING_STEPS(theme);
       break;
     default:
-      relevantSteps = WATCH_PAGE_ONBOARDING_STEPS(meta.theme);
+      relevantSteps = WATCH_PAGE_ONBOARDING_STEPS(theme);
       break;
   }
 
