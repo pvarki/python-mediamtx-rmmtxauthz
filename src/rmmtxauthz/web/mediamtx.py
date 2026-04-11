@@ -124,7 +124,7 @@ async def check_rmuser(authreq: MTXAuthReq) -> Optional[Response]:
             raise HTTPException(status_code=403)
         # read-only rules
         if authreq.password == dbuser.stream_ro_password:
-            if resp := user_publish_path_rules(authreq, dbuser):
+            if resp := ro_rules(authreq, dbuser):
                 return resp
 
         # User path based rules

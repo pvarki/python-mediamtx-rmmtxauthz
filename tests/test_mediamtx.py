@@ -96,12 +96,27 @@ def test_wrong_username(unauth_testclient: TestClient, valid_user: User) -> None
 
 
 def test_right_password(unauth_testclient: TestClient, valid_user: User) -> None:
-    """Test without password"""
+    """Test with password"""
     resp = unauth_testclient.post(
         "/api/v1/mediamtx/auth",
-        json={"user": valid_user.username, "password": valid_user.mtxpassword, "action": "read"},
+        json={
+            "user": valid_user.username,
+            "password": valid_user.mtxpassword,
+            "action": "read",
+            "path": "whatever/should/not/care",
+        },
     )
     assert resp.status_code == 204
+    resp2 = unauth_testclient.post(
+        "/api/v1/mediamtx/auth",
+        json={
+            "user": valid_user.username,
+            "password": valid_user.stream_ro_password,
+            "action": "playback",
+            "path": f"live/icu/{valid_user.username}",
+        },
+    )
+    assert resp2.status_code == 204
 
 
 # NOTE: Our ENV monkeypatches have not taken affect at the time parametrize runs
@@ -130,22 +145,30 @@ def test_publish_valid_path(unauth_testclient: TestClient, valid_user: User, pat
         },
     )
     assert resp2.status_code == 204
+    resp3 = unauth_testclient.post(
+        "/api/v1/mediamtx/auth",
+        json={
+            "user": valid_user.username,
+            "password": valid_user.stream_ro_password,
+            "path": f"{path_prefix}/{valid_user.username}",
+            "action": "publish",
+        },
+    )
+    assert resp3.status_code == 403
 
 
 @pytest.mark.parametrize(
     "path_prefix", [pytest.param(path_prefix, id=path_prefix) for path_prefix in RMMTXSettings.singleton().user_paths]
 )
-def test_read_valid_path(
-    unauth_testclient: TestClient, valid_user: User, another_valid_user: User, path_prefix: str
-) -> None:
-    """Test playing anothers stream"""
+def test_readonly_valid_path(unauth_testclient: TestClient, valid_user: User, path_prefix: str) -> None:
+    """Test playing a stream with RO password"""
     for action in ("read", "playback"):
         resp = unauth_testclient.post(
             "/api/v1/mediamtx/auth",
             json={
                 "user": valid_user.username,
-                "password": valid_user.mtxpassword,
-                "path": f"{path_prefix}/{another_valid_user.username}",
+                "password": valid_user.stream_ro_password,
+                "path": f"{path_prefix}/{valid_user.username}",
                 "action": action,
             },
         )
