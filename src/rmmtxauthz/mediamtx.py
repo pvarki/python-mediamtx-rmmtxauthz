@@ -92,7 +92,7 @@ class MediaMTXControl:
                         clean_path = path.lstrip("/")
                         url = (
                             f"{pinfo.proto}://{cnf.mtx_address}:{pinfo.port}"
-                            f"?streamid=read:{clean_path}:{username}:{password}"
+                            f"?streamid=read:{clean_path}:{username}:{password}&passphrase={cnf.srt_pub_password}"
                         )
                     else:
                         url = f"{pinfo.proto}://{username}:{password}@{cnf.mtx_address}:{pinfo.port}{path}"
