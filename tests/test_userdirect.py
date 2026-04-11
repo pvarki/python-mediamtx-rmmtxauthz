@@ -1,5 +1,7 @@
 """Direct user routes"""
 
+import logging
+
 import pytest
 from fastapi import FastAPI
 from fastapi.testclient import TestClient
@@ -8,6 +10,7 @@ from rmmtxauthz.db.user import User
 from rmmtxauthz.config import RMMTXSettings
 from .test_mediamtx import valid_user  # pylint: disable=W0611
 
+LOGGER = logging.getLogger(__name__)
 
 # pylint: disable=W0621
 
