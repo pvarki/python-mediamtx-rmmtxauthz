@@ -167,8 +167,16 @@ export function VideoPage({ streamSlug }: VideoPageProps) {
 
   if (streamsLoading) {
     return (
-      <div className="space-y-6" role="status" aria-busy="true">
-        <div className="h-5 w-32 bg-muted animate-pulse rounded" />
+      <div
+        data-testid="video-page"
+        className="space-y-6"
+        role="status"
+        aria-busy="true"
+      >
+        <div
+          data-testid="video-loading"
+          className="h-5 w-32 bg-muted animate-pulse rounded"
+        />
         <div className="h-8 w-64 bg-muted animate-pulse rounded" />
         <div className="aspect-video bg-muted animate-pulse rounded-lg" />
       </div>
@@ -177,9 +185,12 @@ export function VideoPage({ streamSlug }: VideoPageProps) {
 
   if (!stream) {
     return (
-      <div className="space-y-6">
+      <div data-testid="video-page" className="space-y-6">
         <BackLink />
-        <div className="aspect-video bg-muted rounded-lg flex flex-col items-center justify-center space-y-4">
+        <div
+          data-testid="video-stream-not-found"
+          className="aspect-video bg-muted rounded-lg flex flex-col items-center justify-center space-y-4"
+        >
           <AlertCircle className="w-12 h-12 text-muted-foreground" />
           <p className="text-lg font-semibold text-foreground">
             {t("video.streamNotFound")}
@@ -187,15 +198,18 @@ export function VideoPage({ streamSlug }: VideoPageProps) {
           <p className="text-sm text-muted-foreground">
             {t("video.streamNotFoundHint")}
           </p>
-          <Button onClick={goBack}>{t("video.backToStreams")}</Button>
+          <Button data-testid="video-back-button" onClick={goBack}>
+            {t("video.backToStreams")}
+          </Button>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="space-y-6">
+    <div data-testid="video-page" className="space-y-6">
       <button
+        data-testid="video-back-button"
         onClick={goBack}
         aria-label={t("video.backToStreams")}
         className="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring rounded transition-colors"
@@ -206,7 +220,10 @@ export function VideoPage({ streamSlug }: VideoPageProps) {
 
       <div className="flex items-start justify-between gap-4 flex-wrap">
         <div className="min-w-0 max-w-full">
-          <h1 className="text-xl md:text-2xl font-bold text-foreground truncate">
+          <h1
+            data-testid="video-stream-name"
+            className="text-xl md:text-2xl font-bold text-foreground truncate"
+          >
             {streamName}
           </h1>
           <p className="text-sm text-muted-foreground mt-1 truncate">
@@ -214,6 +231,7 @@ export function VideoPage({ streamSlug }: VideoPageProps) {
           </p>
         </div>
         <Button
+          data-testid="connection-options-trigger"
           variant="outline"
           size="sm"
           onClick={() => setDialogOpen(true)}
@@ -235,6 +253,7 @@ export function VideoPage({ streamSlug }: VideoPageProps) {
         {playing && hlsUrl && !playbackError ? (
           <video
             ref={videoRef}
+            data-testid="video-player"
             controls
             playsInline
             autoPlay
@@ -252,7 +271,10 @@ export function VideoPage({ streamSlug }: VideoPageProps) {
             </p>
           </div>
         ) : !live ? (
-          <div className="w-full h-full flex flex-col items-center justify-center space-y-3">
+          <div
+            data-testid="video-stream-offline"
+            className="w-full h-full flex flex-col items-center justify-center space-y-3"
+          >
             <Monitor className="w-12 h-12 text-muted-foreground" />
             <p className="text-foreground font-semibold">
               {t("video.streamOffline")}
@@ -263,6 +285,7 @@ export function VideoPage({ streamSlug }: VideoPageProps) {
           </div>
         ) : (
           <button
+            data-testid="video-play-button"
             onClick={() => setPlaying(true)}
             disabled={!credentials}
             aria-label={t("video.play")}

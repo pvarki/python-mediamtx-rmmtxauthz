@@ -50,7 +50,7 @@ export function BroadcastWizard({ open, onOpenChange }: BroadcastWizardProps) {
   if (isMobile) {
     return (
       <Drawer open={open} onOpenChange={onOpenChange}>
-        <DrawerContent className="max-h-[85dvh]">
+        <DrawerContent data-testid="broadcast-dialog" className="max-h-[85dvh]">
           <div className="overflow-y-auto p-4">
             <WizardContent />
           </div>
@@ -61,7 +61,10 @@ export function BroadcastWizard({ open, onOpenChange }: BroadcastWizardProps) {
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-w-md max-h-[85dvh] overflow-y-auto">
+      <DialogContent
+        data-testid="broadcast-dialog"
+        className="max-w-md max-h-[85dvh] overflow-y-auto"
+      >
         <WizardContent />
       </DialogContent>
     </Dialog>
@@ -91,10 +94,11 @@ function WizardContent() {
         <p className="text-sm text-muted-foreground">
           {t("broadcast.selectTool")}
         </p>
-        <div className="space-y-2 mt-2">
+        <div data-testid="broadcast-tool-list" className="space-y-2 mt-2">
           {TOOLS.map((tool) => (
             <button
               key={tool.id}
+              data-testid={`broadcast-tool-${tool.id}`}
               onClick={() => handleSelectTool(tool.id)}
               className="w-full text-left p-3 rounded-lg border border-border hover:border-primary hover:bg-primary/5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring transition-colors"
             >
@@ -115,6 +119,7 @@ function WizardContent() {
     <div className="space-y-5">
       <div>
         <button
+          data-testid="broadcast-wizard-back"
           onClick={() => setStep("select")}
           aria-label={t("common.back")}
           className="inline-flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring rounded transition-colors mb-3"
