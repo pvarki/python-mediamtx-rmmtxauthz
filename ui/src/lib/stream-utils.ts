@@ -19,3 +19,13 @@ export function streamPathToSlug(path: string): string {
 export function getBaseDomain(): string {
   return window.location.hostname.replace(/^mtls\./, "");
 }
+
+export function maskStreamUrl(
+  url: string,
+  password: string,
+  passphrase?: string,
+): string {
+  let masked = url.replaceAll(password, "***");
+  if (passphrase) masked = masked.replaceAll(passphrase, "***");
+  return masked;
+}

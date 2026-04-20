@@ -22,8 +22,10 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { copyToClipboard } from "@/lib/clipboard";
+import { maskStreamUrl } from "@/lib/stream-utils";
 import { StreamConfig, Credentials } from "@/model/stream-config";
 import { useStreamPackages } from "@/hooks/useStreamPackages";
+import { useSrtPasswords } from "@/hooks/useSrtPasswords";
 import { useIsMobile } from "@/hooks/use-mobile";
 
 interface ConnectionOptionsDialogProps {
@@ -46,6 +48,7 @@ export function ConnectionOptionsDialog({
   const [showSecrets, setShowSecrets] = useState(false);
   const [advancedOpen, setAdvancedOpen] = useState(false);
 
+  const { data: srtPasswords } = useSrtPasswords();
   const {
     downloadAtakRtmps,
     downloadBrowserHls,
@@ -179,7 +182,13 @@ export function ConnectionOptionsDialog({
                       {protocol.toUpperCase()}
                     </span>
                     <p className="text-xs text-muted-foreground font-mono break-all mt-0.5">
-                      {showSecrets ? url : url.replace(/\/\/[^@]+@/, "//***@")}
+                      {showSecrets || !credentials
+                        ? url
+                        : maskStreamUrl(
+                            url,
+                            credentials.password,
+                            srtPasswords?.read,
+                          )}
                     </p>
                   </div>
                   <Button

@@ -7,6 +7,7 @@ import {
   getVlcSrt,
 } from "./packages";
 import { useCredentials } from "@/hooks/useCredentials";
+import { useSrtPasswords } from "@/hooks/useSrtPasswords";
 import { getBaseDomain } from "@/lib/stream-utils";
 
 function downloadFile(content: string, filename: string, mimeType: string) {
@@ -26,15 +27,18 @@ function sanitizeFilename(streamPath: string) {
 export function useStreamPackages(streamPath: string) {
   const currentDomain = useMemo(() => getBaseDomain(), []);
   const { data: credentials } = useCredentials();
+  const { data: srtPasswords } = useSrtPasswords();
 
-  const params: StreamPackageParams | null = credentials
-    ? {
-        streamPath,
-        currentDomain,
-        username: credentials.username,
-        password: credentials.password,
-      }
-    : null;
+  const params: StreamPackageParams | null =
+    credentials && srtPasswords
+      ? {
+          streamPath,
+          currentDomain,
+          username: credentials.username,
+          password: credentials.password,
+          srtReadPassphrase: srtPasswords.read,
+        }
+      : null;
 
   const stableParams = useMemo(
     () => params,
@@ -43,6 +47,7 @@ export function useStreamPackages(streamPath: string) {
       params?.currentDomain,
       params?.username,
       params?.password,
+      params?.srtReadPassphrase,
     ],
   );
 

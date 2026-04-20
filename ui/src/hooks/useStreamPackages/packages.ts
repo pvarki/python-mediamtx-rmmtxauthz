@@ -1,8 +1,11 @@
+import { parseStreamPath } from "@/lib/stream-utils";
+
 export interface StreamPackageParams {
   streamPath: string;
   currentDomain: string;
   username: string;
   password: string;
+  srtReadPassphrase: string;
 }
 
 export function getAtakRtmps({
@@ -11,23 +14,24 @@ export function getAtakRtmps({
   username,
   password,
 }: StreamPackageParams) {
-  return `\
-  <?xml version='1.0' encoding='UTF-8' standalone='yes' ?>
-  <feed>
-  <protocol>rtmps</protocol>
-  <alias>${streamPath}</alias>
-  <uid>3368b54f-d291-4d0d-bc70-35874ea699a5</uid>
-  <address>${currentDomain}</address>
-  <port>1936</port>
-  <roverPort>-1</roverPort>
-  <ignoreEmbeddedKLV>false</ignoreEmbeddedKLV>
-  <preferredMacAddress/>
-  <preferredInterfaceAddress/>
-  <path>${streamPath}?user=${username}&amp;pass=${password}</path>
-  <buffer>-1</buffer>
-  <timeout>1000</timeout>
-  <rtspReliable>0</rtspReliable>
-  </feed>
+  const { name: callsign } = parseStreamPath(streamPath);
+  const uid = crypto.randomUUID();
+  return `<?xml version='1.0' encoding='UTF-8' standalone='yes' ?>
+<feed>
+<protocol>rtmps</protocol>
+<alias>${callsign}</alias>
+<uid>${uid}</uid>
+<address>${currentDomain}</address>
+<port>1936</port>
+<roverPort>-1</roverPort>
+<ignoreEmbeddedKLV>false</ignoreEmbeddedKLV>
+<preferredMacAddress/>
+<preferredInterfaceAddress/>
+<path>${streamPath}?user=${username}&amp;pass=${password}</path>
+<buffer>-1</buffer>
+<timeout>1000</timeout>
+<rtspReliable>0</rtspReliable>
+</feed>
 `;
 }
 
@@ -70,10 +74,11 @@ export function getVlcSrt({
   currentDomain,
   username,
   password,
+  srtReadPassphrase,
 }: StreamPackageParams) {
   const fixedPath = streamPath.slice(1);
   return `\
   #EXTM3U
   #EXTINF:-1,/live/icu/test
-  srt://${currentDomain}:8890?streamid=read:${fixedPath}:${username}:${password}`;
+  srt://${currentDomain}:8890?streamid=read:${fixedPath}:${username}:${password}&passphrase=${srtReadPassphrase}`;
 }
