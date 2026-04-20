@@ -1,4 +1,10 @@
-import { Monitor } from "lucide-react";
+import {
+  Monitor,
+  Globe,
+  Crosshair,
+  LucideIcon,
+  TrafficCone,
+} from "lucide-react";
 import { Card } from "@/components/ui/card";
 import { StreamConfig } from "@/model/stream-config";
 import { parseStreamPath } from "@/lib/stream-utils";
@@ -14,12 +20,17 @@ export function StreamCard({ stream, onClick }: StreamCardProps) {
     .filter(([, url]) => url)
     .map(([protocol]) => protocol.toUpperCase());
 
+  const methods: { label: string; icon: LucideIcon }[] = [];
+  if (stream.urls.hls) methods.push({ label: "Browser", icon: Globe });
+  if (stream.urls.srt) methods.push({ label: "VLC", icon: TrafficCone });
+  if (stream.urls.rtmps) methods.push({ label: "TAK", icon: Crosshair });
+
   return (
     <button
       onClick={onClick}
       className="text-left w-full focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring rounded-lg"
     >
-      <Card className="overflow-hidden hover:border-primary hover:shadow-lg hover:-translate-y-1 transition-all duration-300 py-0">
+      <Card className="overflow-hidden hover:border-primary hover:shadow-lg hover:-translate-y-1 transition-all duration-300 gap-0 py-0">
         <div className="aspect-video bg-muted flex items-center justify-center">
           <Monitor className="w-8 h-8 text-muted-foreground" />
         </div>
@@ -33,14 +44,23 @@ export function StreamCard({ stream, onClick }: StreamCardProps) {
             </p>
           )}
           <div className="flex gap-1 mt-2 flex-wrap">
-            {availableProtocols.map((protocol) => (
+            {methods.map(({ label, icon: Icon }) => (
               <span
-                key={protocol}
-                className="text-xs bg-muted text-muted-foreground px-1.5 py-0.5 rounded"
+                key={label}
+                className="inline-flex items-center gap-1 text-xs bg-primary/10 text-foreground px-1.5 py-0.5 rounded"
               >
-                {protocol}
+                <Icon className="w-3 h-3" aria-hidden="true" />
+                {label}
               </span>
             ))}
+            {availableProtocols.length > 0 && (
+              <span
+                className="text-xs bg-primary/10 text-foreground px-1.5 py-0.5 rounded"
+                title={availableProtocols.join(", ")}
+              >
+                +{availableProtocols.length}
+              </span>
+            )}
           </div>
         </div>
       </Card>

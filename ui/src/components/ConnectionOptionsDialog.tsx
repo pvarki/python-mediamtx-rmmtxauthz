@@ -6,7 +6,7 @@ import {
   ChevronDown,
   ChevronUp,
   Globe,
-  MonitorPlay,
+  TrafficCone,
   Crosshair,
 } from "lucide-react";
 import { useTranslation } from "react-i18next";
@@ -145,7 +145,7 @@ export function ConnectionOptionsDialog({
               {t("video.downloadBrowser")}
             </Button>
             <Button variant="outline" size="sm" onClick={downloadVlcSrt}>
-              <MonitorPlay className="w-4 h-4 mr-2" />
+              <TrafficCone className="w-4 h-4 mr-2" />
               {t("video.downloadVlc")}
             </Button>
             <Button variant="outline" size="sm" onClick={downloadAtakRtmps}>

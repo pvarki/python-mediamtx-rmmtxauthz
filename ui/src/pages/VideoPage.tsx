@@ -102,7 +102,11 @@ export function VideoPage({ streamSlug }: VideoPageProps) {
 
       <div
         className="w-full bg-muted rounded-lg overflow-hidden"
-        style={{ aspectRatio: "16/9", minHeight: "200px", maxHeight: "60vh" }}
+        style={{
+          aspectRatio: "16/9",
+          minHeight: "200px",
+          maxHeight: "calc(100dvh - 14rem)",
+        }}
       >
         {playing && stream.urls.hls ? (
           <iframe

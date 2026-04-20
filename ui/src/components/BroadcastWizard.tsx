@@ -163,11 +163,11 @@ function StepList({ steps }: { steps: string[] }) {
   return (
     <ol className="space-y-4 text-sm text-foreground">
       {steps.map((step, i) => (
-        <li key={i} className="flex gap-4 items-start">
+        <li key={i} className="flex gap-4 items-center">
           <span className="shrink-0 w-7 h-7 rounded-full bg-muted flex items-center justify-center text-xs font-semibold text-muted-foreground">
             {i + 1}
           </span>
-          <span className="pt-1">{step}</span>
+          <span>{step}</span>
         </li>
       ))}
     </ol>
@@ -370,10 +370,12 @@ function UasToolGuide({
   })();
 
   return (
-    <div className="space-y-4">
-      <a href={uasToolUrl}>
-        <Button className="w-full">{t("broadcast.importSettings")}</Button>
-      </a>
+    <div className="flex flex-col gap-6">
+      <div className="pt-2">
+        <a href={uasToolUrl}>
+          <Button className="w-full">{t("broadcast.importSettings")}</Button>
+        </a>
+      </div>
 
       <StepList
         steps={[
