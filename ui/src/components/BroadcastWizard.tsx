@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, type ReactNode } from "react";
 import { ArrowLeft, Copy, Eye, EyeClosed, ExternalLink } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { PRODUCT_SHORTNAME } from "@/App";
@@ -15,7 +15,7 @@ import { useIsMobile } from "@/hooks/use-mobile";
 import { Drawer, DrawerContent } from "@/components/ui/drawer";
 import { useCredentials } from "@/hooks/useCredentials";
 import { useSrtPasswords } from "@/hooks/useSrtPasswords";
-import { getBaseDomain } from "@/lib/stream-utils";
+import { getBaseDomain, maskStreamUrl } from "@/lib/stream-utils";
 import { Credentials, SrtPasswords } from "@/model/stream-config";
 
 type Tool = "opentak_icu" | "gopro" | "uastool" | "advanced";
@@ -50,8 +50,10 @@ export function BroadcastWizard({ open, onOpenChange }: BroadcastWizardProps) {
   if (isMobile) {
     return (
       <Drawer open={open} onOpenChange={onOpenChange}>
-        <DrawerContent className="max-h-[85dvh] overflow-y-auto p-4">
-          <WizardContent />
+        <DrawerContent className="max-h-[85dvh]">
+          <div className="overflow-y-auto p-4">
+            <WizardContent />
+          </div>
         </DrawerContent>
       </Drawer>
     );
@@ -83,13 +85,13 @@ function WizardContent() {
   if (step === "select") {
     return (
       <>
-        <DialogHeader className="pb-2">
+        <DialogHeader className="pb-3">
           <DialogTitle>{t("broadcast.title")}</DialogTitle>
         </DialogHeader>
         <p className="text-sm text-muted-foreground">
           {t("broadcast.selectTool")}
         </p>
-        <div className="space-y-2">
+        <div className="space-y-2 mt-2">
           {TOOLS.map((tool) => (
             <button
               key={tool.id}
@@ -120,7 +122,7 @@ function WizardContent() {
           <ArrowLeft className="w-4 h-4" />
           {t("common.back")}
         </button>
-        <DialogHeader className="pb-2">
+        <DialogHeader className="pb-3">
           <DialogTitle>
             {TOOLS.find((tool) => tool.id === selectedTool)
               ? t(TOOLS.find((tool) => tool.id === selectedTool)!.nameKey)
@@ -159,18 +161,59 @@ function WizardContent() {
   );
 }
 
-function StepList({ steps }: { steps: string[] }) {
+function StepList({ steps }: { steps: ReactNode[] }) {
   return (
     <ol className="space-y-4 text-sm text-foreground">
       {steps.map((step, i) => (
-        <li key={i} className="flex gap-4 items-center">
+        <li key={i} className="flex gap-4 items-start">
           <span className="shrink-0 w-7 h-7 rounded-full bg-muted flex items-center justify-center text-xs font-semibold text-muted-foreground">
             {i + 1}
           </span>
-          <span>{step}</span>
+          <div className="flex-1 leading-7">{step}</div>
         </li>
       ))}
     </ol>
+  );
+}
+
+const STORE_BADGE_LOCALES = ["en", "fi", "sv"] as const;
+type StoreBadgeLocale = (typeof STORE_BADGE_LOCALES)[number];
+
+function GoProStoreBadges() {
+  const { t, i18n } = useTranslation(PRODUCT_SHORTNAME);
+  const lang = (STORE_BADGE_LOCALES as readonly string[]).includes(
+    i18n.language,
+  )
+    ? (i18n.language as StoreBadgeLocale)
+    : "en";
+
+  return (
+    <div className="flex flex-wrap items-center gap-3 mt-2">
+      <a
+        href="https://apps.apple.com/fi/app/gopro-quik/id561350520"
+        target="_blank"
+        rel="noopener noreferrer"
+        className="inline-block"
+      >
+        <img
+          src={`/ui/mtx/assets/appstore/${lang}.svg`}
+          alt={t("broadcast.gopro_appstore_alt")}
+          className="h-12 w-auto"
+        />
+      </a>
+      <a
+        href="https://play.google.com/store/apps/details?id=com.gopro.smarty"
+        target="_blank"
+        rel="noopener noreferrer"
+        className="inline-block"
+      >
+        <img
+          src={`/ui/mtx/assets/googleplay/${lang}.svg`}
+          alt={t("broadcast.gopro_googleplay_alt")}
+          className="h-12 w-auto"
+        />
+      </a>
+    </div>
   );
 }
 
@@ -285,7 +328,10 @@ function GoProGuide({
 
       <StepList
         steps={[
-          t("broadcast.gopro_step1"),
+          <div className="flex flex-col gap-1">
+            <span>{t("broadcast.gopro_step1")}</span>
+            <GoProStoreBadges />
+          </div>,
           t("broadcast.gopro_step2"),
           t("broadcast.gopro_step3"),
         ]}
@@ -400,9 +446,6 @@ function AdvancedGuide({
   srtPasswords: SrtPasswords | null;
 }) {
   const { t } = useTranslation(PRODUCT_SHORTNAME);
-  const [showPasswords, setShowPasswords] = useState<Record<number, boolean>>(
-    {},
-  );
 
   const srtPassphrase = srtPasswords?.publish
     ? `&passphrase=${srtPasswords.publish}`
@@ -411,77 +454,57 @@ function AdvancedGuide({
     {
       name: t("stream.rtsps"),
       url: `rtsps://${domain}:8322/live/icu/${credentials.username}`,
-      hideCredentials: false,
     },
     {
       name: t("stream.rtsps_with_auth"),
       url: `rtsps://${credentials.username}:${credentials.password}@${domain}:8322/live/icu/${credentials.username}`,
-      hideCredentials: true,
     },
     {
       name: t("stream.rtmps"),
       url: `rtmps://${domain}:1936/live/icu/${credentials.username}`,
-      hideCredentials: false,
     },
     {
       name: t("stream.rtmps_with_auth"),
       url: `rtmps://${credentials.username}:${credentials.password}@${domain}:1936/live/icu/${credentials.username}`,
-      hideCredentials: true,
     },
     {
       name: t("stream.srt"),
       url: `srt://${domain}:8890?streamid=publish:live/icu/${credentials.username}&pkt_size=1316`,
-      hideCredentials: false,
     },
     {
       name: t("stream.srt_with_auth"),
       url: `srt://${domain}:8890?streamid=publish:live/icu/${credentials.username}:${credentials.username}:${credentials.password}${srtPassphrase}&pkt_size=1316`,
-      hideCredentials: true,
     },
   ];
 
   return (
-    <div className="space-y-3">
+    <div className="space-y-2">
       {links.map((link, idx) => (
-        <div key={idx}>
-          <p className="text-sm font-semibold">{link.name}</p>
-          <div className="flex gap-2 mt-1">
-            <Input
-              readOnly
-              type={
-                link.hideCredentials && !showPasswords[idx]
-                  ? "password"
-                  : "text"
-              }
-              value={link.url}
-              className="flex-1 text-xs"
-            />
-            {link.hideCredentials && (
-              <Button
-                size="sm"
-                variant="outline"
-                aria-label={
-                  showPasswords[idx] ? t("common.hide") : t("common.show")
-                }
-                onClick={() =>
-                  setShowPasswords((p) => ({ ...p, [idx]: !p[idx] }))
-                }
-              >
-                {showPasswords[idx] ? (
-                  <EyeClosed className="w-4 h-4" />
-                ) : (
-                  <Eye className="w-4 h-4" />
-                )}
-              </Button>
-            )}
-            <Button
-              size="sm"
-              aria-label={`${t("common.copy")} ${link.name}`}
-              onClick={() => copyToClipboard(link.url, t("common.copied"))}
-            >
-              <Copy className="w-4 h-4" />
-            </Button>
+        <div
+          key={idx}
+          className="flex items-center justify-between gap-2 p-2 bg-muted rounded-md"
+        >
+          <div className="min-w-0">
+            <span className="text-sm font-semibold text-foreground">
+              {link.name}
+            </span>
+            <p className="text-xs text-muted-foreground font-mono break-all mt-0.5">
+              {maskStreamUrl(
+                link.url,
+                credentials.password,
+                srtPasswords?.publish,
+              )}
+            </p>
           </div>
+          <Button
+            variant="ghost"
+            size="icon-sm"
+            className="shrink-0"
+            aria-label={`${t("common.copy")} ${link.name}`}
+            onClick={() => copyToClipboard(link.url, t("common.copied"))}
+          >
+            <Copy className="w-4 h-4" />
+          </Button>
         </div>
       ))}
     </div>

@@ -3,8 +3,6 @@ import {
   Copy,
   Eye,
   EyeClosed,
-  ChevronDown,
-  ChevronUp,
   Globe,
   TrafficCone,
   Crosshair,
@@ -18,6 +16,12 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { Drawer, DrawerContent } from "@/components/ui/drawer";
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "@/components/ui/accordion";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -46,7 +50,6 @@ export function ConnectionOptionsDialog({
   const isMobile = useIsMobile();
   const { t } = useTranslation(PRODUCT_SHORTNAME);
   const [showSecrets, setShowSecrets] = useState(false);
-  const [advancedOpen, setAdvancedOpen] = useState(false);
 
   const { data: srtPasswords } = useSrtPasswords();
   const {
@@ -60,7 +63,7 @@ export function ConnectionOptionsDialog({
 
   const content = (
     <>
-      <DialogHeader className="pb-2">
+      <DialogHeader className="pb-1">
         <DialogTitle>{t("video.connectionOptions")}</DialogTitle>
       </DialogHeader>
 
@@ -136,7 +139,7 @@ export function ConnectionOptionsDialog({
       {/* Download Packages */}
       {packagesReady && (
         <div className="space-y-3">
-          <p className="text-sm font-semibold text-foreground">
+          <p className="text-xs text-muted-foreground uppercase tracking-wide font-semibold">
             {t("video.downloadPackages")}
           </p>
           <div className="flex gap-2 flex-wrap">
@@ -158,20 +161,16 @@ export function ConnectionOptionsDialog({
 
       {/* Advanced Links */}
       {protocols.length > 0 && (
-        <div className="border border-border rounded-lg">
-          <button
-            onClick={() => setAdvancedOpen(!advancedOpen)}
-            className="w-full flex items-center justify-between p-3 text-sm font-semibold text-foreground hover:bg-muted/50 rounded-lg transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
-          >
-            {t("video.advancedLinks")}
-            {advancedOpen ? (
-              <ChevronUp className="w-4 h-4" />
-            ) : (
-              <ChevronDown className="w-4 h-4" />
-            )}
-          </button>
-          {advancedOpen && (
-            <div className="px-3 pb-3 space-y-2">
+        <Accordion
+          type="single"
+          collapsible
+          className="border border-border rounded-lg"
+        >
+          <AccordionItem value="advanced" className="border-b-0">
+            <AccordionTrigger className="px-3 py-3 items-center font-semibold hover:no-underline hover:bg-muted/50 rounded-lg">
+              {t("video.advancedLinks")}
+            </AccordionTrigger>
+            <AccordionContent className="px-3 pb-3 pt-0 space-y-2">
               {protocols.map(([protocol, url]) => (
                 <div
                   key={protocol}
@@ -202,9 +201,9 @@ export function ConnectionOptionsDialog({
                   </Button>
                 </div>
               ))}
-            </div>
-          )}
-        </div>
+            </AccordionContent>
+          </AccordionItem>
+        </Accordion>
       )}
     </>
   );
@@ -212,8 +211,8 @@ export function ConnectionOptionsDialog({
   if (isMobile) {
     return (
       <Drawer open={open} onOpenChange={onOpenChange}>
-        <DrawerContent className="max-h-[85dvh] overflow-y-auto p-4">
-          {content}
+        <DrawerContent className="max-h-[85dvh]">
+          <div className="overflow-y-auto p-4 space-y-4">{content}</div>
         </DrawerContent>
       </Drawer>
     );
@@ -221,7 +220,7 @@ export function ConnectionOptionsDialog({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-w-lg max-h-[85dvh] overflow-y-auto">
+      <DialogContent className="max-w-lg max-h-[85dvh] overflow-y-auto space-y-4">
         {content}
       </DialogContent>
     </Dialog>
