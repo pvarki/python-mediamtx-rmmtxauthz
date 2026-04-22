@@ -217,6 +217,32 @@ function GoProStoreBadges() {
   );
 }
 
+function UasToolStoreBadge() {
+  const { t, i18n } = useTranslation(PRODUCT_SHORTNAME);
+  const lang = (STORE_BADGE_LOCALES as readonly string[]).includes(
+    i18n.language,
+  )
+    ? (i18n.language as StoreBadgeLocale)
+    : "en";
+
+  return (
+    <div className="flex flex-wrap items-center gap-3 mt-2">
+      <a
+        href="https://play.google.com/store/apps/details?id=com.atakmap.android.uastool.plugin"
+        target="_blank"
+        rel="noopener noreferrer"
+        className="inline-block"
+      >
+        <img
+          src={`/ui/mtx/assets/googleplay/${lang}.svg`}
+          alt={t("broadcast.uastool_googleplay_alt")}
+          className="h-12 w-auto"
+        />
+      </a>
+    </div>
+  );
+}
+
 function GuideLink({ toolKey }: { toolKey: Exclude<Tool, "advanced"> }) {
   const { t } = useTranslation(PRODUCT_SHORTNAME);
   const guideUrl = t(`broadcast.${toolKey}_guide_url`);
@@ -425,7 +451,10 @@ function UasToolGuide({
 
       <StepList
         steps={[
-          t("broadcast.uastool_step1"),
+          <div className="flex flex-col gap-1">
+            <span>{t("broadcast.uastool_step1")}</span>
+            <UasToolStoreBadge />
+          </div>,
           t("broadcast.uastool_step2"),
           t("broadcast.uastool_step3"),
         ]}

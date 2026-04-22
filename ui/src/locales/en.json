@@ -135,6 +135,7 @@
     "uastool_step3": "Start streaming",
     "uastool_guide": "UAS Tool Streaming",
     "uastool_guide_url": "https://docs.pvarki.fi/en/docs/guides/mtx-guide/uas-tool-automatic-method-DwT6M5lj9c",
+    "uastool_googleplay_alt": "Get UAS Tool on Google Play",
     "advanced": "Advanced",
     "advanced_desc": "Manual protocol URLs & credentials",
     "guideHint": "If you need more instructions use the Guide Button",
