@@ -17,11 +17,13 @@ import svLang from "./locales/sv.json";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { MetaData, MetaProvider } from "./lib/metadata";
 import { BroadcastWizard } from "./components/BroadcastWizard";
+import { OnboardingHandler } from "./components/OnboardingHandler";
 import { Toaster } from "./components/ui/sonner";
 
 const RootLayoutComponent = () => (
   <div>
     <Outlet />
+    <OnboardingHandler />
     <Toaster position="top-center" />
   </div>
 );

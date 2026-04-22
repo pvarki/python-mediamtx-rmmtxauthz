@@ -36,7 +36,16 @@
     "progressSaved": "Perehdyttämisen edistyminen on tallennettu.",
     "review": "Tarkista perehdyttäminen",
     "step": "Vaihe",
-    "steps": {},
+    "steps": {
+      "welcome": {
+        "title": "Tervetuloa MediaMTX:ään",
+        "description": "MediaMTX:llä lähetät ja katsot suoria videolähetyksiä yhdistetyiltä laitteilta. Tämä lyhyt opastus näyttää, mistä kaikki löytyy."
+      },
+      "walkthrough": {
+        "title": "Käyttöliittymän perusteet",
+        "description": "(1) Napauta mitä tahansa striimiruutua etusivulla aloittaaksesi katselun.\n(2) Käytä Aloita lähetys -painiketta käynnistääksesi uuden lähetyksen OpenTAK ICU:sta, UAS Toolista, GoProsta tai muusta lähteestä."
+      }
+    },
     "title": "MediaMTX -sovelluksen perehdyttäminen"
   },
   "stream": {

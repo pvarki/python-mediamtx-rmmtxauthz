@@ -18,6 +18,7 @@
   --color-popover-foreground: var(--popover-foreground);
   --color-primary: var(--primary);
   --color-primary-foreground: var(--primary-foreground);
+  --color-primary-light: var(--primary-light);
   --color-secondary: var(--secondary);
   --color-secondary-foreground: var(--secondary-foreground);
   --color-muted: var(--muted);
@@ -51,6 +52,7 @@
   --popover-foreground: #c1c1c1;
   --primary: #e78a53;
   --primary-foreground: #121113;
+  --primary-light: #ff6b1a;
   --secondary: #5f8787;
   --secondary-foreground: #121113;
   --muted: #222222;

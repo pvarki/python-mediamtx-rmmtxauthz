@@ -36,7 +36,16 @@
     "progressSaved": "Dina introduktionsframsteg har sparats.",
     "review": "Granska introduktion",
     "step": "Steg",
-    "steps": {},
+    "steps": {
+      "welcome": {
+        "title": "Välkommen till MediaMTX",
+        "description": "Med MediaMTX kan du sända och titta på direkta videoflöden från anslutna enheter. Den här korta guiden visar var du hittar allt."
+      },
+      "walkthrough": {
+        "title": "Hitta rätt i gränssnittet",
+        "description": "(1) Tryck på en strömruta på startsidan för att börja titta.\n(2) Använd knappen Starta sändning för att starta ett nytt flöde från OpenTAK ICU, UAS Tool, GoPro eller någon avancerad källa."
+      }
+    },
     "title": "Introduktion till MediaMTX"
   },
   "stream": {

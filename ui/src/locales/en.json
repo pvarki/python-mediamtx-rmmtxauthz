@@ -36,7 +36,16 @@
     "progressSaved": "Your onboarding progress has been saved.",
     "review": "Review onboarding",
     "step": "Step",
-    "steps": {},
+    "steps": {
+      "welcome": {
+        "title": "Welcome to MediaMTX",
+        "description": "MediaMTX lets you stream and watch live video feeds from connected devices. This short walkthrough will show you where to find everything."
+      },
+      "walkthrough": {
+        "title": "Finding your way around",
+        "description": "(1) Tap any stream tile on the home page to start watching.\n(2) Use the Start Broadcasting button to launch a new feed from OpenTAK ICU, UAS Tool, GoPro, or any advanced source."
+      }
+    },
     "title": "Onboard to MediaMTX"
   },
   "stream": {

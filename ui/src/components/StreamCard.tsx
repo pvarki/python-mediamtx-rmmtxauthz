@@ -5,6 +5,8 @@ import {
   LucideIcon,
   TrafficCone,
 } from "lucide-react";
+import { useTranslation } from "react-i18next";
+import { PRODUCT_SHORTNAME } from "@/App";
 import { Card } from "@/components/ui/card";
 import { StreamConfig } from "@/model/stream-config";
 import { parseStreamPath } from "@/lib/stream-utils";
@@ -15,15 +17,19 @@ interface StreamCardProps {
 }
 
 export function StreamCard({ stream, onClick }: StreamCardProps) {
+  const { t } = useTranslation(PRODUCT_SHORTNAME);
   const { name, category } = parseStreamPath(stream.path);
   const availableProtocols = Object.entries(stream.urls)
     .filter(([, url]) => url)
     .map(([protocol]) => protocol.toUpperCase());
 
   const methods: { label: string; icon: LucideIcon }[] = [];
-  if (stream.urls.hls) methods.push({ label: "Browser", icon: Globe });
-  if (stream.urls.srt) methods.push({ label: "VLC", icon: TrafficCone });
-  if (stream.urls.rtmps) methods.push({ label: "TAK", icon: Crosshair });
+  if (stream.urls.hls)
+    methods.push({ label: t("video.downloadBrowser"), icon: Globe });
+  if (stream.urls.srt)
+    methods.push({ label: t("video.downloadVlc"), icon: TrafficCone });
+  if (stream.urls.rtmps)
+    methods.push({ label: t("video.downloadTak"), icon: Crosshair });
 
   return (
     <button
