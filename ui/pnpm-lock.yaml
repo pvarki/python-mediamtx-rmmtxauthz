@@ -46,6 +46,9 @@ importers:
       clsx:
         specifier: ^2.1.1
         version: 2.1.1
+      hls.js:
+        specifier: ^1.6.16
+        version: 1.6.16
       i18next:
         specifier: ^25.6.2
         version: 25.6.2(typescript@5.4.5)
@@ -2589,6 +2592,12 @@ packages:
       }
     engines: { node: ">= 0.4" }
 
+  hls.js@1.6.16:
+    resolution:
+      {
+        integrity: sha512-VSIRpLfRwlAAdGL4wiTucx2ScRipo0ed1FBatWkyt832jC4CReKstga6yIhYVwGu9LOBjuX9wzmRMeQdBJtzEA==,
+      }
+
   homedir-polyfill@1.0.3:
     resolution:
       {
@@ -5054,6 +5063,8 @@ snapshots:
   hasown@2.0.2:
     dependencies:
       function-bind: 1.1.2
+
+  hls.js@1.6.16: {}
 
   homedir-polyfill@1.0.3:
     dependencies:
