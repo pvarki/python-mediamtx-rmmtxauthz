@@ -62,23 +62,80 @@ export function VideoPage({ streamSlug }: VideoPageProps) {
     if (Hls.isSupported()) {
       const playlistUrl = toPlaylistUrl(hlsUrl);
       const authHeader = "Basic " + btoa(`${username}:${password}`);
+      const retryPolicy = {
+        default: {
+          maxTimeToFirstByteMs: 10000,
+          maxLoadTimeMs: 100000,
+          timeoutRetry: {
+            maxNumRetry: 4,
+            retryDelayMs: 0,
+            maxRetryDelayMs: 0,
+          },
+          errorRetry: {
+            maxNumRetry: 8,
+            retryDelayMs: 1000,
+            maxRetryDelayMs: 8000,
+            backoff: "exponential" as const,
+          },
+        },
+      };
+
       const hls = new Hls({
         xhrSetup: (xhr) => {
           xhr.setRequestHeader("Authorization", authHeader);
         },
+        manifestLoadPolicy: retryPolicy,
+        playlistLoadPolicy: retryPolicy,
+        fragLoadPolicy: retryPolicy,
       });
+
+      let attemptedErrorRecovery: number | null = null;
+      const RECOVERY_THROTTLE_MS = 5000;
+
+      const tryRecoverMediaError = () => {
+        const now = Date.now();
+        if (
+          !attemptedErrorRecovery ||
+          now - attemptedErrorRecovery > RECOVERY_THROTTLE_MS
+        ) {
+          attemptedErrorRecovery = now;
+          hls.recoverMediaError();
+          return true;
+        }
+        return false;
+      };
+
+      const handleVideoError = () => {
+        const mediaError = video.error;
+        if (mediaError && mediaError.code === mediaError.MEDIA_ERR_DECODE) {
+          tryRecoverMediaError();
+        }
+      };
+      video.addEventListener("error", handleVideoError);
+
       hls.on(Hls.Events.MANIFEST_PARSED, () => {
         video.play().catch(() => {});
       });
       hls.on(Hls.Events.ERROR, (_event, data) => {
-        if (data.fatal) {
-          setPlaybackError(true);
-          hls.destroy();
+        if (!data.fatal) return;
+        switch (data.type) {
+          case Hls.ErrorTypes.MEDIA_ERROR:
+            if (!tryRecoverMediaError()) {
+              setPlaybackError(true);
+              hls.destroy();
+            }
+            break;
+
+          default:
+            setPlaybackError(true);
+            hls.destroy();
+            break;
         }
       });
       hls.loadSource(playlistUrl);
       hls.attachMedia(video);
       return () => {
+        video.removeEventListener("error", handleVideoError);
         hls.destroy();
       };
     }
