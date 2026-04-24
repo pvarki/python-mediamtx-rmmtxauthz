@@ -6,5 +6,5 @@
 ###
 FROM rmmtxauthz:devel_shell as pycharm
 RUN source /root/.profile \
-    && poetry install \
+    && uv sync --frozen \
     && true

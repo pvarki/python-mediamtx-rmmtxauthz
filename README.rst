@@ -91,15 +91,15 @@ TLDR:
 
     git checkout -b my_branch
 
-- install Poetry: https://python-poetry.org/docs/#installation
+- install uv: https://docs.astral.sh/uv/getting-started/installation/
 - Install project deps and pre-commit hooks::
 
-    poetry install
-    git add poetry.lock
+    uv sync
+    git add uv.lock
     pre-commit install --install-hooks
     pre-commit run --all-files
 
-If you get weird errors about missing packages from pre-commit try running it with "poetry run pre-commit".
+If you get weird errors about missing packages from pre-commit try running it with "uv run pre-commit".
 
 - Ready to go.
 

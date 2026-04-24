@@ -7,5 +7,5 @@ then
   git reset rune
 fi
 set -e
-poetry run pre-commit install
-SKIP="poetry-lock" poetry run pre-commit run --all-files
+uv run pre-commit install
+SKIP="uv-lock" uv run pre-commit run --all-files
