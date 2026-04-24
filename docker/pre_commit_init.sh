@@ -7,5 +7,5 @@ then
   git reset rune
 fi
 set -e
-uv run pre-commit install
-SKIP="uv-lock" uv run pre-commit run --all-files
+uv run prek install
+SKIP="uv-lock" uv run prek run --all-files

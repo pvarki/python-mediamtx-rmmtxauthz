@@ -52,13 +52,13 @@ pre-commit considerations
 
 If working in Docker instead of native env you need to run the pre-commit checks in docker too::
 
-    docker exec -i rmmtxauthz_devel /bin/bash -c "pre-commit install --install-hooks"
-    docker exec -i rmmtxauthz_devel /bin/bash -c "pre-commit run --all-files"
+    docker exec -i rmmtxauthz_devel /bin/bash -c "prek install"
+    docker exec -i rmmtxauthz_devel /bin/bash -c "prek run --all-files"
 
 You need to have the container running, see above. Or alternatively use the docker run syntax but using
 the running container is faster::
 
-    docker run --rm -it -v "$(pwd):/app" rmmtxauthz:devel_shell -c "pre-commit run --all-files"
+    docker run --rm -it -v "$(pwd):/app" rmmtxauthz:devel_shell -c "prek run --all-files"
 
 Test suite
 ^^^^^^^^^^
@@ -96,17 +96,17 @@ TLDR:
 
     uv sync
     git add uv.lock
-    pre-commit install --install-hooks
-    pre-commit run --all-files
+    uv run prek install
+    uv run prek run --all-files
 
-If you get weird errors about missing packages from pre-commit try running it with "uv run pre-commit".
+If you get weird errors about missing packages from prek try running it with "uv run prek".
 
 - Ready to go.
 
 Remember to activate your virtualenv whenever working on the repo, this is needed
-because pylint and mypy pre-commit hooks use the "system" python for now (because reasons).
+because pylint and mypy hooks use the "system" python for now (because reasons).
 
-Running "pre-commit run --all-files" and "py.test -v" regularly during development and
+Running "prek run --all-files" and "py.test -v" regularly during development and
 especially before committing will save you some headache.
 
 RUNE instructions compile
