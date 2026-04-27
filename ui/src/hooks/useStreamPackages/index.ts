@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useMemo } from "react";
 import {
   StreamPackageParams,
   getAtakRtmps,
@@ -6,6 +6,10 @@ import {
   getVlcHls,
   getVlcSrt,
 } from "./packages";
+import { useCredentials } from "@/hooks/useCredentials";
+import { useSrtPasswords } from "@/hooks/useSrtPasswords";
+import useHealthCheck from "@/hooks/helpers/useHealthcheck";
+import { getBaseDomain } from "@/lib/stream-utils";
 
 function downloadFile(content: string, filename: string, mimeType: string) {
   const blob = new Blob([content], { type: mimeType });
@@ -22,75 +26,75 @@ function sanitizeFilename(streamPath: string) {
 }
 
 export function useStreamPackages(streamPath: string) {
-  const currentDomain = useMemo(
-    () => window.location.hostname.replace(/^mtls./, ""),
-    [],
+  const currentDomain = useMemo(() => getBaseDomain(), []);
+  const { data: credentials } = useCredentials();
+  const { data: srtPasswords } = useSrtPasswords();
+  const { deployment } = useHealthCheck();
+  const filenamePrefix = deployment ? `${deployment}_` : "";
+
+  const params: StreamPackageParams | null =
+    credentials && srtPasswords
+      ? {
+          streamPath,
+          currentDomain,
+          username: credentials.username,
+          password: credentials.password,
+          srtReadPassphrase: srtPasswords.read,
+        }
+      : null;
+
+  const stableParams = useMemo(
+    () => params,
+    [
+      params?.streamPath,
+      params?.currentDomain,
+      params?.username,
+      params?.password,
+      params?.srtReadPassphrase,
+    ],
   );
-  const [credentials, setCredentials] = useState<{
-    username: string;
-    password: string;
-  } | null>(null);
-
-  useEffect(() => {
-    async function fetchCredentials() {
-      const response = await fetch(
-        "/api/v1/product/proxy/mtx/api/v1/proxy/credentials",
-      );
-
-      if (!response.ok) {
-        throw new Error(`HTTP error: ${response.status}`);
-      }
-
-      const data: { username: string; password: string } =
-        await response.json();
-      setCredentials(data);
-    }
-
-    fetchCredentials();
-  }, []);
-
-  const params: StreamPackageParams | null = credentials
-    ? {
-        streamPath,
-        currentDomain,
-        username: credentials.username,
-        password: credentials.password,
-      }
-    : null;
 
   const downloadAtakRtmps = useCallback(() => {
-    if (!params) return;
-    const content = getAtakRtmps(params);
-    const filename = `atak-rtmps-${sanitizeFilename(params.streamPath)}.xml`;
+    if (!stableParams) return;
+    const content = getAtakRtmps(stableParams);
+    const filename = `${filenamePrefix}atak-rtmps-${sanitizeFilename(
+      stableParams.streamPath,
+    )}.xml`;
     downloadFile(content, filename, "application/xml");
-  }, [params]);
+  }, [stableParams, filenamePrefix]);
 
   const downloadBrowserHls = useCallback(() => {
-    if (!params) return;
-    const content = getBrowserHls(params);
-    const filename = `browser-hls-${sanitizeFilename(params.streamPath)}.htm`;
+    if (!stableParams) return;
+    const content = getBrowserHls(stableParams);
+    const filename = `${filenamePrefix}browser-hls-${sanitizeFilename(
+      stableParams.streamPath,
+    )}.htm`;
     downloadFile(content, filename, "text/html");
-  }, [params]);
+  }, [stableParams, filenamePrefix]);
 
   const downloadVlcSrt = useCallback(() => {
-    if (!params) return;
-    const content = getVlcSrt(params);
-    const filename = `vlc-srt-${sanitizeFilename(params.streamPath)}.m3u`;
+    if (!stableParams) return;
+    const content = getVlcSrt(stableParams);
+    const filename = `${filenamePrefix}vlc-srt-${sanitizeFilename(
+      stableParams.streamPath,
+    )}.m3u`;
     downloadFile(content, filename, "application/xml");
-  }, [params]);
+  }, [stableParams, filenamePrefix]);
 
   const downloadVlcHls = useCallback(() => {
-    if (!params) return;
-    const content = getVlcHls(params);
-    const filename = `vlc-hls-${sanitizeFilename(params.streamPath)}.m3u8`;
+    if (!stableParams) return;
+    const content = getVlcHls(stableParams);
+    const filename = `${filenamePrefix}vlc-hls-${sanitizeFilename(
+      stableParams.streamPath,
+    )}.m3u8`;
     downloadFile(content, filename, "text/html");
-  }, [params]);
+  }, [stableParams, filenamePrefix]);
 
   return {
     downloadAtakRtmps,
     downloadBrowserHls,
     downloadVlcHls,
     downloadVlcSrt,
-    ready: params !== null,
+    ready: stableParams !== null,
   };
 }
