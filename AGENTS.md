@@ -16,7 +16,6 @@ stream management.
 - **Container:** Docker multi-target (devel_shell, tox, production)
 - **Port:** 8005
 - **Companion service:** bluenviron/mediamtx 1.12.3 (Go binary, separate container)
-- **Config generation:** RUNE tool generates `mediamtx.json` schema from `rune/src/`
 
 ## Development Setup
 ```bash
@@ -24,18 +23,12 @@ export DOCKER_BUILDKIT=1
 # Linux:
 export DOCKER_SSHAGENT="-v $SSH_AUTH_SOCK:$SSH_AUTH_SOCK -e SSH_AUTH_SOCK"
 
-# Build devel shell (mounts rune output for config generation)
+# Build devel shell
 docker build --ssh default --target devel_shell -t rmmtxauthz:devel_shell .
 docker create --name rmmtxauthz_devel \
-  -v "$(pwd)/rune/output/rune.json:/opt/templates/mediamtx.json" \
   -v "$(pwd):/app" \
   -it $(echo $DOCKER_SSHAGENT) rmmtxauthz:devel_shell
 docker start -i rmmtxauthz_devel
-
-# Regenerate mediamtx config schema (inside container):
-rune rune/src json > /opt/templates/mediamtx.json
-# Outside container:
-rune rune/src json > rune/output/rune.json
 
 # Key env vars:
 # RMMTX_API_URL          — https://mtx.<domain>:9997 (MediaMTX control API)
@@ -62,7 +55,6 @@ pre-commit run --all-files
 
 ## Code Conventions
 - Async-first: use async FastAPI endpoints
-- RUNE config schema must be regenerated and committed when `rune/src/` changes
 - Follow pylint rules from root `pylintrc`
 
 ## Architecture Notes
@@ -84,18 +76,10 @@ pre-commit run --all-files
 | 9996  | HTTP     | HLS recorded playback  |
 | 9997  | HTTP     | MediaMTX admin API     |
 
-**RUNE config:** The `rune/src/` directory contains source definitions for the MediaMTX
-JSON configuration schema. Run `rune rune/src json > rune/output/rune.json` to regenerate.
-This file is mounted into the container at `/opt/templates/mediamtx.json`.
-
 **TLS:** MediaMTX uses Let's Encrypt certs from the `le_certs` volume (provided by miniwerk).
 
 ## Common Agent Pitfalls
-1. **RUNE output must be regenerated when `rune/src/` changes.** The file at
-   `rune/output/rune.json` is committed to the repo and mounted into the container.
-   If you modify RUNE sources without regenerating, the running config will not match
-   what you intended.
-2. **`pytest-docker` spins up real containers for integration tests.** Ensure Docker is
+1. **`pytest-docker` spins up real containers for integration tests.** Ensure Docker is
    running and the Docker socket is accessible when running the test suite. Tests that
    work locally may fail in CI if Docker-in-Docker is not configured.
 3. **MediaMTX admin API (port 9997) is not publicly accessible.** It is on an internal
