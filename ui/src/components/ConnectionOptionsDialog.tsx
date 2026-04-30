@@ -211,7 +211,10 @@ export function ConnectionOptionsDialog({
   if (isMobile) {
     return (
       <Drawer open={open} onOpenChange={onOpenChange}>
-        <DrawerContent className="max-h-[85dvh]">
+        <DrawerContent
+          data-testid="connection-options-dialog"
+          className="max-h-[85dvh]"
+        >
           <div className="overflow-y-auto p-4 space-y-4">{content}</div>
         </DrawerContent>
       </Drawer>
@@ -220,7 +223,10 @@ export function ConnectionOptionsDialog({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-w-lg max-h-[85dvh] overflow-y-auto space-y-4">
+      <DialogContent
+        data-testid="connection-options-dialog"
+        className="max-w-lg max-h-[85dvh] overflow-y-auto space-y-4"
+      >
         {content}
       </DialogContent>
     </Dialog>

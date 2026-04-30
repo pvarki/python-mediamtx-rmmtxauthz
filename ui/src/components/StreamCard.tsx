@@ -33,6 +33,8 @@ export function StreamCard({ stream, onClick }: StreamCardProps) {
 
   return (
     <button
+      data-testid="stream-card"
+      data-stream-path={stream.path}
       onClick={onClick}
       className="text-left w-full focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring rounded-lg"
     >
