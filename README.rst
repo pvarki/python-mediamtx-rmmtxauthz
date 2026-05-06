@@ -39,14 +39,6 @@ Build image, create container and start it::
     docker create --name rmmtxauthz_devel -v "$(pwd)/rune/output/rune.json:/opt/templates/mediamtx.json" -v "$(pwd):/app" -it $(echo $DOCKER_SSHAGENT) rmmtxauthz:devel_shell
     docker start -i rmmtxauthz_devel
 
-To rebuild the documentation inside the container run::
-
-   rune rune/src json >/opt/templates/mediamtx.json
-
-Outside of container use::
-
-    rune rune/src json >rune/output/rune.json
-
 pre-commit considerations
 ^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -104,17 +96,10 @@ If you get weird errors about missing packages from prek try running it with "uv
 - Ready to go.
 
 Remember to activate your virtualenv whenever working on the repo, this is needed
-because mypy hook uses the "system" python for now (because reasons).
+because mypy hook uses the "system" python for now (to account for required dependencies).
 
 Running "prek run --all-files" and "py.test -v" regularly during development and
 especially before committing will save you some headache.
-
-RUNE instructions compile
-^^^^^^^^^^^^^^^^^^^^^^^^^
-
-tldr::
-
-    rune rune/src json >rune/output/mediamtx.json
 
 Versioning
 ----------

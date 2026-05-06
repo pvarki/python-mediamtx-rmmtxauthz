@@ -6,14 +6,17 @@ import pytest
 from fastapi import FastAPI
 from fastapi.testclient import TestClient
 
+from .test_mediamtx import valid_user  # noqa F401
+
 from rmmtxauthz.db.user import User
 from rmmtxauthz.config import RMMTXSettings
+
 
 LOGGER = logging.getLogger(__name__)
 
 
 @pytest.fixture(scope="function")
-def user_testclient(app_instance: FastAPI, valid_user: User) -> TestClient:
+def user_testclient(app_instance: FastAPI, valid_user: User) -> TestClient:  # noqa F811
     """Testclient with user DN"""
     client = TestClient(app_instance)
     client.headers["X-ClientCert-DN"] = f"CN={valid_user.username},O=N/A"
@@ -32,7 +35,7 @@ def test_srt(user_testclient: TestClient) -> None:
     assert payload["read"] == cnf.srt_read_password
 
 
-def test_credentials(user_testclient: TestClient, valid_user: User) -> None:
+def test_credentials(user_testclient: TestClient, valid_user: User) -> None:  # noqa F811
     """SRT passwords"""
     client = user_testclient
     resp = client.get(

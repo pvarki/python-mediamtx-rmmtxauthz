@@ -20,6 +20,12 @@ init_logging(logging.DEBUG)
 LOGGER = logging.getLogger(__name__)
 
 
+@pytest.fixture(scope="session")
+def monkeysession() -> Generator[pytest.MonkeyPatch, None, None]:
+    with pytest.MonkeyPatch.context() as mp:
+        yield mp
+
+
 @pytest.fixture(scope="function")
 def testclient(app_instance: FastAPI) -> TestClient:
     """Testclient with Rasenmaeher DN"""

@@ -30,7 +30,6 @@ COPY ./uv.lock ./pyproject.toml ./README.rst ./.pre-commit-config.yaml /app/
 COPY ./docker /app/docker/
 WORKDIR /app
 RUN uv sync --frozen \
-    && docker/pre_commit_init.sh \
     && rm -rf .venv
 
 
@@ -188,7 +187,6 @@ ENTRYPOINT ["/usr/bin/tini", "--", "docker/entrypoint-test.sh"]
 # Re run install to get the service itself installed
 RUN --mount=type=ssh source /.venv/bin/activate \
     && uv sync --frozen \
-    && docker/pre_commit_init.sh \
     && true
 
 
