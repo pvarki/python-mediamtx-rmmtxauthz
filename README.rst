@@ -83,10 +83,6 @@ Development
 
 TLDR:
 
-- Create and activate a Python 3.11 virtualenv (assuming virtualenvwrapper)::
-
-    mkvirtualenv -p $(which python3.11) my_virtualenv
-
 - change to a branch::
 
     git checkout -b my_branch
@@ -99,12 +95,16 @@ TLDR:
     uv run prek install
     uv run prek run --all-files
 
+- Use the project virtual environment::
+
+    source .venv/bin/activate
+
 If you get weird errors about missing packages from prek try running it with "uv run prek".
 
 - Ready to go.
 
 Remember to activate your virtualenv whenever working on the repo, this is needed
-because pylint and mypy hooks use the "system" python for now (because reasons).
+because mypy hook uses the "system" python for now (because reasons).
 
 Running "prek run --all-files" and "py.test -v" regularly during development and
 especially before committing will save you some headache.

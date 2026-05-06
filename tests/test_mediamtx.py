@@ -17,9 +17,6 @@ from rmmtxauthz.config import RMMTXSettings
 LOGGER = logging.getLogger(__name__)
 
 
-# pylint: disable=W0621
-
-
 @pytest.fixture(scope="module")
 def valid_user(dbinstance: None) -> Generator[User, None, None]:
     """A valid user"""
@@ -56,7 +53,9 @@ def another_valid_user(dbinstance: None) -> Generator[User, None, None]:
 
 def test_no_password(unauth_testclient: TestClient) -> None:
     """Test without password"""
-    resp = unauth_testclient.post("/api/v1/mediamtx/auth", json={"user": "", "password": ""})
+    resp = unauth_testclient.post(
+        "/api/v1/mediamtx/auth", json={"user": "", "password": ""}
+    )
     assert resp.status_code == 401
 
 
@@ -64,18 +63,22 @@ def test_wrong_password(unauth_testclient: TestClient, valid_user: User) -> None
     """Test without password"""
     resp = unauth_testclient.post(
         "/api/v1/mediamtx/auth",
-        json={"user": valid_user.username, "password": "wrongpassword"},  # pragma: allowlist secret
+        json={
+            "user": valid_user.username,
+            "password": "wrongpassword",  # pragma: allowlist secret
+        },
     )
     assert resp.status_code == 403
 
 
 def test_real_data(unauth_testclient: TestClient, valid_user: User) -> None:
     """See what gives with this real request"""
-    content = '{"action":"read","id":"e14b6658-fa32-4a21-b0ac-ab1bc135dcf6","ip":"185.11.209.242","password":"__PASSWORD__","path":"live/icu/Eetu2","protocol":"srt","query":"","user":"__USERNAME__"}'.replace(  # pylint: disable=C0301  ;  # pragma: allowlist secret
+    content = '{"action":"read","id":"e14b6658-fa32-4a21-b0ac-ab1bc135dcf6","ip":"185.11.209.242","password":"__PASSWORD__","path":"live/icu/Eetu2","protocol":"srt","query":"","user":"__USERNAME__"}'.replace(  # pragma: allowlist secret
         "__USERNAME__",
         valid_user.username,
     ).replace(
-        "__PASSWORD__", valid_user.mtxpassword  # pragma: allowlist secret
+        "__PASSWORD__",
+        valid_user.mtxpassword,  # pragma: allowlist secret
     )
     payload = json.loads(content)
     LOGGER.debug("POSTing '{}'".format(payload))
@@ -91,7 +94,11 @@ def test_wrong_username(unauth_testclient: TestClient, valid_user: User) -> None
     _ = valid_user
     resp = unauth_testclient.post(
         "/api/v1/mediamtx/auth",
-        json={"user": "nosuchuser", "password": "wrongpassword", "action": "read"},  # pragma: allowlist secret
+        json={
+            "user": "nosuchuser",
+            "password": "wrongpassword",  # pragma: allowlist secret
+            "action": "read",
+        },
     )
     assert resp.status_code == 403
 
@@ -122,9 +129,15 @@ def test_right_password(unauth_testclient: TestClient, valid_user: User) -> None
 
 # NOTE: Our ENV monkeypatches have not taken affect at the time parametrize runs
 @pytest.mark.parametrize(
-    "path_prefix", [pytest.param(path_prefix, id=path_prefix) for path_prefix in RMMTXSettings.singleton().user_paths]
+    "path_prefix",
+    [
+        pytest.param(path_prefix, id=path_prefix)
+        for path_prefix in RMMTXSettings.singleton().user_paths
+    ],
 )
-def test_publish_valid_path(unauth_testclient: TestClient, valid_user: User, path_prefix: str) -> None:
+def test_publish_valid_path(
+    unauth_testclient: TestClient, valid_user: User, path_prefix: str
+) -> None:
     """Test valid user paths"""
     resp = unauth_testclient.post(
         "/api/v1/mediamtx/auth",
@@ -159,9 +172,15 @@ def test_publish_valid_path(unauth_testclient: TestClient, valid_user: User, pat
 
 
 @pytest.mark.parametrize(
-    "path_prefix", [pytest.param(path_prefix, id=path_prefix) for path_prefix in RMMTXSettings.singleton().user_paths]
+    "path_prefix",
+    [
+        pytest.param(path_prefix, id=path_prefix)
+        for path_prefix in RMMTXSettings.singleton().user_paths
+    ],
 )
-def test_readonly_valid_path(unauth_testclient: TestClient, valid_user: User, path_prefix: str) -> None:
+def test_readonly_valid_path(
+    unauth_testclient: TestClient, valid_user: User, path_prefix: str
+) -> None:
     """Test playing a stream with RO password"""
     for action in ("read", "playback"):
         resp = unauth_testclient.post(
@@ -192,8 +211,12 @@ def test_read_any_path(unauth_testclient: TestClient, valid_user: User) -> None:
 
 
 # NOTE: Our ENV monkeypatches have not taken affect at the time parametrize runs
-@pytest.mark.parametrize("prefix", [pytest.param(prefix, id=prefix) for prefix in ("live", "undead")])
-def test_publish_path_wrong_tool(unauth_testclient: TestClient, valid_user: User, prefix: str) -> None:
+@pytest.mark.parametrize(
+    "prefix", [pytest.param(prefix, id=prefix) for prefix in ("live", "undead")]
+)
+def test_publish_path_wrong_tool(
+    unauth_testclient: TestClient, valid_user: User, prefix: str
+) -> None:
     """Test invalid tool but otherwise fine"""
     resp = unauth_testclient.post(
         "/api/v1/mediamtx/auth",
@@ -208,8 +231,12 @@ def test_publish_path_wrong_tool(unauth_testclient: TestClient, valid_user: User
 
 
 # NOTE: Our ENV monkeypatches have not taken affect at the time parametrize runs
-@pytest.mark.parametrize("tool", [pytest.param(tool, id=tool) for tool in RMMTXSettings.singleton().tools])
-def test_publish_path_wrong_prefix(unauth_testclient: TestClient, valid_user: User, tool: str) -> None:
+@pytest.mark.parametrize(
+    "tool", [pytest.param(tool, id=tool) for tool in RMMTXSettings.singleton().tools]
+)
+def test_publish_path_wrong_prefix(
+    unauth_testclient: TestClient, valid_user: User, tool: str
+) -> None:
     """Test invalid tool but otherwise fine"""
     resp = unauth_testclient.post(
         "/api/v1/mediamtx/auth",
@@ -225,10 +252,17 @@ def test_publish_path_wrong_prefix(unauth_testclient: TestClient, valid_user: Us
 
 # NOTE: Our ENV monkeypatches have not taken affect at the time parametrize runs
 @pytest.mark.parametrize(
-    "path_prefix", [pytest.param(prefix, id=prefix) for prefix in RMMTXSettings.singleton().user_paths]
+    "path_prefix",
+    [
+        pytest.param(prefix, id=prefix)
+        for prefix in RMMTXSettings.singleton().user_paths
+    ],
 )
 def test_publish_path_wrong_callsign(
-    unauth_testclient: TestClient, valid_user: User, path_prefix: str, another_valid_user: User
+    unauth_testclient: TestClient,
+    valid_user: User,
+    path_prefix: str,
+    another_valid_user: User,
 ) -> None:
     """Test valid user paths"""
     resp = unauth_testclient.post(

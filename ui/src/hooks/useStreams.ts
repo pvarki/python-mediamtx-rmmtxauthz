@@ -8,7 +8,7 @@ export function useStreams() {
     queryFn: async () => {
       const resp = await fetch(API_ENDPOINTS.STREAMS);
       if (!resp.ok) throw new Error("Fetching streams failed");
-      return resp.json();
+      return resp.json() as Promise<StreamConfig[]>;
     },
     refetchInterval: 15_000,
   });

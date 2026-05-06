@@ -15,7 +15,7 @@ import sqlalchemy as sa
 from .errors import NotFound, Deleted
 from .engine import EngineWrapper
 
-utcnow = sa.func.current_timestamp()  # pylint: disable=invalid-name,not-callable  # not-callable is false-positive
+utcnow = sa.func.current_timestamp()
 
 LOGGER = logging.getLogger(__name__)
 
@@ -26,12 +26,18 @@ class ORMBaseModel(SQLModel, table=False):
     __table_args__ = {"schema": "rmmtxauthz"}
 
     pk: uuid.UUID = Field(primary_key=True, default_factory=uuid.uuid4)
-    created: datetime.datetime = Field(sa_column_kwargs={"default": utcnow}, nullable=False)
-    updated: datetime.datetime = Field(sa_column_kwargs={"default": utcnow, "onupdate": utcnow}, nullable=False)
+    created: datetime.datetime = Field(
+        sa_column_kwargs={"default": utcnow}, nullable=False
+    )
+    updated: datetime.datetime = Field(
+        sa_column_kwargs={"default": utcnow, "onupdate": utcnow}, nullable=False
+    )
     deleted: datetime.datetime | None = Field(nullable=True)
 
     @classmethod
-    async def by_pk(cls, pkin: Union[str, uuid.UUID], allow_deleted: bool = False) -> Self:
+    async def by_pk(
+        cls, pkin: Union[str, uuid.UUID], allow_deleted: bool = False
+    ) -> Self:
         """Get by pk"""
         if isinstance(pkin, uuid.UUID):
             getpk = pkin

@@ -27,7 +27,9 @@ async def get_credentials(request: Request) -> UserCredentials:
     """Get my MediaMTX credentials"""
     user = await User.by_username(get_callsign(request))
     return UserCredentials(
-        username=user.username, password=user.mtxpassword, stream_ro_password=user.stream_ro_password
+        username=user.username,
+        password=user.mtxpassword,
+        stream_ro_password=user.stream_ro_password,
     )
 
 
@@ -46,7 +48,11 @@ async def get_streams(request: Request) -> Sequence[Dict[str, Any]]:
     conf = RMMTXSettings.singleton()
     if conf.mtx_address == "__REQUEST_HOSTNAME__":
         LOGGER.warning("Setting RMMTX_MTX_ADDRESS from the request header")
-        conf.mtx_address = request.headers.get("host", "__REQUEST_HOSTNAME__:1234").split(":", 1)[0]
+        conf.mtx_address = request.headers.get(
+            "host", "__REQUEST_HOSTNAME__:1234"
+        ).split(":", 1)[0]
         LOGGER.info("Setting RMMTX_MTX_ADDRESS is now: {}".format(conf.mtx_address))
-    streams = await MediaMTXControl.singleton().get_paths(username=user.username, password=user.mtxpassword)
+    streams = await MediaMTXControl.singleton().get_paths(
+        username=user.username, password=user.mtxpassword
+    )
     return streams

@@ -1,12 +1,12 @@
 on:
-    pull_request:
+  pull_request:
 
 jobs:
   versiontag:
     runs-on: ubuntu-latest
     if: github.ref != 'refs/heads/main'
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v6
       - name: Check version tag
         run: |
           curl -f https://raw.githubusercontent.com/pvarki/python-mediamtx-rmmtxauthz/main/pyproject.toml -o /tmp/main_pyproject.toml || touch /tmp/main_pyproject.toml
@@ -22,14 +22,12 @@ jobs:
       checks: write
     strategy:
       matrix:
-        python-version: ["3.11"] # , "3.12"]
+        python-version: ["3.14"] # , "3.12"]
     env:
       PIP_INDEX_URL: https://nexus.dev.pvarki.fi/repository/python/simple
       UV_DEFAULT_INDEX: https://nexus.dev.pvarki.fi/repository/python/simple
     steps:
-      - uses: actions/checkout@v5
-        with:
-          submodules: recursive
+      - uses: actions/checkout@v6
       - name: Install uv
         uses: astral-sh/setup-uv@v5
         with:
@@ -38,7 +36,7 @@ jobs:
         run: uv python install ${{ matrix.python-version }}
       - name: Install dependencies
         run: uv sync --frozen
-      - name: Do pre-commit checks (black, lint, mypy)
+      - name: Do pre-commit checks
         run: |
           uv run docker/pre_commit_init.sh
       - name: Prep docker
@@ -55,14 +53,14 @@ jobs:
         uses: mikepenz/action-junit-report@v4
         if: success() || failure() # always run even if the previous step fails
         with:
-          report_paths: '**/pytest*.xml'
+          report_paths: "**/pytest*.xml"
           detailed_summary: true
-          check_name: 'JUnit report (local)'
+          check_name: "JUnit report (local)"
 
   docker_builds:
     runs-on: arc-runner-set
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v6
         with:
           submodules: recursive
       - name: Build test target

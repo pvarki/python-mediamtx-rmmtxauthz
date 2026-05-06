@@ -18,7 +18,9 @@ LOGGER = logging.getLogger(__name__)
 @click.group()
 @click.version_option(version=__version__)
 @click.pass_context
-@click.option("-v", "--verbose", count=True, help="Shorthand for info/debug loglevel (-v/-vv)")
+@click.option(
+    "-v", "--verbose", count=True, help="Shorthand for info/debug loglevel (-v/-vv)"
+)
 def cli_group(ctx: click.Context, verbose: int) -> None:
     """CLI helpers for RASENMAEHER developers"""
     _ = ctx
@@ -55,7 +57,9 @@ def dump_openapi(ctx: click.Context) -> None:
 @click.option("--port", default=8005, help="The port to connect to")
 @click.option("--timeout", default=2.0, help="The timeout in seconds")
 @click.pass_context
-def do_http_healthcheck(ctx: click.Context, host: str, port: int, timeout: float) -> None:
+def do_http_healthcheck(
+    ctx: click.Context, host: str, port: int, timeout: float
+) -> None:
     """
     Do a GET request to the healthcheck api and dump results to stdout
     """
@@ -65,7 +69,9 @@ def do_http_healthcheck(ctx: click.Context, host: str, port: int, timeout: float
         nonlocal host, port, timeout
         if "://" not in host:
             host = f"http://{host}"
-        async with aiohttp.ClientSession(timeout=aiohttp.ClientTimeout(total=timeout)) as session:
+        async with aiohttp.ClientSession(
+            timeout=aiohttp.ClientTimeout(total=timeout)
+        ) as session:
             async with session.get(f"{host}:{port}/api/v1/healthcheck") as resp:
                 if resp.status != 200:
                     return int(resp.status)
@@ -81,4 +87,4 @@ def do_http_healthcheck(ctx: click.Context, host: str, port: int, timeout: float
 def rmmtxauthz_cli() -> None:
     """Backend for the IoT devices"""
     init_logging(logging.WARNING)
-    cli_group()  # pylint: disable=no-value-for-parameter
+    cli_group()

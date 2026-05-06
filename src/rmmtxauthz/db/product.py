@@ -22,7 +22,8 @@ class Product(ORMBaseModel, table=True):
 
     certcn: str = Field(index=True, unique=True, description="")
     mtxpassword: str = Field(
-        description="Plaintext password we give to product for using MediaMTX", default_factory=generate_code
+        description="Plaintext password we give to product for using MediaMTX",
+        default_factory=generate_code,
     )
     stream_ro_password: str = Field(
         description="Plaintext password user can pass along for read/playback of any stream",

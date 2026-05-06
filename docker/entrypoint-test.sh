@@ -13,7 +13,6 @@ if [ "$#" -eq 0 ]; then
   pytest --junitxml=pytest.xml tests/
   # If prek does not run these, enable them
   # mypy src tests
-  # pylint src tests
   # bandit --skip=B101 -r src
 else
   exec "$@"

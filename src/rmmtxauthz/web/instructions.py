@@ -33,7 +33,9 @@ async def get_asset(file_path: str) -> FileResponse:
 
 
 @router.post("/instructions/{language}")
-async def user_intructions(user: UserCRUDRequest, request: Request, language: str) -> Dict[str, Any]:
+async def user_intructions(
+    user: UserCRUDRequest, request: Request, language: str
+) -> Dict[str, Any]:
     """return user instructions"""
     comes_from_rm(request)
     try:
@@ -63,7 +65,9 @@ async def user_intructions(user: UserCRUDRequest, request: Request, language: st
             "body": dbuser.mtxpassword,
         }
     )
-    streams = await MediaMTXControl.singleton().get_paths(username=dbuser.username, password=dbuser.mtxpassword)
+    streams = await MediaMTXControl.singleton().get_paths(
+        username=dbuser.username, password=dbuser.mtxpassword
+    )
     streams_content = "<ul>\n"
     for streamdict in streams:
         streams_content += f"<li>{streamdict['path']}<ul>"
@@ -79,4 +83,8 @@ async def user_intructions(user: UserCRUDRequest, request: Request, language: st
         }
     )
 
-    return {"callsign": dbuser.username, "instructions": instructions_data, "language": language}
+    return {
+        "callsign": dbuser.username,
+        "instructions": instructions_data,
+        "language": language,
+    }

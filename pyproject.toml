@@ -34,7 +34,6 @@ dev = [
     "pytest>=8.0,<9.0",
     "coverage>=7.4,<8.0",
     "pytest-cov>=4.1,<5.0",
-    "pylint>=3.3,<4.0",
     "black>=25.1,<26.0",
     "bandit>=1.8,<2.0",
     "mypy>=1.15,<2.0",
@@ -46,6 +45,7 @@ dev = [
     "httpx>=0.28.1,<1.0",
     "tox>=4.0,<5.0",
     "tox-uv>=1.0,<2.0",
+    "ruff>=0.15.12",
 ]
 
 [[tool.uv.index]]
@@ -91,19 +91,6 @@ strict=true
 junit_family="xunit2"
 addopts="--cov=rmmtxauthz --cov-fail-under=65 --cov-branch"
 asyncio_mode="strict"
-
-[tool.pylint.format]
-max-line-length = 120
-
-[tool.pylint.design]
-max-parents = 10
-
-[tool.pylint.messages_control]
-disable=["fixme", "W1202", "C0209"]
-
-[tool.pylint.similarities]
-min-similarity-lines = 8
-ignore-imports = true
 
 [tool.coverage.run]
 omit = ["tests/*"]

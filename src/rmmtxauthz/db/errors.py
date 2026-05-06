@@ -25,7 +25,9 @@ class NotFound(DBFetchError, HTTPException):
         """make us also 404 HTTP error"""
         _ = args, kwargs
         # We need to specify the correct superclass init
-        super(HTTPException, self).__init__(status_code=status.HTTP_404_NOT_FOUND, detail="Not found")
+        super(HTTPException, self).__init__(
+            status_code=status.HTTP_404_NOT_FOUND, detail="Not found"
+        )
 
 
 class Deleted(NotFound):

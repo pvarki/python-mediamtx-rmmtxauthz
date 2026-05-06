@@ -8,7 +8,7 @@ export function useCredentials() {
     queryFn: async () => {
       const resp = await fetch(API_ENDPOINTS.CREDENTIALS);
       if (!resp.ok) throw new Error("Fetching credentials failed");
-      return resp.json();
+      return resp.json() as Promise<Credentials>;
     },
   });
 }

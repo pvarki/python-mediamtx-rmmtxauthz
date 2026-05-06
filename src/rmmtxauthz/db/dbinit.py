@@ -27,15 +27,19 @@ async def init_db() -> None:
     lockpath = Path(tempfile.gettempdir()) / "dbinit.lock"
     lock = filelock.FileLock(lockpath)
     wrapper = EngineWrapper.singleton()
-    assert wrapper.engine
+    assert wrapper.engine  # nosec B101
     engine = wrapper.engine
     try:
         await asyncio.sleep(random.random() * 2)  # nosec
         lock.acquire(timeout=0.0)
         LOGGER.debug("Acquiring session")
         with engine.connect() as connection:
-            if not sa.inspect(connection).has_schema(ORMBaseModel.__table_args__["schema"]):
-                LOGGER.debug("Creating schema {}".format(ORMBaseModel.__table_args__["schema"]))
+            if not sa.inspect(connection).has_schema(
+                ORMBaseModel.__table_args__["schema"]
+            ):
+                LOGGER.debug(
+                    "Creating schema {}".format(ORMBaseModel.__table_args__["schema"])
+                )
                 connection.execute(CreateSchema(ORMBaseModel.__table_args__["schema"]))
                 connection.commit()
                 LOGGER.debug("Creating tables")
@@ -53,7 +57,7 @@ async def init_db() -> None:
 async def drop_db() -> None:
     """Drop tables and schema"""
     wrapper = EngineWrapper.singleton()
-    assert wrapper.engine
+    assert wrapper.engine  # nosec B101
     engine = wrapper.engine
     LOGGER.debug("Acquiring session")
     with engine.connect() as connection:

@@ -8,13 +8,9 @@ from libpvarki.schemas.product import UserCRUDRequest
 
 from rmmtxauthz.db.user import User
 from rmmtxauthz.config import RMMTXSettings
-from .test_mediamtx import valid_user  # pylint: disable=W0611
 
 
 LOGGER = logging.getLogger(__name__)
-
-
-# pylint: disable=W0621
 
 
 @pytest.fixture(scope="module")
@@ -37,7 +33,9 @@ def test_srt(testclient: TestClient, usercrud: UserCRUDRequest) -> None:
     assert payload["read"] == cnf.srt_read_password
 
 
-def test_credentials(testclient: TestClient, valid_user: User, usercrud: UserCRUDRequest) -> None:
+def test_credentials(
+    testclient: TestClient, valid_user: User, usercrud: UserCRUDRequest
+) -> None:
     """SRT passwords"""
     resp = testclient.post("/api/v1/proxy/credentials", json=usercrud.model_dump())
     payload = resp.json()

@@ -35,9 +35,13 @@ class MediaMTXControl:
         if cadir.is_dir():
             ctx = get_ca_context(ssl.Purpose.SERVER_AUTH, cadir)
             conn = aiohttp.TCPConnector(ssl=ctx)
-            return aiohttp.ClientSession(connector=conn, auth=auth, base_url=cnf.api_url, raise_for_status=True)
+            return aiohttp.ClientSession(
+                connector=conn, auth=auth, base_url=cnf.api_url, raise_for_status=True
+            )
         # Fallback
-        return aiohttp.ClientSession(auth=auth, base_url=cnf.api_url, raise_for_status=True)
+        return aiohttp.ClientSession(
+            auth=auth, base_url=cnf.api_url, raise_for_status=True
+        )
 
     async def ensure_srt_pass(self) -> bool:
         """Ensure SRT password for authentication is set to server config"""
@@ -71,7 +75,9 @@ class MediaMTXControl:
                 return False
             return True
 
-    async def get_paths(self, username: str, password: str = "") -> Sequence[Dict[str, Any]]:
+    async def get_paths(
+        self, username: str, password: str = ""
+    ) -> Sequence[Dict[str, Any]]:
         """Get active paths and generate their corresponding urls for each protocol
         insert_credentials MUST be in format: username:password@"""
         ret = []

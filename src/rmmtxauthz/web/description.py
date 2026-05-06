@@ -14,17 +14,19 @@ router = APIRouter(dependencies=[Depends(MTLSHeader(auto_error=True))])
 router_v2 = APIRouter(dependencies=[Depends(MTLSHeader(auto_error=True))])
 
 
-class ProductComponent(BaseModel):  # pylint: disable=too-few-public-methods
+class ProductComponent(BaseModel):
     """Project component info"""
 
     type: Literal["link", "markdown", "component"]
     ref: str
 
 
-class ProductDescriptionExtended(BaseModel):  # pylint: disable=too-few-public-methods
+class ProductDescriptionExtended(BaseModel):
     """Description of a product"""
 
-    shortname: str = Field(description="Short name for the product, used as slug/key in dicts and urls")
+    shortname: str = Field(
+        description="Short name for the product, used as slug/key in dicts and urls"
+    )
     title: str = Field(description="Fancy name for the product")
     icon: Optional[str] = Field(description="URL for icon")
     description: str = Field(description="Short-ish description of the product")
@@ -32,7 +34,7 @@ class ProductDescriptionExtended(BaseModel):  # pylint: disable=too-few-public-m
     docs: str = Field(description="Link to documentation")
     component: ProductComponent = Field(description="Component type and ref")
 
-    class Config:  # pylint: disable=too-few-public-methods
+    class Config:
         """Pydantic configs"""
 
         extra = "forbid"
@@ -42,7 +44,9 @@ class ProductDescriptionExtended(BaseModel):  # pylint: disable=too-few-public-m
     "/description/{language}",
     response_model=ProductDescription,
 )
-async def return_product_description(language: str, request: Request) -> ProductDescription:
+async def return_product_description(
+    language: str, request: Request
+) -> ProductDescription:
     """The product description"""
     comes_from_rm(request)
     # FIXME: return in correct Rune format
@@ -67,7 +71,9 @@ async def return_product_description(language: str, request: Request) -> Product
     "/description/{language}",
     response_model=ProductDescriptionExtended,
 )
-async def return_product_description_extended(language: str, request: Request) -> ProductDescriptionExtended:
+async def return_product_description_extended(
+    language: str, request: Request
+) -> ProductDescriptionExtended:
     """Fetch description from each product in manifest"""
     comes_from_rm(request)
     shortname = "mtx"
@@ -79,7 +85,9 @@ async def return_product_description_extended(language: str, request: Request) -
             description="Videon suoratoistopalvelu",
             language=language,
             docs="https://docs.pvarki.fi/fi/docs/guides/mtx-guide",
-            component=ProductComponent(type="component", ref=f"/ui/{shortname}/remoteEntry.js"),
+            component=ProductComponent(
+                type="component", ref=f"/ui/{shortname}/remoteEntry.js"
+            ),
         )
     if language == "sv":
         return ProductDescriptionExtended(
@@ -89,7 +97,9 @@ async def return_product_description_extended(language: str, request: Request) -
             description="Videoströmningstjänst",
             language=language,
             docs="https://docs.pvarki.fi/sv/docs/guides/mtx-guide",
-            component=ProductComponent(type="component", ref=f"/ui/{shortname}/remoteEntry.js"),
+            component=ProductComponent(
+                type="component", ref=f"/ui/{shortname}/remoteEntry.js"
+            ),
         )
     return ProductDescriptionExtended(
         shortname=shortname,
@@ -98,5 +108,7 @@ async def return_product_description_extended(language: str, request: Request) -
         description="Video streaming service",
         language=language,
         docs="https://docs.pvarki.fi/en/docs/guides/mtx-guide",
-        component=ProductComponent(type="component", ref=f"/ui/{shortname}/remoteEntry.js"),
+        component=ProductComponent(
+            type="component", ref=f"/ui/{shortname}/remoteEntry.js"
+        ),
     )

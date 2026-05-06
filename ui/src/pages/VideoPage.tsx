@@ -152,9 +152,11 @@ export function VideoPage({ streamSlug }: VideoPageProps) {
     setPlaybackError(true);
   }, [playing, hlsUrl, username, password]);
 
-  const goBack = () => navigate({ to: "/" });
+  const goBack = () => {
+    void navigate({ to: "/" });
+  };
 
-  const BackLink = () => (
+  const backLink = (
     <button
       onClick={goBack}
       aria-label={t("video.backToStreams")}
@@ -178,7 +180,7 @@ export function VideoPage({ streamSlug }: VideoPageProps) {
   if (!stream) {
     return (
       <div className="space-y-6">
-        <BackLink />
+        {backLink}
         <div className="aspect-video bg-muted rounded-lg flex flex-col items-center justify-center space-y-4">
           <AlertCircle className="w-12 h-12 text-muted-foreground" />
           <p className="text-lg font-semibold text-foreground">
@@ -195,14 +197,7 @@ export function VideoPage({ streamSlug }: VideoPageProps) {
 
   return (
     <div className="space-y-6">
-      <button
-        onClick={goBack}
-        aria-label={t("video.backToStreams")}
-        className="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring rounded transition-colors"
-      >
-        <ArrowLeft className="w-4 h-4" />
-        {t("video.backToStreams")}
-      </button>
+      {backLink}
 
       <div className="flex items-start justify-between gap-4 flex-wrap">
         <div className="min-w-0 max-w-full">
