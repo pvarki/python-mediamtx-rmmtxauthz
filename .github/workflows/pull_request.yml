@@ -14,14 +14,14 @@ jobs:
       contents: write
       pull-requests: write
       checks: write
-    strategy:
-      matrix:
-        python-version: ["3.14"]
     steps:
       - uses: actions/checkout@v6
       - uses: pvarki/config-ci-library/.github/actions/setup-python@main
         with:
           python-version: "3.14"
+      - uses: pvarki/config-ci-library/.github/actions/setup-typescript@main
+        with:
+          working-directory: ui
       - name: Do pre-commit checks
         run: |
           uv run prek run --all-files
