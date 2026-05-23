@@ -39,22 +39,49 @@ class ProductAuthzResponse(BaseModel):
         description="Password for read-only streaming", default=None
     )
 
+
+class ProductAuthzRequest(BaseModel):
+    """Brokered auth lookup request."""
+
+    certcn: str = Field(description="CN of the source product certificate")
+
     model_config = ConfigDict(
         extra="forbid",
         json_schema_extra={
             "examples": [
                 {
-                    "type": "mtls",
+                    "certcn": "product.deployment.tld",
                 },
+            ],
+        },
+    )
+
+
+class ProductStreamURLs(BaseModel):
+    """Protocol URLs for a product-visible stream."""
+
+    model_config = ConfigDict(extra="forbid")
+
+    rtmps: Optional[str] = Field(default=None)
+
+
+class ProductStream(BaseModel):
+    """TAK-facing active stream inventory item."""
+
+    path: str = Field(description="MediaMTX path")
+    alias: str = Field(description="Human-readable stream alias")
+    urls: ProductStreamURLs
+
+    model_config = ConfigDict(
+        extra="forbid",
+        json_schema_extra={
+            "examples": [
                 {
-                    "type": "bearer-token",
-                    "token": "<JWT>",
-                },
-                {
-                    "type": "basic",
-                    "username": "product.deployment.tld",
-                    "password": "<PASSWORD>",
-                    "ro_password": "<PASSWORD>",
+                    "path": "/live/demo",
+                    "alias": "live/demo",
+                    "urls": {
+                        "rtmps": "rtmps://mtx.example.test:1936/live/demo?user=product.deployment.tld&pass=stream-ro-password",
+                    },
                 },
             ],
         },

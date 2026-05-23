@@ -105,3 +105,27 @@ class MediaMTXControl:
                     item["urls"][pname] = url  # type: ignore[index]
                 ret.append(item)
         return ret
+
+    async def get_active_paths(
+        self, username: str, password: str = ""
+    ) -> Sequence[Dict[str, Any]]:
+        """Return only ready MediaMTX paths."""
+        ret = []
+        async with self.get_session() as session:
+            resp = await session.get("/v3/paths/list", params={"itemsPerPage": 1000})
+            payload = await resp.json()
+        cnf = RMMTXSettings.singleton()
+        rtmps = cnf.protocols["rtmps"]
+        for plitem in payload["items"]:
+            if not bool(plitem.get("ready", plitem.get("sourceReady", True))):
+                continue
+            path = f"/{plitem['name']}"
+            ret.append(
+                {
+                    "path": path,
+                    "urls": {
+                        "rtmps": f"{rtmps.proto}://{cnf.mtx_address}:{rtmps.port}{path}?user={username}&pass={password}"
+                    },
+                }
+            )
+        return ret
