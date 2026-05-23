@@ -32,7 +32,7 @@ export function StreamGridPage({ onStartBroadcast }: StreamGridPageProps) {
   }, [search, streams]);
 
   const handleStreamClick = (stream: StreamConfig) => {
-    navigate({ to: `/${streamPathToSlug(stream.path)}` });
+    void navigate({ to: `/${streamPathToSlug(stream.path)}` });
   };
 
   if (isLoading) {
@@ -67,7 +67,13 @@ export function StreamGridPage({ onStartBroadcast }: StreamGridPageProps) {
         <p className="text-lg font-semibold text-foreground">
           {t("streams.errorLoading")}
         </p>
-        <Button onClick={() => refetch()}>{t("common.retry")}</Button>
+        <Button
+          onClick={() => {
+            void refetch();
+          }}
+        >
+          {t("common.retry")}
+        </Button>
       </div>
     );
   }
@@ -84,7 +90,9 @@ export function StreamGridPage({ onStartBroadcast }: StreamGridPageProps) {
           <Button
             variant="ghost"
             size="sm"
-            onClick={() => refetch()}
+            onClick={() => {
+              void refetch();
+            }}
             className="ml-auto"
           >
             {t("common.retry")}

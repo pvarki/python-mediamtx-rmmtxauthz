@@ -7,7 +7,6 @@ import logging
 import pytest
 import pytest_asyncio
 from libpvarki.logging import init_logging, add_trace_and_audit
-from libadvian.testhelpers import monkeysession, nice_tmpdir_mod, nice_tmpdir_ses  # pylint: disable=unused-import
 from pytest_docker.plugin import Services
 from fastapi import FastAPI
 from fastapi.testclient import TestClient
@@ -20,7 +19,11 @@ add_trace_and_audit()
 init_logging(logging.DEBUG)
 LOGGER = logging.getLogger(__name__)
 
-# pylint: disable=W0621
+
+@pytest.fixture(scope="session")
+def monkeysession() -> Generator[pytest.MonkeyPatch, None, None]:
+    with pytest.MonkeyPatch.context() as mp:
+        yield mp
 
 
 @pytest.fixture(scope="function")
@@ -59,9 +62,11 @@ def session_env_config(
         mpatch.setenv("RMMTX_API_URL", "http://127.0.0.1:19997")
         mpatch.setenv("RMMTX_SRT_PUB_PASSWORD", "pytestsrtpub")
         mpatch.setenv("RMMTX_SRT_READ_PASSWORD", "pytestsrtread")
-        mpatch.setenv("RMMTX_USER_PATH_PREFIXES", "live,undead")  # Test multiple prefix config
+        mpatch.setenv(
+            "RMMTX_USER_PATH_PREFIXES", "live,undead"
+        )  # Test multiple prefix config
         # Force end re-read
-        RMMTXSettings._singleton = None  # pylint: disable=W0212
+        RMMTXSettings._singleton = None
         yield None
 
 
@@ -70,7 +75,7 @@ def app_instance(session_env_config: None) -> FastAPI:
     """app instance"""
     _ = session_env_config
     # To ensure that env mock happens before import side-effects (if any)
-    from rmmtxauthz.web.application import get_app_no_init  # pylint: disable=C0415
+    from rmmtxauthz.web.application import get_app_no_init
 
     return get_app_no_init()
 
@@ -81,7 +86,9 @@ async def dbinstance(
 ) -> AsyncGenerator[None, None]:
     """Module scoped db instance, drops tables at end of scope"""
     with monkeysession.context() as mpatch:
-        mpatch.setenv("RMMTX_DATABASE_PORT", str(docker_services.port_for("postgres", 5432)))
+        mpatch.setenv(
+            "RMMTX_DATABASE_PORT", str(docker_services.port_for("postgres", 5432))
+        )
         mpatch.setenv("RMMTX_DATABASE_HOST", docker_ip)
         mpatch.setenv("RMMTX_DATABASE_PASSWORD", "rmmtxauthztestpwd")
         mpatch.setenv("RMMTX_DATABASE_USER", "rmmtxauthz")

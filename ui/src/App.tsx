@@ -63,13 +63,13 @@ function StreamWrapper() {
 const routeTree = rootRoute.addChildren([homeRoute, streamRoute]);
 
 interface Props {
-  data: {};
+  data: unknown;
   meta: MetaData;
 }
 
 export const PRODUCT_SHORTNAME = "mtx";
 
-export default ({ data, meta }: Props) => {
+export default ({ meta }: Props) => {
   const [ready, setReady] = useState(false);
   const { i18n } = useTranslation(PRODUCT_SHORTNAME);
 
@@ -89,7 +89,7 @@ export default ({ data, meta }: Props) => {
       setReady(true);
     }
 
-    load();
+    void load();
   }, [i18n]);
 
   if (!ready) {

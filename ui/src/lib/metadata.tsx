@@ -5,9 +5,7 @@ export interface MetaData {
   callsign: string;
 }
 
-const MetaContext = createContext<MetaData | undefined>(
-  undefined,
-) as React.Context<MetaData | undefined>;
+const MetaContext = createContext<MetaData | undefined>(undefined);
 
 export const MetaProvider = ({
   children,
@@ -18,11 +16,7 @@ export const MetaProvider = ({
 }) => {
   const value = useMemo(() => meta, [meta.theme, meta.callsign]);
 
-  return (
-    <MetaContext.Provider value={value as MetaData}>
-      {children}
-    </MetaContext.Provider>
-  );
+  return <MetaContext.Provider value={value}>{children}</MetaContext.Provider>;
 };
 
 export const useMeta = () => {

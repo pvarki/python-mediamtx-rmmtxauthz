@@ -22,9 +22,15 @@ def comes_from_rm(request: Request, allow_proxy: bool = False) -> None:
     """Check the CN, raises 403 if not"""
     payload = request.state.mtlsdn
     if payload.get("CN") != RMMTXSettings.singleton().rmcn:
-        LOGGER.audit("Request CN {} does not match {}".format(payload.get("CN"), RMMTXSettings.singleton().rmcn))  # type: ignore[attr-defined]  # pylint: disable=C0301
+        LOGGER.audit(  # type: ignore[attr-defined]
+            "Request CN {} does not match {}".format(
+                payload.get("CN"), RMMTXSettings.singleton().rmcn
+            )
+        )
         raise HTTPException(status_code=403)
-    if not allow_proxy and (request.headers.get("X-Rasenmaeher-Proxy") == "productproxy"):
+    if not allow_proxy and (
+        request.headers.get("X-Rasenmaeher-Proxy") == "productproxy"
+    ):
         LOGGER.audit("Productproxy headers present but not allowed")  # type: ignore[attr-defined]
         raise HTTPException(status_code=403)
 
@@ -77,7 +83,9 @@ async def user_promoted(
     try:
         dbuser = await User.by_rmuuid(user.uuid)
     except NotFound:
-        LOGGER.warning("User '{}' did not exist, creating transparently".format(user.callsign))
+        LOGGER.warning(
+            "User '{}' did not exist, creating transparently".format(user.callsign)
+        )
         dbuser = await create_user(user)
         await MediaMTXControl.singleton().ensure_srt_pass()
     with EngineWrapper.singleton().get_session() as session:
@@ -98,7 +106,9 @@ async def user_demoted(
     try:
         dbuser = await User.by_rmuuid(user.uuid)
     except NotFound:
-        LOGGER.warning("User '{}' did not exist, creating transparently".format(user.callsign))
+        LOGGER.warning(
+            "User '{}' did not exist, creating transparently".format(user.callsign)
+        )
         dbuser = await create_user(user)
     with EngineWrapper.singleton().get_session() as session:
         dbuser.is_rmadmin = False
@@ -120,7 +130,9 @@ async def user_updated(
     try:
         dbuser = await User.by_rmuuid(user.uuid)
     except NotFound:
-        LOGGER.warning("User '{}' did not exist, creating transparently".format(user.callsign))
+        LOGGER.warning(
+            "User '{}' did not exist, creating transparently".format(user.callsign)
+        )
         dbuser = await create_user(user)
     _ = dbuser
     result = OperationResultResponse(success=True)

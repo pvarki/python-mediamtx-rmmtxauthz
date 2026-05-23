@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback, useMemo } from "react";
+import { useState, useEffect, useCallback, useMemo, useReducer } from "react";
 import { Drawer, DrawerContent, DrawerTitle } from "@/components/ui/drawer";
 import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
@@ -50,20 +50,56 @@ const hashString = (str: string): string => {
   return Math.abs(hash).toString(36).padStart(8, "0").slice(0, 8);
 };
 
+type FlowState = {
+  completed: Set<string>;
+  currentStep: number;
+  open: boolean;
+  initialized: boolean;
+};
+
+type FlowAction =
+  | { type: "init"; completed: Set<string>; currentStep: number; open: boolean }
+  | { type: "setCompleted"; completed: Set<string> }
+  | { type: "setCurrentStep"; step: number }
+  | { type: "setOpen"; open: boolean };
+
+function flowReducer(state: FlowState, action: FlowAction): FlowState {
+  switch (action.type) {
+    case "init":
+      return {
+        completed: action.completed,
+        currentStep: action.currentStep,
+        open: action.open,
+        initialized: true,
+      };
+    case "setCompleted":
+      return { ...state, completed: action.completed };
+    case "setCurrentStep":
+      return { ...state, currentStep: action.step };
+    case "setOpen":
+      return { ...state, open: action.open };
+  }
+}
+
 export function OnboardingHandler() {
   const { t, i18n } = useTranslation(PRODUCT_SHORTNAME);
   const { deployment } = useHealthCheck();
   const isMobile = useIsMobile();
   const { callsign } = useMeta();
 
-  const [open, setOpen] = useState(false);
-  const [currentStep, setCurrentStep] = useState(0);
-  const [completed, setCompleted] = useState<Set<string>>(new Set());
-  const [initialized, setInitialized] = useState(false);
+  const [{ completed, currentStep, open, initialized }, dispatch] = useReducer(
+    flowReducer,
+    {
+      completed: new Set<string>(),
+      currentStep: 0,
+      open: false,
+      initialized: false,
+    },
+  );
 
-  const [imageEnlarged, setImageEnlarged] = useState(false);
-  const [imageError, setImageError] = useState(false);
-  const [imageLoading, setImageLoading] = useState(true);
+  const [imageEnlargedState, setImageEnlarged] = useState(false);
+  const [loadedSrc, setLoadedSrc] = useState<string | null>(null);
+  const [errorSrc, setErrorSrc] = useState<string | null>(null);
 
   const storageKeys = useMemo(() => {
     if (!callsign || !deployment) return null;
@@ -72,6 +108,16 @@ export function OnboardingHandler() {
     )}-${PRODUCT_SHORTNAME}-onboarding-${callsign}`;
     return { finished: `${base}-finished`, steps: `${base}-steps` };
   }, [deployment, callsign]);
+
+  // Compute step and imageSrc before early returns so derived state can use them
+  const step = ONBOARDING_STEPS[currentStep] ?? null;
+  const imageSrc = step?.image(i18n.language) ?? null;
+
+  // Derive image state from tracked src values — auto-resets when imageSrc changes
+  const imageError = imageSrc !== null && errorSrc === imageSrc;
+  const imageLoading =
+    imageSrc !== null && loadedSrc !== imageSrc && !imageError;
+  const imageEnlarged = imageEnlargedState && !isMobile;
 
   useEffect(() => {
     if (!storageKeys || initialized) return;
@@ -87,48 +133,31 @@ export function OnboardingHandler() {
         console.error(e);
       }
     }
-    setCompleted(savedSteps);
 
     const firstIncomplete = ONBOARDING_STEPS.findIndex(
       (s) => !savedSteps.has(s.id),
     );
-    setCurrentStep(firstIncomplete === -1 ? 0 : firstIncomplete);
-
-    if (!finished && firstIncomplete !== -1) {
-      setOpen(true);
-    }
-
-    setInitialized(true);
+    dispatch({
+      type: "init",
+      completed: savedSteps,
+      currentStep: firstIncomplete === -1 ? 0 : firstIncomplete,
+      open: !finished && firstIncomplete !== -1,
+    });
   }, [storageKeys, initialized]);
 
   const handleOpenChange = useCallback((newOpen: boolean) => {
-    setOpen(newOpen);
+    dispatch({ type: "setOpen", open: newOpen });
   }, []);
 
-  useEffect(() => {
-    setImageLoading(true);
-    setImageError(false);
-  }, [i18n.language, currentStep]);
-
-  useEffect(() => {
-    setImageEnlarged(false);
-  }, [isMobile]);
-
-  const resetImageState = () => {
-    setImageLoading(true);
-    setImageError(false);
-    setImageEnlarged(false);
-  };
-
   const goToStep = (index: number) => {
-    resetImageState();
-    setCurrentStep(index);
+    setImageEnlarged(false);
+    dispatch({ type: "setCurrentStep", step: index });
   };
 
   const handleComplete = () => {
-    const step = ONBOARDING_STEPS[currentStep];
+    if (!step) return;
     const nextCompleted = new Set(completed).add(step.id);
-    setCompleted(nextCompleted);
+    dispatch({ type: "setCompleted", completed: nextCompleted });
 
     if (!storageKeys) return;
 
@@ -139,7 +168,7 @@ export function OnboardingHandler() {
 
     if (currentStep === ONBOARDING_STEPS.length - 1) {
       localStorage.setItem(storageKeys.finished, "true");
-      setOpen(false);
+      dispatch({ type: "setOpen", open: false });
       toast.success(t("onboarding.completion"));
     } else {
       goToStep(currentStep + 1);
@@ -151,17 +180,14 @@ export function OnboardingHandler() {
       (s) => !completed.has(s.id),
     );
     goToStep(firstIncomplete === -1 ? 0 : firstIncomplete);
-    setOpen(true);
+    dispatch({ type: "setOpen", open: true });
   };
 
   if (!initialized || !storageKeys) return null;
-
-  const step = ONBOARDING_STEPS[currentStep];
-  if (!step) return null;
+  if (!step || !imageSrc) return null;
 
   const progress = ((currentStep + 1) / ONBOARDING_STEPS.length) * 100;
   const imageClickable = !imageError && !imageLoading;
-  const imageSrc = step.image(i18n.language);
 
   const content = (
     <div className="flex flex-col h-full max-h-[85vh] w-full overflow-hidden">
@@ -199,11 +225,8 @@ export function OnboardingHandler() {
                 "absolute inset-0 w-full h-full object-contain transition-opacity duration-300",
                 imageLoading ? "opacity-0" : "opacity-100",
               )}
-              onLoad={() => setImageLoading(false)}
-              onError={() => {
-                setImageError(true);
-                setImageLoading(false);
-              }}
+              onLoad={() => setLoadedSrc(imageSrc)}
+              onError={() => setErrorSrc(imageSrc)}
             />
           )}
         </div>

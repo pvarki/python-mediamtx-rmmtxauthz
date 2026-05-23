@@ -10,7 +10,9 @@ class ProductAddRequest(BaseModel):
     """Request to add product interoperability."""
 
     certcn: str = Field(description="CN of the certificate")
-    x509cert: str = Field(description="Certificate encoded with CFSSL conventions (newlines escaped)")
+    x509cert: str = Field(
+        description="Certificate encoded with CFSSL conventions (newlines escaped)"
+    )
 
     model_config = ConfigDict(
         extra="forbid",
@@ -33,7 +35,9 @@ class ProductAuthzResponse(BaseModel):
     token: Optional[str] = Field(description="Bearer token", default=None)
     username: Optional[str] = Field(description="Username for basic auth", default=None)
     password: Optional[str] = Field(description="Password for basic auth", default=None)
-    ro_password: Optional[str] = Field(description="Password for read-only streaming", default=None)
+    ro_password: Optional[str] = Field(
+        description="Password for read-only streaming", default=None
+    )
 
     model_config = ConfigDict(
         extra="forbid",

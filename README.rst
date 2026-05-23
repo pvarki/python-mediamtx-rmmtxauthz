@@ -39,26 +39,18 @@ Build image, create container and start it::
     docker create --name rmmtxauthz_devel -v "$(pwd)/rune/output/rune.json:/opt/templates/mediamtx.json" -v "$(pwd):/app" -it $(echo $DOCKER_SSHAGENT) rmmtxauthz:devel_shell
     docker start -i rmmtxauthz_devel
 
-To rebuild the documentation inside the container run::
-
-   rune rune/src json >/opt/templates/mediamtx.json
-
-Outside of container use::
-
-    rune rune/src json >rune/output/rune.json
-
 pre-commit considerations
 ^^^^^^^^^^^^^^^^^^^^^^^^^
 
 If working in Docker instead of native env you need to run the pre-commit checks in docker too::
 
-    docker exec -i rmmtxauthz_devel /bin/bash -c "pre-commit install --install-hooks"
-    docker exec -i rmmtxauthz_devel /bin/bash -c "pre-commit run --all-files"
+    docker exec -i rmmtxauthz_devel /bin/bash -c "prek install"
+    docker exec -i rmmtxauthz_devel /bin/bash -c "prek run --all-files"
 
 You need to have the container running, see above. Or alternatively use the docker run syntax but using
 the running container is faster::
 
-    docker run --rm -it -v "$(pwd):/app" rmmtxauthz:devel_shell -c "pre-commit run --all-files"
+    docker run --rm -it -v "$(pwd):/app" rmmtxauthz:devel_shell -c "prek run --all-files"
 
 Test suite
 ^^^^^^^^^^
@@ -83,35 +75,37 @@ Development
 
 TLDR:
 
-- Create and activate a Python 3.11 virtualenv (assuming virtualenvwrapper)::
-
-    mkvirtualenv -p $(which python3.11) my_virtualenv
-
 - change to a branch::
 
     git checkout -b my_branch
 
-- install Poetry: https://python-poetry.org/docs/#installation
+- install uv: https://docs.astral.sh/uv/getting-started/installation/
 - Install project deps and pre-commit hooks::
 
-    poetry install
-    git add poetry.lock
-    pre-commit install --install-hooks
-    pre-commit run --all-files
+    uv sync
+    git add uv.lock
+    uv run prek install
+    uv run prek run --all-files
 
-If you get weird errors about missing packages from pre-commit try running it with "poetry run pre-commit".
+- Use the project virtual environment::
+
+    source .venv/bin/activate
+
+If you get weird errors about missing packages from prek try running it with "uv run prek".
 
 - Ready to go.
 
 Remember to activate your virtualenv whenever working on the repo, this is needed
-because pylint and mypy pre-commit hooks use the "system" python for now (because reasons).
+because mypy hook uses the "system" python for now (to account for required dependencies).
 
-Running "pre-commit run --all-files" and "py.test -v" regularly during development and
+Running "prek run --all-files" and "py.test -v" regularly during development and
 especially before committing will save you some headache.
 
-RUNE instructions compile
-^^^^^^^^^^^^^^^^^^^^^^^^^
+Versioning
+----------
 
-tldr::
+Versioning is handled with bump-my-version_. To increment, use ``bump-my-version bump <patch/minor/major>``.
 
-    rune rune/src json >rune/output/mediamtx.json
+You can use ``bump-my-version show-bump`` to see how each option would affect the version.
+
+.. _bump-my-version: https://github.com/callowayproject/bump-my-version

@@ -13,8 +13,6 @@ from rmmtxauthz.db.engine import EngineWrapper
 
 LOGGER = logging.getLogger(__name__)
 
-# pylint: disable=W0621
-
 
 @pytest.fixture
 def crudrequest() -> UserCRUDRequest:
@@ -27,7 +25,9 @@ def crudrequest() -> UserCRUDRequest:
 
 
 @pytest.mark.asyncio
-async def test_normal_crud(dbinstance: None, testclient: TestClient, crudrequest: UserCRUDRequest) -> None:
+async def test_normal_crud(
+    dbinstance: None, testclient: TestClient, crudrequest: UserCRUDRequest
+) -> None:
     """Test basic crud operations in order"""
     _ = dbinstance
     user = crudrequest
@@ -56,7 +56,9 @@ async def test_normal_crud(dbinstance: None, testclient: TestClient, crudrequest
 
 
 @pytest.mark.asyncio
-async def test_update_wo_create(dbinstance: None, testclient: TestClient, crudrequest: UserCRUDRequest) -> None:
+async def test_update_wo_create(
+    dbinstance: None, testclient: TestClient, crudrequest: UserCRUDRequest
+) -> None:
     """Test transparent create on update"""
     _ = dbinstance
     user = crudrequest
@@ -65,7 +67,9 @@ async def test_update_wo_create(dbinstance: None, testclient: TestClient, crudre
 
 
 @pytest.mark.asyncio
-async def test_promote_wo_create(dbinstance: None, testclient: TestClient, crudrequest: UserCRUDRequest) -> None:
+async def test_promote_wo_create(
+    dbinstance: None, testclient: TestClient, crudrequest: UserCRUDRequest
+) -> None:
     """Test transparent create on promote"""
     _ = dbinstance
     user = crudrequest
@@ -76,7 +80,9 @@ async def test_promote_wo_create(dbinstance: None, testclient: TestClient, crudr
 
 
 @pytest.mark.asyncio
-async def test_demote_wo_create(dbinstance: None, testclient: TestClient, crudrequest: UserCRUDRequest) -> None:
+async def test_demote_wo_create(
+    dbinstance: None, testclient: TestClient, crudrequest: UserCRUDRequest
+) -> None:
     """Test transparent create on demote"""
     _ = dbinstance
     user = crudrequest
@@ -96,7 +102,9 @@ async def test_demote_wo_create(dbinstance: None, testclient: TestClient, crudre
 
 
 @pytest.mark.asyncio
-async def test_unauth_crud(dbinstance: None, unauth_testclient: TestClient, crudrequest: UserCRUDRequest) -> None:
+async def test_unauth_crud(
+    dbinstance: None, unauth_testclient: TestClient, crudrequest: UserCRUDRequest
+) -> None:
     """Test basic crud operations in order"""
     _ = dbinstance
     user = crudrequest
@@ -118,7 +126,9 @@ async def test_unauth_crud(dbinstance: None, unauth_testclient: TestClient, crud
 
 
 @pytest.mark.asyncio
-async def test_proxy_disallow(dbinstance: None, testclient: TestClient, crudrequest: UserCRUDRequest) -> None:
+async def test_proxy_disallow(
+    dbinstance: None, testclient: TestClient, crudrequest: UserCRUDRequest
+) -> None:
     """Test transparent create on update"""
     _ = dbinstance
     user = crudrequest

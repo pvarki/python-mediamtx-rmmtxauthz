@@ -25,7 +25,7 @@ const mtxRoute = createRoute({
   path: "product/mtx/$",
   component: () => {
     const SAMPLE_DATA = { data: {} };
-    // @ts-ignore
+    // @ts-expect-error App meta prop is injected by the host at runtime
     return <App data={SAMPLE_DATA} />;
   },
 });
@@ -34,8 +34,9 @@ const indexRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: "/",
   beforeLoad: () => {
+    // eslint-disable-next-line @typescript-eslint/only-throw-error
     throw redirect({
-      //@ts-ignore
+      // @ts-expect-error route not registered in dev router
       to: "/product/mtx",
     });
   },
@@ -53,7 +54,7 @@ declare module "@tanstack/react-router" {
 }
 
 if (__USE_GLOBAL_CSS__ == true) {
-  import("./index.css");
+  void import("./index.css");
 }
 
 ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(

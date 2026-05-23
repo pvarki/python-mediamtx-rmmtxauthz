@@ -8,7 +8,7 @@ export function useSrtPasswords() {
     queryFn: async () => {
       const resp = await fetch(API_ENDPOINTS.SRT_DEFAULT);
       if (!resp.ok) throw new Error("Fetching SRT passwords failed");
-      return resp.json();
+      return resp.json() as Promise<SrtPasswords>;
     },
   });
 }

@@ -57,7 +57,7 @@ class DBSettings(BaseSettings):
         return DBSettings._singleton
 
 
-class RMMTXSettings(BaseSettings):  # pylint: disable=too-few-public-methods
+class RMMTXSettings(BaseSettings):
     """
     Application settings.
 
@@ -72,27 +72,46 @@ class RMMTXSettings(BaseSettings):  # pylint: disable=too-few-public-methods
     # Enable uvicorn reloading
     reload: bool = True
     log_level: UCStr = Field(default="INFO", alias="LOG_LEVEL")
-    rmcn: str = Field(default="rasenmaeher", description="expected CN for RASENMAEHERs mTLS cert")
+    rmcn: str = Field(
+        default="rasenmaeher", description="expected CN for RASENMAEHERs mTLS cert"
+    )
 
-    api_username: str = Field(default="rmmtxauthz", description="Username for *this* integration to use")
-    api_password: str = Field(default="CHANGEME", description="Password for *this* integration to use")
-    api_url: str = Field(default="https://mediamtx:9997", description="URL for the MediaMTX control API")
-    srt_pub_password: str = Field(default="CHANGEME", description="SRT Password for *this* integration to use")
-    srt_read_password: str = Field(default="CHANGEME", description="SRT Password for *this* integration to use")
+    api_username: str = Field(
+        default="rmmtxauthz", description="Username for *this* integration to use"
+    )
+    api_password: str = Field(
+        default="CHANGEME", description="Password for *this* integration to use"
+    )
+    api_url: str = Field(
+        default="https://mediamtx:9997", description="URL for the MediaMTX control API"
+    )
+    srt_pub_password: str = Field(
+        default="CHANGEME", description="SRT Password for *this* integration to use"
+    )
+    srt_read_password: str = Field(
+        default="CHANGEME", description="SRT Password for *this* integration to use"
+    )
 
-    mtx_address: str = Field(default="__REQUEST_HOSTNAME__", description="Public address for MediaMTX server")
+    mtx_address: str = Field(
+        default="__REQUEST_HOSTNAME__", description="Public address for MediaMTX server"
+    )
     mtx_hls_port: int = Field(default=9888, description="HLS stream port")
     mtx_webrtc_port: int = Field(default=9889, description="WebRTC stream port")
     mtx_rtsps_port: int = Field(default=8322, description="RTSPs stream port")
     mtx_rtmps_port: int = Field(default=1936, description="RTMPs stream port")
     mtx_srt_port: int = Field(default=8890, description="SRT stream port")
-    mtx_protocols: str = Field(default="hls,webrtc,rtsps,rtmps,srt", description="Which protocols to generate URLs for")
+    mtx_protocols: str = Field(
+        default="hls,webrtc,rtsps,rtmps,srt",
+        description="Which protocols to generate URLs for",
+    )
 
     user_path_prefixes: str = Field(
-        default="live", description="Valid path prefixes for users (path format PREFIX/TOOL/CALLSIGN)"
+        default="live",
+        description="Valid path prefixes for users (path format PREFIX/TOOL/CALLSIGN)",
     )
     user_path_tools: str = Field(
-        default="icu,gopro,uas,ipcam", description="Valid tool components for users (path format PREFIX/TOOL/CALLSIGN)"
+        default="icu,gopro,uas,ipcam",
+        description="Valid tool components for users (path format PREFIX/TOOL/CALLSIGN)",
     )
 
     model_config = SettingsConfigDict(env_prefix="RMMTX_", extra="ignore")

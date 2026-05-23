@@ -27,7 +27,7 @@ class EngineWrapper:
         """Get a singleton"""
         if EngineWrapper._singleton is None:
             EngineWrapper._singleton = EngineWrapper(**kwargs)
-        assert EngineWrapper._singleton is not None
+        assert EngineWrapper._singleton is not None  # nosec B101
         return EngineWrapper._singleton
 
     def __post_init__(self) -> None:

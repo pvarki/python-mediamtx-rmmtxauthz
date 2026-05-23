@@ -18,4 +18,6 @@ async def request_healthcheck() -> ProductHealthCheckResponse:
     users_count = 0
     async for _user in User.list():
         users_count += 1
-    return ProductHealthCheckResponse(healthy=True, extra=f"DB works, {users_count} users found")
+    return ProductHealthCheckResponse(
+        healthy=True, extra=f"DB works, {users_count} users found"
+    )
