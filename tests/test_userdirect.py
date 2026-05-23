@@ -6,6 +6,8 @@ import pytest
 from fastapi import FastAPI
 from fastapi.testclient import TestClient
 
+from rmmtxauthz.mediamtx import MediaMTXControl
+
 from .test_mediamtx import valid_user  # noqa F401
 
 from rmmtxauthz.db.user import User
@@ -45,3 +47,38 @@ def test_credentials(user_testclient: TestClient, valid_user: User) -> None:  # 
     assert payload["username"] == valid_user.username
     assert payload["password"] == valid_user.mtxpassword
     assert payload["stream_ro_password"] == valid_user.stream_ro_password
+
+
+def test_streams(
+    user_testclient: TestClient,
+    valid_user: User,  # noqa: F811
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    """Direct stream inventory still uses the existing user-facing route shape."""
+
+    async def fake_get_paths(
+        self: MediaMTXControl, username: str, password: str = ""
+    ) -> list[dict[str, object]]:
+        assert username == valid_user.username
+        assert password == valid_user.mtxpassword
+        return [
+            {
+                "path": "/live/demo",
+                "urls": {
+                    "rtsps": f"rtsps://{username}:{password}@streams.example.test:8322/live/demo",
+                },
+            }
+        ]
+
+    monkeypatch.setattr(MediaMTXControl, "get_paths", fake_get_paths)
+    resp = user_testclient.get("/api/v1/direct/streams")
+    assert resp.status_code == 200
+    payload = resp.json()
+    assert payload == [
+        {
+            "path": "/live/demo",
+            "urls": {
+                "rtsps": f"rtsps://{valid_user.username}:{valid_user.mtxpassword}@streams.example.test:8322/live/demo",
+            },
+        }
+    ]
