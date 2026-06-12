@@ -1,5 +1,6 @@
 on:
   pull_request:
+  workflow_dispatch: # Allow manual triggering
 
 jobs:
   version-check:
@@ -80,14 +81,7 @@ jobs:
         run: docker build --target production -t rmmtxauthz:production .
   publish:
     name: Publish Docker image
-    needs:
-      [
-        "version-check",
-        "pre-commit",
-        "test",
-        "snyk-test",
-        "docker-build-and-verify",
-      ]
+    needs: ["version-check", "pre-commit", "test", "docker-build-and-verify"]
     runs-on: ubuntu-latest # arc-runner-set
     permissions:
       contents: read

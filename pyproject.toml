@@ -1,6 +1,6 @@
 [project]
 name = "rmmtxauthz"
-version = "1.6.0+260513"
+version = "1.6.1+260612"
 description = "Do HTTP based authz for MediaMTX"
 authors = [{ name = "Eero af Heurlin", email = "eero.afheurlin@iki.fi" }]
 license = "MIT"
@@ -46,6 +46,7 @@ dev = [
     "tox>=4.0,<5.0",
     "tox-uv>=1.0,<2.0",
     "ruff>=0.15.12",
+    "pre-commit>=4.6,<5.0",
 ]
 
 [[tool.uv.index]]
