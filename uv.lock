@@ -2095,7 +2095,7 @@ wheels = [
 
 [[package]]
 name = "rmmtxauthz"
-version = "1.6.1+260612"
+version = "1.6.2+260707"
 source = { editable = "." }
 dependencies = [
     { name = "aiohttp" },
