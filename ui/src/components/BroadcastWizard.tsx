@@ -15,7 +15,7 @@ import { useIsMobile } from "@/hooks/use-mobile";
 import { Drawer, DrawerContent } from "@/components/ui/drawer";
 import { useCredentials } from "@/hooks/useCredentials";
 import { useSrtPasswords } from "@/hooks/useSrtPasswords";
-import { getBaseDomain, maskStreamUrl } from "@/lib/stream-utils";
+import { getStreamDomain, maskStreamUrl } from "@/lib/stream-utils";
 import { Credentials, SrtPasswords } from "@/model/stream-config";
 
 type Tool = "opentak_icu" | "gopro" | "uastool" | "advanced";
@@ -73,7 +73,7 @@ function WizardContent() {
   const [step, setStep] = useState<"select" | "guide">("select");
   const [selectedTool, setSelectedTool] = useState<Tool | null>(null);
 
-  const currentDomain = getBaseDomain();
+  const currentDomain = getStreamDomain();
   const { data: credentials, error: credentialsError } = useCredentials();
   const { data: srtPasswords } = useSrtPasswords();
 
