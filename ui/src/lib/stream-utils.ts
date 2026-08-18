@@ -16,8 +16,13 @@ export function streamPathToSlug(path: string): string {
   return path.replaceAll("/", "-");
 }
 
-export function getBaseDomain(): string {
-  return window.location.hostname.replace(/^mtls\./, "");
+const MTX_HOST_PREFIX = "mtx";
+
+export function getStreamDomain(): string {
+  const host = window.location.hostname.replace(/^mtls\./, "");
+  return host.startsWith(`${MTX_HOST_PREFIX}.`)
+    ? host
+    : `${MTX_HOST_PREFIX}.${host}`;
 }
 
 export function maskStreamUrl(

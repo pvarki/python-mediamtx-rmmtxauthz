@@ -9,7 +9,7 @@ import {
 import { useCredentials } from "@/hooks/useCredentials";
 import { useSrtPasswords } from "@/hooks/useSrtPasswords";
 import useHealthCheck from "@/hooks/helpers/useHealthcheck";
-import { getBaseDomain } from "@/lib/stream-utils";
+import { getStreamDomain } from "@/lib/stream-utils";
 
 function downloadFile(content: string, filename: string, mimeType: string) {
   const blob = new Blob([content], { type: mimeType });
@@ -26,7 +26,7 @@ function sanitizeFilename(streamPath: string) {
 }
 
 export function useStreamPackages(streamPath: string) {
-  const currentDomain = useMemo(() => getBaseDomain(), []);
+  const currentDomain = useMemo(() => getStreamDomain(), []);
   const { data: credentials } = useCredentials();
   const { data: srtPasswords } = useSrtPasswords();
   const { deployment } = useHealthCheck();
