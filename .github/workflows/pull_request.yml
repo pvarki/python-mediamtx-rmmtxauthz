@@ -82,7 +82,7 @@ jobs:
   publish:
     name: Publish Docker image
     needs: ["version-check", "pre-commit", "test", "docker-build-and-verify"]
-    runs-on: ubuntu-latest # arc-runner-set
+    runs-on: arc-runner-set
     permissions:
       contents: read
       packages: write
