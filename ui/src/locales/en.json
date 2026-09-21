@@ -46,7 +46,8 @@
         "description": "(1) Tap any stream tile on the home page to start watching.\n(2) Use the Start Broadcasting button to launch a new feed from OpenTAK ICU, UAS Tool, GoPro, or any advanced source."
       }
     },
-    "title": "Onboard to MediaMTX"
+    "title": "Onboard to MediaMTX",
+    "disableAutoOpen": "Do not show me guides automatically"
   },
   "stream": {
     "address": "Address",

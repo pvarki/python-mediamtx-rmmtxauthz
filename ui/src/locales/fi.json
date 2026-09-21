@@ -46,7 +46,8 @@
         "description": "(1) Napauta mitä tahansa striimiruutua etusivulla aloittaaksesi katselun.\n(2) Käytä Aloita lähetys -painiketta käynnistääksesi uuden lähetyksen OpenTAK ICU:sta, UAS Toolista, GoProsta tai muusta lähteestä."
       }
     },
-    "title": "MediaMTX -sovelluksen perehdyttäminen"
+    "title": "MediaMTX -sovelluksen perehdyttäminen",
+    "disableAutoOpen": "Älä näytä minulle ohjeita automaattisesti"
   },
   "stream": {
     "address": "Osoite",

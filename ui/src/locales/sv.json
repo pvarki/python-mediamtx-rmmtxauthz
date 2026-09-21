@@ -46,7 +46,8 @@
         "description": "(1) Tryck på en strömruta på startsidan för att börja titta.\n(2) Använd knappen Starta sändning för att starta ett nytt flöde från OpenTAK ICU, UAS Tool, GoPro eller någon avancerad källa."
       }
     },
-    "title": "Introduktion till MediaMTX"
+    "title": "Introduktion till MediaMTX",
+    "disableAutoOpen": "Visa inte guider automatiskt för mig"
   },
   "stream": {
     "address": "Adress",
