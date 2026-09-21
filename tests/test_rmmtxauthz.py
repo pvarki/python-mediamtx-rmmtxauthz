@@ -6,7 +6,7 @@ from rmmtxauthz.config import RMMTXSettings
 
 def test_version() -> None:
     """Make sure version matches expected"""
-    assert __version__ == "1.6.4+260915"
+    assert __version__ == "1.6.5+260921"
 
 
 def test_config() -> None:
