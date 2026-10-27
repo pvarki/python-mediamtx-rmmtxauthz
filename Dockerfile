@@ -124,7 +124,7 @@ RUN --mount=type=ssh source /.venv/bin/activate \
 # Main production build #
 #########################
 FROM python:3.11-slim-bookworm AS production
-COPY --from=pvarki/kw_product_init:latest /kw_product_init /kw_product_init
+COPY --from=ghcr.io/pvarki/kraftwerk-helper-tool:1.4.1-261027 /kw_product_init /kw_product_init
 COPY --from=production_build /tmp/wheelhouse /tmp/wheelhouse
 COPY --from=production_build /ui_build /ui_build
 COPY --from=production_build /docker-entrypoint.sh /docker-entrypoint.sh
@@ -155,7 +155,7 @@ ENTRYPOINT ["/usr/bin/tini", "--", "/docker-entrypoint.sh"]
 # Base stage for development builds #
 #####################################
 FROM builder_base AS devel_build
-COPY --from=pvarki/kw_product_init:latest /kw_product_init /kw_product_init
+COPY --from=ghcr.io/pvarki/kraftwerk-helper-tool:1.4.1-261027 /kw_product_init /kw_product_init
 # Install deps
 COPY . /app
 COPY ./docker/entrypoint-dev.sh /entrypoint-dev.sh
