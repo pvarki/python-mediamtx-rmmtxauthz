@@ -24,7 +24,7 @@ class Protocol(NamedTuple):
 class DBSettings(BaseSettings):
     """Database settings"""
 
-    driver: str = "postgresql"
+    driver: str = "postgresql+psycopg2"
     host: str = "localhost"
     port: int = 5432
     user: str = "rmmtx"
