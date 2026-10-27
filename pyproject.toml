@@ -1,6 +1,6 @@
 [project]
 name = "rmmtxauthz"
-version = "1.7.0+261027"
+version = "1.7.1+261027"
 description = "Do HTTP based authz for MediaMTX"
 authors = [{ name = "Eero af Heurlin", email = "eero.afheurlin@iki.fi" }]
 license = "MIT"
