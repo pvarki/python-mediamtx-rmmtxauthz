@@ -1,6 +1,7 @@
 """ "User actions"""
 
 import logging
+import uuid
 
 from fastapi import APIRouter, Depends, Request, HTTPException
 from libpvarki.middleware import MTLSHeader
@@ -38,7 +39,7 @@ def comes_from_rm(request: Request, allow_proxy: bool = False) -> None:
 async def create_user(user: UserCRUDRequest) -> User:
     """Be more dry"""
     with EngineWrapper.singleton().get_session() as session:
-        dbuser = User(rmuuid=user.uuid, username=user.callsign)
+        dbuser = User(rmuuid=uuid.UUID(user.uuid), username=user.callsign)
         session.add(dbuser)
         session.commit()
         session.refresh(dbuser)

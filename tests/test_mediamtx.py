@@ -23,7 +23,7 @@ def valid_user(dbinstance: None) -> Generator[User, None, None]:
     _ = dbinstance
     with EngineWrapper.singleton().get_session() as session:
         dbuser = User(
-            rmuuid=str(uuid.uuid4()),
+            rmuuid=uuid.uuid4(),
             username=f"koira_{generate_code(4)}",
         )
         session.add(dbuser)
@@ -40,7 +40,7 @@ def another_valid_user(dbinstance: None) -> Generator[User, None, None]:
     _ = dbinstance
     with EngineWrapper.singleton().get_session() as session:
         dbuser = User(
-            rmuuid=str(uuid.uuid4()),
+            rmuuid=uuid.uuid4(),
             username=f"mayra_{generate_code(4)}",
         )
         session.add(dbuser)
