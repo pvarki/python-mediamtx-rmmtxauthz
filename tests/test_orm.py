@@ -5,8 +5,23 @@ import uuid
 import pytest
 
 
-from rmmtxauthz.db.user import User, generate_code
+from rmmtxauthz.config import DBSettings
 from rmmtxauthz.db.engine import EngineWrapper
+from rmmtxauthz.db.product import Product
+from rmmtxauthz.db.user import User, generate_code
+
+
+def test_database_defaults() -> None:
+    """ORM constructors accept fields generated during insertion."""
+    assert DBSettings().dsn.drivername == "postgresql+psycopg2"
+    for row in (
+        User(rmuuid=uuid.uuid4(), username="defaults"),
+        Product(certcn="defaults"),
+    ):
+        assert isinstance(row.pk, uuid.UUID)
+        assert row.created is None
+        assert row.updated is None
+        assert row.deleted is None
 
 
 @pytest.mark.asyncio

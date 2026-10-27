@@ -88,7 +88,7 @@ async def test_demote_wo_create(
     user = crudrequest
     with EngineWrapper.singleton().get_session() as session:
         dbuser = User(
-            rmuuid=user.uuid,
+            rmuuid=uuid.UUID(user.uuid),
             is_rmadmin=True,
             username=user.callsign,
         )
