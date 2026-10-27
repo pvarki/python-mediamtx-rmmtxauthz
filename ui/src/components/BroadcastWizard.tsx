@@ -283,7 +283,7 @@ function OpenTakIcuGuide({
     params.append("protocol", "rtmps");
     params.append("address", domain);
     params.append("port", "1936");
-    params.append("path", `/live/icu/${credentials.username}`);
+    params.append("path", `live/icu/${credentials.username}`);
     params.append("username", credentials.username);
     params.append("password", credentials.password);
     return `opentakicu://import?${params.toString()}`;
