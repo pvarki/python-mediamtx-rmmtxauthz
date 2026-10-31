@@ -84,7 +84,7 @@ async def return_product_description_extended(
             icon="/ui/mtx/mtxlogo.svg",
             description="Videon suoratoistopalvelu",
             language=language,
-            docs="https://docs.pvarki.fi/fi/docs/guides/mtx-guide",
+            docs="https://docs.opendefence.fi/fi/guides/mtx-guide",
             component=ProductComponent(
                 type="component", ref=f"/ui/{shortname}/remoteEntry.js"
             ),
@@ -96,7 +96,7 @@ async def return_product_description_extended(
             icon="/ui/mtx/mtxlogo.svg",
             description="Videoströmningstjänst",
             language=language,
-            docs="https://docs.pvarki.fi/sv/docs/guides/mtx-guide",
+            docs="https://docs.opendefence.fi/sv/guides/mtx-guide",
             component=ProductComponent(
                 type="component", ref=f"/ui/{shortname}/remoteEntry.js"
             ),
@@ -107,7 +107,7 @@ async def return_product_description_extended(
         icon="/ui/mtx/mtxlogo.svg",
         description="Video streaming service",
         language=language,
-        docs="https://docs.pvarki.fi/en/docs/guides/mtx-guide",
+        docs="https://docs.opendefence.fi/en/guides/mtx-guide",
         component=ProductComponent(
             type="component", ref=f"/ui/{shortname}/remoteEntry.js"
         ),
